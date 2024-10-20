@@ -1,5 +1,6 @@
 package com.AngryBirds;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,10 +18,15 @@ public class HomeScreen implements Screen {
     private Skin UIskin;
     private Texture background;
     private SpriteBatch spriteBatch;
+    private Game game;
 
     private Sprite PLAY;
     private Sprite LOGO;
     private Sprite SETTINGS;
+
+    public HomeScreen(Game game) {
+        this.game = game;
+    }
 
     @Override
     public void show() {
