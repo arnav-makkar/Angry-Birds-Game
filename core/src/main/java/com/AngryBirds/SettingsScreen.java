@@ -19,8 +19,6 @@ public class SettingsScreen implements Screen {
     private SpriteBatch spriteBatch;
 
     private Sprite LOGO;
-    private Label VOLUME;
-    private Label BRIGHTNESS;
     private Sprite BACK;
 
     @Override
@@ -63,6 +61,12 @@ public class SettingsScreen implements Screen {
         table.add(bslide).width(300).center().padBottom(30);
         table.row();
 
+        Image backButtonImage=new Image(BACK);
+        backButtonImage.setSize(150f, 10f); // Set size for the play button image
+
+        table.add(backButtonImage).size(700f, 100f).center().padBottom(20);
+        table.row();
+
         stage.addActor(table);
 
         ChangeListener volumeListner=new ChangeListener() {
@@ -94,6 +98,7 @@ public class SettingsScreen implements Screen {
         spriteBatch.begin();
         spriteBatch.end();
 
+        stage.draw();
     }
 
     @Override
@@ -119,6 +124,9 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        UIskin.dispose();
+        stage.dispose();
+        spriteBatch.dispose();
+        BACK.getTexture().dispose();
     }
 }
