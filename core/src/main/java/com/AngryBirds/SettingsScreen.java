@@ -45,7 +45,6 @@ public class SettingsScreen implements Screen {
         BACK = new Sprite(backTexture);
         BACK.setSize(200f, 20f);
 
-        // Setup the layout using a table
         Table table = new Table();
         table.setFillParent(true);
 
