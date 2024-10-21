@@ -3,9 +3,11 @@ package com.AngryBirds;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
 
 public class SettingsScreen implements Screen {
     private Stage stage;
@@ -45,6 +48,13 @@ public class SettingsScreen implements Screen {
         BACK = new Sprite(backTexture);
         BACK.setSize(200f, 20f);
 
+        BitmapFont font = new BitmapFont(Gdx.files.internal("font_file/063d88635d8f46ce942b2f8d43978f74-12.fnt"));
+        font.getData().setScale(2f);
+
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.font = font;
+        style.fontColor = Color.BLACK;
+
         Table table = new Table();
         table.setFillParent(true);
 
@@ -53,7 +63,7 @@ public class SettingsScreen implements Screen {
         table.add(logoButtonImage).size(700f, 300f).center().padBottom(20);
         table.row();
 
-        Label VOLUME = new Label("Game Volume", UIskin);
+        Label VOLUME = new Label("Game Volume", style);
         Slider vslide = new Slider(0, 100, 1, false, UIskin);
         vslide.setValue(50);
 
@@ -62,7 +72,7 @@ public class SettingsScreen implements Screen {
         table.add(vslide).width(500).center().padBottom(30);
         table.row();
 
-        Label BRIGHTNESS = new Label("Screen Brightness", UIskin);
+        Label BRIGHTNESS = new Label("Screen Brightness", style);
         Slider bslide = new Slider(0, 100, 1, false, UIskin);
         bslide.setValue(50);
 
