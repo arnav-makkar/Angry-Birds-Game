@@ -56,19 +56,19 @@ public class HomeScreen implements Screen {
         Image logoButtonImage = new Image(LOGO);
         logoButtonImage.setSize(150f, 10f); // Set size for the play button image
 
-        table.add(logoButtonImage).size(700f, 100f).center().padBottom(20);
+        table.add(logoButtonImage).size(700f, 160f).center().padBottom(20);
         table.row();
 
         Image playButtonImage = new Image(PLAY);
         playButtonImage.setSize(150f, 50f);
 
-        table.add(playButtonImage).size(300f, 50f).center().padBottom(20);
+        table.add(playButtonImage).size(300f, 100f).center().padBottom(20);
         table.row();
 
         Image settingsButtonImage = new Image(SETTINGS);
-        settingsButtonImage.setSize(150f, 50f);
+        settingsButtonImage.setSize(200f, 100f);
 
-        table.add(settingsButtonImage).size(150f,50f).center();
+        table.add(settingsButtonImage).size(100f,100f).center();
         stage.addActor(table);
 
         ClickListener playButtonListener = new ClickListener() {
@@ -80,6 +80,7 @@ public class HomeScreen implements Screen {
         ClickListener settingsButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SettingsScreen(game));
             }
         };
 
@@ -100,7 +101,6 @@ public class HomeScreen implements Screen {
         spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         spriteBatch.end();
 
-       // stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 

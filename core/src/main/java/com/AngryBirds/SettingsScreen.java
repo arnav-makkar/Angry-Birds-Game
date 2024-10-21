@@ -22,8 +22,6 @@ public class SettingsScreen implements Screen {
     private SpriteBatch spriteBatch;
     private Game game;
 
-
-
     private Sprite LOGO;
     private Sprite BACK;
 
@@ -81,11 +79,9 @@ public class SettingsScreen implements Screen {
         table.row();
         stage.addActor(table);
 
-        // Change listeners for sliders
         ChangeListener volumeListener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                // Handle volume changes
                 System.out.println("Volume changed to: " + vslide.getValue());
             }
         };
@@ -93,7 +89,6 @@ public class SettingsScreen implements Screen {
         ChangeListener brightnessListener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                // Handle brightness changes
                 System.out.println("Brightness changed to: " + bslide.getValue());
             }
         };
@@ -112,11 +107,9 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        // Clear the screen with a black color
         Gdx.gl.glClearColor(0.8f, 0.8f,0.8f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Set up camera
         OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
@@ -125,7 +118,6 @@ public class SettingsScreen implements Screen {
         spriteBatch.begin();
         spriteBatch.end();
 
-        // Act and draw the stage
         stage.act(Math.min(delta, 1 / 30f));
         stage.draw();
     }
