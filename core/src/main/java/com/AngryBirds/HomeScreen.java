@@ -23,6 +23,7 @@ public class HomeScreen implements Screen {
     private Sprite PLAY;
     private Sprite LOGO;
     private Sprite SETTINGS;
+    private Sprite EXIT;
 
     public HomeScreen(Game game) {
         this.game = game;
@@ -45,6 +46,10 @@ public class HomeScreen implements Screen {
         SETTINGS = new Sprite(settingsTexture);
         SETTINGS.setSize(200f, 20f);
 
+        Texture exitTexture = new Texture(Gdx.files.internal("exit_app.png"));
+        EXIT = new Sprite(exitTexture);
+        EXIT.setSize(200f, 20f);
+
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
         stage = new Stage(new ScreenViewport());
@@ -55,22 +60,28 @@ public class HomeScreen implements Screen {
 
         Image logoButtonImage = new Image(LOGO);
         logoButtonImage.setSize(150f, 10f); // Set size for the play button image
-
-        table.add(logoButtonImage).size(700f, 160f).center().padBottom(20);
+        table.add(logoButtonImage).size(700f, 160f).center().padBottom(20).padTop(80f);
         table.row();
 
         Image playButtonImage = new Image(PLAY);
         playButtonImage.setSize(150f, 50f);
-
-        table.add(playButtonImage).size(300f, 100f).center().padBottom(20);
+        table.add(playButtonImage).size(200f, 70f).center().padBottom(20);
         table.row();
 
+        Table buttonRow = new Table();
+
+        Image exitButtonImage = new Image(EXIT);
+        exitButtonImage.setSize(150f, 750f);
+        buttonRow.add(exitButtonImage).size(125f, 80f).padRight(80f); // Add padding between buttons
+
         Image settingsButtonImage = new Image(SETTINGS);
-        settingsButtonImage.setSize(200f, 100f);
+        settingsButtonImage.setSize(150f, 750f);
+        buttonRow.add(settingsButtonImage).size(75f, 75f).padRight(25f);
 
-        table.add(settingsButtonImage).size(100f,100f).center();
+        table.add(buttonRow).center();
+        table.row();
+
         stage.addActor(table);
-
 
         ClickListener playButtonListener = new ClickListener() {
             @Override
@@ -86,8 +97,16 @@ public class HomeScreen implements Screen {
             }
         };
 
+        ClickListener exitButtonListener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.exit(0);
+            }
+        };
+
         playButtonImage.addListener(playButtonListener);
         settingsButtonImage.addListener(settingsButtonListener);
+        exitButtonImage.addListener(exitButtonListener);
     }
 
     @Override
