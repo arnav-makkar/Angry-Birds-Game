@@ -92,9 +92,8 @@ public class GameScreen implements Screen {
         table2.columnDefaults(0).left();
 
         Image catapultButtonImage = new Image(catapultTexture);
-        catapultButtonImage.setSize(50f, 50f);
-        table2.add(catapultButtonImage).size(75f, 75f);
-        table2.row();
+        catapultButtonImage.setSize(75f, 50f);
+        table2.add(catapultButtonImage).size(125f, 75f);
 
         table2.padBottom(30);
 

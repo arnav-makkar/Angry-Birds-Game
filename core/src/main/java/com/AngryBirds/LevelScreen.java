@@ -64,24 +64,26 @@ public class LevelScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
 
+        table.center().padBottom(75);
+
         Image l1ButtonImage=new Image(LEVEL1);
         l1ButtonImage.setSize(200f,200f);
-        table.add(l1ButtonImage);
+        table.add(l1ButtonImage).size(140f, 60f).pad(20f);
         table.columnDefaults(0).left();
 
         Image l2ButtonImage=new Image(LEVEL2);
         l2ButtonImage.setSize(200f,200f);
-        table.add(l2ButtonImage);
+        table.add(l2ButtonImage).size(140f, 60f).pad(20f);
         table.columnDefaults(0).left();
 
         Image l3ButtonImage=new Image(LEVEL3);
         l3ButtonImage.setSize(200f,200f);
-        table.add(l3ButtonImage);
+        table.add(l3ButtonImage).size(140f, 60f).pad(20f);
         table.columnDefaults(0).left();
 
         Image l4ButtonImage =new Image(LEVEL4);
-        l4ButtonImage.setSize(150f,150f);
-        table.add(l4ButtonImage);
+        l4ButtonImage.setSize(100f,100f);
+        table.add(l4ButtonImage).size(140f, 60f).pad(20f);
         table.columnDefaults(0).left();
 
         stage.addActor(table);
@@ -101,7 +103,7 @@ public class LevelScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         OrthographicCamera camera=new OrthographicCamera();
