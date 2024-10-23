@@ -50,8 +50,8 @@ public class SettingsScreen implements Screen {
         BACK.setSize(300f, 100f);
 
         Texture volumeTexture = new Texture(Gdx.files.internal("volumeButton.png"));
-         VOLUME= new Sprite(volumeTexture);
-        VOLUME.setSize(100f, 4f);
+        VOLUME= new Sprite(volumeTexture);
+        VOLUME.setSize(100f, 40f);
 
         Texture brightnessTexture = new Texture(Gdx.files.internal("brightnessButton.png"));
         BRIGHTNESS = new Sprite(brightnessTexture);
@@ -65,20 +65,20 @@ public class SettingsScreen implements Screen {
         table.add(logoButtonImage).size(400f, 80f).center().padBottom(20f);
         table.row();
 
-        Image volumeButtonImage = new Image(VOLUME);
+        Image volumeButtonImage = new Image(volumeTexture);
         volumeButtonImage.setSize(100f, 60f);
         Slider vslide = new Slider(0, 100, 1, false, UIskin);
         vslide.setValue(50);
-        table.add(volumeButtonImage).center().padBottom(10f);
+        table.add(volumeButtonImage).size(200f,50f).center().padBottom(10f);
         table.row();
         table.add(vslide).width(500f).center().padBottom(30f);
         table.row();
 
-        Image brightnessButtonImage = new Image(BRIGHTNESS);
-        brightnessButtonImage.setSize(300f, 60f);
+        Image brightnessButtonImage = new Image(brightnessTexture);
+        brightnessButtonImage.setSize(100f, 60f);
         Slider bslide = new Slider(0, 100, 1, false, UIskin);
         bslide.setValue(50);
-        table.add(brightnessButtonImage).center().padBottom(10f);
+        table.add(brightnessButtonImage).size(320f,80f).center().padBottom(10f);
         table.row();
         table.add(bslide).width(500f).center().padBottom(30f);
         table.row();
