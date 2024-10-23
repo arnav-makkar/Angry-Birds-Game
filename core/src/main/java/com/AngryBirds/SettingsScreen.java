@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 public class SettingsScreen implements Screen {
     private Stage stage;
     private Skin UIskin;
+    private Texture background;
     private SpriteBatch spriteBatch;
     private Game game;
 
@@ -35,6 +36,7 @@ public class SettingsScreen implements Screen {
     public void show() {
         spriteBatch = new SpriteBatch();
         stage = new Stage(new ScreenViewport());
+        background = new Texture(Gdx.files.internal("settingsBackground.png"));
 
         Gdx.input.setInputProcessor(stage);
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
@@ -125,9 +127,9 @@ public class SettingsScreen implements Screen {
 
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
+        spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         spriteBatch.end();
 
-        stage.act(Math.min(delta, 1 / 30f));
         stage.draw();
     }
 
