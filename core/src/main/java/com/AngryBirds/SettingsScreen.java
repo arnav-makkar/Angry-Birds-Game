@@ -3,11 +3,9 @@ package com.AngryBirds;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -18,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-
 public class SettingsScreen implements Screen {
     private Stage stage;
     private Skin UIskin;
@@ -26,10 +23,12 @@ public class SettingsScreen implements Screen {
     private Game game;
 
     private Sprite LOGO;
+    private Sprite VOLUME;
+    private Sprite BRIGHTNESS;
     private Sprite BACK;
 
     public SettingsScreen(Game game) {
-        this.game=game;
+        this.game = game;
     }
 
     @Override
@@ -42,50 +41,51 @@ public class SettingsScreen implements Screen {
 
         Texture logoTexture = new Texture(Gdx.files.internal("settingsLogo.png"));
         LOGO = new Sprite(logoTexture);
-        LOGO.setSize(200f, 20f);
+        LOGO.setSize(400f, 80f);
 
         Texture backTexture = new Texture(Gdx.files.internal("back.png"));
         BACK = new Sprite(backTexture);
-        BACK.setSize(200f, 20f);
+        BACK.setSize(300f, 100f);
 
-        BitmapFont font = new BitmapFont(Gdx.files.internal("font_file/063d88635d8f46ce942b2f8d43978f74-12.fnt"));
-        font.getData().setScale(2f);
+        Texture volumeTexture = new Texture(Gdx.files.internal("volumeButton.png"));
+         VOLUME= new Sprite(volumeTexture);
+        VOLUME.setSize(100f, 4f);
 
-        Label.LabelStyle style = new Label.LabelStyle();
-        style.font = font;
-        style.fontColor = Color.BLACK;
+        Texture brightnessTexture = new Texture(Gdx.files.internal("brightnessButton.png"));
+        BRIGHTNESS = new Sprite(brightnessTexture);
+        BRIGHTNESS.setSize(100f, 40f);
 
         Table table = new Table();
         table.setFillParent(true);
 
         Image logoButtonImage = new Image(LOGO);
-        logoButtonImage.setSize(150f, 10f);
-        table.add(logoButtonImage).size(700f, 300f).center().padBottom(20);
+        logoButtonImage.setSize(400f, 80f);
+        table.add(logoButtonImage).size(400f, 80f).center().padBottom(20f);
         table.row();
 
-        Label VOLUME = new Label("Game Volume", style);
+        Image volumeButtonImage = new Image(VOLUME);
+        volumeButtonImage.setSize(100f, 60f);
         Slider vslide = new Slider(0, 100, 1, false, UIskin);
         vslide.setValue(50);
-
-        table.add(VOLUME).center().padBottom(10);
+        table.add(volumeButtonImage).center().padBottom(10f);
         table.row();
-        table.add(vslide).width(500).center().padBottom(30);
+        table.add(vslide).width(500f).center().padBottom(30f);
         table.row();
 
-        Label BRIGHTNESS = new Label("Screen Brightness", style);
+        Image brightnessButtonImage = new Image(BRIGHTNESS);
+        brightnessButtonImage.setSize(300f, 60f);
         Slider bslide = new Slider(0, 100, 1, false, UIskin);
         bslide.setValue(50);
-
-        table.add(BRIGHTNESS).center().padBottom(10);
+        table.add(brightnessButtonImage).center().padBottom(10f);
         table.row();
-        table.add(bslide).width(500).center().padBottom(30);
+        table.add(bslide).width(500f).center().padBottom(30f);
         table.row();
 
         Image backButtonImage = new Image(BACK);
-        backButtonImage.setSize(150f, 10f);
-
-        table.add(backButtonImage).size(300f, 100f).center().padBottom(20);
+        backButtonImage.setSize(300f, 60f);
+        table.add(backButtonImage).size(300f, 100f).center().padBottom(20f);
         table.row();
+
         stage.addActor(table);
 
         ChangeListener volumeListener = new ChangeListener() {
@@ -116,7 +116,7 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.8f, 0.8f,0.8f,1);
+        Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         OrthographicCamera camera = new OrthographicCamera();
@@ -138,12 +138,10 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
