@@ -84,8 +84,8 @@ public class SettingsScreen implements Screen {
         table.row();
 
         Image backButtonImage = new Image(BACK);
-        backButtonImage.setSize(300f, 60f);
-        table.add(backButtonImage).size(300f, 100f).center().padBottom(20f);
+        backButtonImage.setSize(250f, 60f);
+        table.add(backButtonImage).size(250f, 100f).center().padBottom(20f);
         table.row();
 
         stage.addActor(table);
