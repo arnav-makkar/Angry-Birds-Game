@@ -20,6 +20,7 @@ public class PauseScreen implements Screen {
     private Stage stage;
     private Skin UIskin;
     private SpriteBatch spriteBatch;
+    private Texture background;
     private Game game;
 
     private Sprite RESG;
@@ -33,6 +34,8 @@ public class PauseScreen implements Screen {
     public void show() {
         spriteBatch = new SpriteBatch();
         stage = new Stage(new ScreenViewport());
+
+        background = new Texture(Gdx.files.internal("game_screenBG.png"));
 
         Gdx.input.setInputProcessor(stage);
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
@@ -50,13 +53,13 @@ public class PauseScreen implements Screen {
 
         Image resgButtonImage = new Image(RESG);
         resgButtonImage.setSize(150f, 10f);
-        table.add(resgButtonImage).size(300f, 100f).center().padBottom(20);
+        table.add(resgButtonImage).size(350f, 70f).center().padBottom(20);
         table.row();
 
         Image btmmButtonImage = new Image(BTMM);
         btmmButtonImage.setSize(150f, 10f);
 
-        table.add(btmmButtonImage).size(300f, 100f).center().padBottom(20);
+        table.add(btmmButtonImage).size(500f, 70f).center().padBottom(20);
         table.row();
         stage.addActor(table);
 
@@ -89,6 +92,7 @@ public class PauseScreen implements Screen {
 
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
+        spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         spriteBatch.end();
 
         stage.act(Math.min(delta, 1 / 30f));

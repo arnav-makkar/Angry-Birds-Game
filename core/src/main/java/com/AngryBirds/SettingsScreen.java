@@ -19,63 +19,82 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 public class SettingsScreen implements Screen {
     private Stage stage;
     private Skin UIskin;
+    private Texture background;
     private SpriteBatch spriteBatch;
     private Game game;
 
     private Sprite LOGO;
+    private Sprite VOLUME;
+    private Sprite BRIGHTNESS;
     private Sprite BACK;
 
     public SettingsScreen(Game game) {
-        this.game=game;
+        this.game = game;
     }
 
     @Override
     public void show() {
         spriteBatch = new SpriteBatch();
         stage = new Stage(new ScreenViewport());
+        background = new Texture(Gdx.files.internal("homeBackground.png"));
 
         Gdx.input.setInputProcessor(stage);
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
         Texture logoTexture = new Texture(Gdx.files.internal("settingsLogo.png"));
         LOGO = new Sprite(logoTexture);
-        LOGO.setSize(200f, 20f);
+        LOGO.setSize(400f, 80f);
 
-        Texture backTexture = new Texture(Gdx.files.internal("back.png"));
+        Texture backTexture = new Texture(Gdx.files.internal("exit_app.png"));
         BACK = new Sprite(backTexture);
-        BACK.setSize(200f, 20f);
+        BACK.setSize(300f, 100f);
+
+        Texture volumeTexture = new Texture(Gdx.files.internal("volumeButton.png"));
+        VOLUME = new Sprite(volumeTexture);
+        VOLUME.setSize(100f, 40f);
+
+        Texture brightnessTexture = new Texture(Gdx.files.internal("brightnessButton.png"));
+        BRIGHTNESS = new Sprite(brightnessTexture);
+        BRIGHTNESS.setSize(100f, 40f);
 
         Table table = new Table();
         table.setFillParent(true);
 
         Image logoButtonImage = new Image(LOGO);
-        logoButtonImage.setSize(150f, 10f);
-        table.add(logoButtonImage).size(700f, 300f).center().padBottom(20);
+        logoButtonImage.setSize(400f, 100f);
+        table.add(logoButtonImage).size(400f, 110f).center().padBottom(20f);
         table.row();
 
-        Label VOLUME = new Label("Game Volume", UIskin);
+        Table controlsTable = new Table();
+
+        Image volumeButtonImage = new Image(volumeTexture);
+        volumeButtonImage.setSize(100f, 60f);
         Slider vslide = new Slider(0, 100, 1, false, UIskin);
         vslide.setValue(50);
 
-        table.add(VOLUME).center().padBottom(10);
-        table.row();
-        table.add(vslide).width(500).center().padBottom(30);
-        table.row();
-
-        Label BRIGHTNESS = new Label("Screen Brightness", UIskin);
+        Image brightnessButtonImage = new Image(brightnessTexture);
+        brightnessButtonImage.setSize(100f, 80f);
         Slider bslide = new Slider(0, 100, 1, false, UIskin);
         bslide.setValue(50);
 
-        table.add(BRIGHTNESS).center().padBottom(10);
-        table.row();
-        table.add(bslide).width(500).center().padBottom(30);
+        controlsTable.add(volumeButtonImage).size(180f, 45f).center().padRight(30f);
+        controlsTable.columnDefaults(0);
+        controlsTable.add(brightnessButtonImage).size(220f, 45f).center().padRight(30f);
+
+        controlsTable.row();
+
+        controlsTable.add(vslide).width(150f).center().padBottom(10f);
+        controlsTable.columnDefaults(0);
+        controlsTable.add(bslide).width(150f).center().padBottom(10f);
+
+        table.add(controlsTable).center().padBottom(30f);
         table.row();
 
         Image backButtonImage = new Image(BACK);
-        backButtonImage.setSize(150f, 10f);
+        backButtonImage.setSize(125f, 80f);
+        stage.addActor(backButtonImage);
+        backButtonImage.setPosition(20f, 20f);
 
-        table.add(backButtonImage).size(300f, 100f).center().padBottom(20);
-        table.row();
         stage.addActor(table);
 
         ChangeListener volumeListener = new ChangeListener() {
@@ -106,7 +125,7 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.8f, 0.8f,0.8f,1);
+        Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         OrthographicCamera camera = new OrthographicCamera();
@@ -115,9 +134,9 @@ public class SettingsScreen implements Screen {
 
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
+        spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         spriteBatch.end();
 
-        stage.act(Math.min(delta, 1 / 30f));
         stage.draw();
     }
 
@@ -128,12 +147,10 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override

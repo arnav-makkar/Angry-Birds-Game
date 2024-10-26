@@ -2,6 +2,7 @@ package com.AngryBirds;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -68,7 +69,7 @@ public class GameScreen implements Screen {
         Image pauseButtonImage = new Image(PAUSE);
         pauseButtonImage.setSize(30f, 30f);
         table.top().right();  // Set the table alignment to top-left
-        table.add(pauseButtonImage).size(50f, 50f).padTop(20).padRight(60);
+        table.add(pauseButtonImage).size(85f, 50f).padTop(20).padRight(40);
         table.row();
 
         Table table2 = new Table();
@@ -123,9 +124,15 @@ public class GameScreen implements Screen {
 
         spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
+        stage.act(v);
+
         spriteBatch.end();
 
         stage.draw();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            game.setScreen(new EndScreen(game));
+        }
     }
 
     @Override
