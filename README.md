@@ -4,12 +4,9 @@ Angry Birds Game GUI developed using LibGDX and Java by Aryamaan Singh (2023139)
 
 All possible GUI use cases and user requirements have been implemented.
 
-We implemented a Home Screen consisting of a “play” button ,”settings” button and an “exit” button.
+Starting the game opens the Home Screen which consists of “Play”, ”Settings” and an “Exit” button.
 
-On clicking the “play” button we enter the Level Screen where we can choose the level of our choice using the “level@“ button where @=1..4
+Clicking "e" while in the Game screen ends the game and displays the user's final score.
 
-The “Settings” button leads us to the settings page where we can alter the “volume” and “brightness” slider to our needs and also a “back” button to return to Home Screen
-
-# GUI UML Class Diagram
-
-![img_1.png](gui_uml.png)
+## GUI UML Class Diagram
+![gui_uml.png](gui_uml.png)
