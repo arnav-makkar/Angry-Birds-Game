@@ -31,8 +31,6 @@ public class LevelScreen implements Screen {
     private Sprite LEVEL3;
     private Sprite LEVEL4;
 
-    private Sprite BACK;
-
     public LevelScreen(Game game) {
         this.game=game;
     }
@@ -40,7 +38,7 @@ public class LevelScreen implements Screen {
     @Override
     public void show() {
         spriteBatch=new SpriteBatch();
-        background =new Texture(Gdx.files.internal("levelsBackground.png"));
+        background =new Texture(Gdx.files.internal("levelsBackground 2.png"));
 
         Texture levelTexture1 = new Texture(Gdx.files.internal("level1.png"));
         Texture levelTexture2 = new Texture(Gdx.files.internal("level2.png"));
@@ -68,22 +66,22 @@ public class LevelScreen implements Screen {
 
         Image l1ButtonImage=new Image(LEVEL1);
         l1ButtonImage.setSize(200f,200f);
-        table.add(l1ButtonImage).size(150f, 60f).pad(20f);
+        table.add(l1ButtonImage).size(180f, 60f).pad(20f);
         table.columnDefaults(0).left();
 
         Image l2ButtonImage=new Image(LEVEL2);
         l2ButtonImage.setSize(200f,200f);
-        table.add(l2ButtonImage).size(150f, 60f).pad(20f);
+        table.add(l2ButtonImage).size(180f, 60f).pad(20f);
         table.columnDefaults(0).left();
 
         Image l3ButtonImage=new Image(LEVEL3);
         l3ButtonImage.setSize(200f,200f);
-        table.add(l3ButtonImage).size(150f, 60f).pad(20f);
+        table.add(l3ButtonImage).size(180f, 60f).pad(20f);
         table.columnDefaults(0).left();
 
         Image l4ButtonImage =new Image(LEVEL4);
         l4ButtonImage.setSize(100f,100f);
-        table.add(l4ButtonImage).size(150f, 60f).pad(20f);
+        table.add(l4ButtonImage).size(180f, 60f).pad(20f);
         table.columnDefaults(0).left();
 
         stage.addActor(table);

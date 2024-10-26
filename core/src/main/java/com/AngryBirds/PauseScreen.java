@@ -53,13 +53,13 @@ public class PauseScreen implements Screen {
 
         Image resgButtonImage = new Image(RESG);
         resgButtonImage.setSize(150f, 10f);
-        table.add(resgButtonImage).size(350f, 70f).center().padBottom(20);
+        table.add(resgButtonImage).size(400f, 70f).center().padBottom(20);
         table.row();
 
         Image btmmButtonImage = new Image(BTMM);
         btmmButtonImage.setSize(150f, 10f);
 
-        table.add(btmmButtonImage).size(500f, 70f).center().padBottom(20);
+        table.add(btmmButtonImage).size(575f, 70f).center().padBottom(20);
         table.row();
         stage.addActor(table);
 
