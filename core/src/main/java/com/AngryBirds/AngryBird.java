@@ -7,6 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class AngryBird extends Game {
     @Override
     public void create() {
-        setScreen(new PauseScreen(this));
+        setScreen(new HomeScreen(this));
     }
 }

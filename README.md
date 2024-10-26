@@ -11,4 +11,5 @@ Clicking "e" while in the Game screen ends the game and displays the user's fina
 All other functionality is self explanatory and intuitive.
 
 ## GUI UML Class Diagram
+
 ![gui_uml.png](gui_uml.png)
