@@ -29,6 +29,11 @@ public class GameScreen implements Screen {
     private Sprite YELLOW;
     private Sprite CATAPULT;
 
+    private Sprite PIG;
+    private Sprite WOOD_H;
+    private Sprite WOOD_V;
+    private Sprite WOOD_BOX;
+
     public GameScreen(Game game) {
         this.game = game;
     }
@@ -58,6 +63,22 @@ public class GameScreen implements Screen {
         CATAPULT = new Sprite(catapultTexture);
         CATAPULT.setSize(200f, 20f);
 
+        Texture pigTexture = new Texture(Gdx.files.internal("pig.png"));
+        PIG = new Sprite(pigTexture);
+        PIG.setSize(200f, 20f);
+
+        Texture wood_h_tex = new Texture(Gdx.files.internal("wood_h.png"));
+        WOOD_H = new Sprite(wood_h_tex);
+        WOOD_H.setSize(200f, 20f);
+
+        Texture wood_v_tex = new Texture(Gdx.files.internal("wood_v.png"));
+        WOOD_V = new Sprite(wood_v_tex);
+        WOOD_V.setSize(200f, 20f);
+
+        Texture wood_box_tex = new Texture(Gdx.files.internal("wood_box.png"));
+        WOOD_BOX = new Sprite(wood_box_tex);
+        WOOD_BOX.setSize(200f, 20f);
+
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
         stage = new Stage(new ScreenViewport());
@@ -69,7 +90,7 @@ public class GameScreen implements Screen {
         Image pauseButtonImage = new Image(PAUSE);
         pauseButtonImage.setSize(30f, 30f);
         table.top().right();  // Set the table alignment to top-left
-        table.add(pauseButtonImage).size(85f, 50f).padTop(20).padRight(40);
+        table.add(pauseButtonImage).size(60f, 55f).padTop(20).padRight(40);
         table.row();
 
         Table table2 = new Table();
@@ -97,9 +118,56 @@ public class GameScreen implements Screen {
         table2.add(catapultButtonImage).size(125f, 75f);
 
         table2.padBottom(30);
+        //table2.padLeft(10);
+
+        Table table3 = new Table();
+        table3.setFillParent(true);
+
+        table3.center();
+
+        Image pig_top = new Image(pigTexture);
+        table3.add(pig_top).size(50f, 50f);
+        table3.row();
+
+        Table row_2 = new Table();
+
+        Image pig_left = new Image(pigTexture);
+        row_2.add(pig_left).size(50f, 50f).padRight(20);
+        row_2.columnDefaults(0);
+
+        Image box = new Image(wood_box_tex);
+        row_2.add(box).size(50f, 50f).padRight(20);
+        row_2.columnDefaults(0);
+
+        Image pig_right = new Image(pigTexture);
+        row_2.add(pig_right).size(50f, 50f);
+        row_2.columnDefaults(0);
+
+        table3.add(row_2).center();
+        table3.row();
+
+        Image wood_h = new Image(wood_h_tex);
+        table3.add(wood_h).size(250f, 20f).padBottom(0);
+
+        table3.row();
+
+        Table last_row = new Table();
+
+        Image wood_v1 = new Image(wood_v_tex);
+        last_row.add(wood_v1).size(20f, 50f).padRight(150);
+
+        Image wood_v2 = new Image(wood_v_tex);
+        last_row.add(wood_v2).size(20f, 50f);
+
+        table3.add(last_row).center();
+        table3.row();
+
+        table3.padLeft(250);
+        table3.padTop(70f);
 
         stage.addActor(table);
         stage.addActor(table2);
+        stage.addActor(table3);
 
         ClickListener pauseButtonListener = new ClickListener() {
             @Override
