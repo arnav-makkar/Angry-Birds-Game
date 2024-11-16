@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class GameScreen implements Screen {
+public class Level1Screen implements Screen {
     private Stage stage;
     private Skin UIskin;
     private Texture background;
@@ -34,7 +34,7 @@ public class GameScreen implements Screen {
     private Sprite WOOD_V;
     private Sprite WOOD_BOX;
 
-    public GameScreen(Game game) {
+    public Level1Screen(Game game) {
         this.game = game;
     }
 

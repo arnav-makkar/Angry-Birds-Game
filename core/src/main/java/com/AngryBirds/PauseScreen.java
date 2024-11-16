@@ -66,7 +66,7 @@ public class PauseScreen implements Screen {
         ClickListener resumeButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new Level1Screen(game));
             }
         };
 
