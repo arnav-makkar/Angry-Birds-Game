@@ -1,13 +1,13 @@
 package com.AngryBirds;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -34,12 +34,94 @@ public class Level1Screen implements Screen {
     private Sprite WOOD_V;
     private Sprite WOOD_BOX;
 
+    private World gameWorld;
+    private Body redBody;
+    private Body blackBody;
+    private Body yellowBody;
+    private Body catapultBody;
+    private boolean drag=false;
+
     public Level1Screen(Game game) {
         this.game = game;
+        gameWorld=new World(new Vector2(0,-10.0f),true);
+    }
+
+    private void initBird(){
+        BodyDef body=new BodyDef();
+        body.type= BodyDef.BodyType.DynamicBody;
+        //body set pos
+        redBody=gameWorld.createBody(body);
+
+        CircleShape circleBox=new CircleShape();
+        circleBox.setRadius(0.5f);
+
+        FixtureDef fixture=new FixtureDef();
+        fixture.shape=circleBox;
+        fixture.density=1.0f;
+        fixture.restitution=1.0f;
+
+        redBody.createFixture(fixture);
+//        circleBox.dispose();
+    }
+
+    private void initCatapult(){
+        BodyDef body=new BodyDef();
+        body.type= BodyDef.BodyType.StaticBody;
+        //set body pos;
+        catapultBody=gameWorld.createBody(body);
+
+        PolygonShape rect = new PolygonShape();
+        rect.setAsBox(1f, 0.5f);
+
+        catapultBody.createFixture(rect, 0);
+        rect.dispose();
+    }
+
+    private Vector2 worldConvert(int screenX, int screenY) {
+        OrthographicCamera camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.update();
+
+        Vector3 wCoords = camera.unproject(new Vector3(screenX, screenY, 0));
+        return new Vector2(wCoords.x, wCoords.y);
     }
 
     @Override
     public void show() {
+        initBird();
+        initCatapult();
+
+        Gdx.input.setInputProcessor(new InputAdapter(){
+            @Override
+            public boolean touchDragged(int screenX, int screenY, int pointer){
+                if(!drag){
+                    return true;
+                }
+                Vector2 worldCoords = worldConvert(screenX, screenY);
+                redBody.setTransform(worldCoords, redBody.getAngle());
+                return false;
+            }
+
+            @Override
+            public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                Vector2 worldCoords = worldConvert(screenX, screenY);
+                if (redBody.getPosition().dst(worldCoords) < 1) {
+                    drag = true;
+                }
+                return true;
+            }
+
+            @Override
+            public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                if (drag) {
+                    drag = false;
+                    Vector2 launchVector = redBody.getPosition().cpy().sub(catapultBody.getPosition()).scl(-5);
+                    redBody.applyLinearImpulse(launchVector, redBody.getWorldCenter(), true);
+                }
+                return true;
+            }
+        });
+
         spriteBatch = new SpriteBatch();
         background = new Texture(Gdx.files.internal("game_screenBG.png"));
 
@@ -182,6 +264,7 @@ public class Level1Screen implements Screen {
     @Override
     public void render(float v) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
+        gameWorld.step(1/60f, 6, 2);
 
         OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -190,12 +273,12 @@ public class Level1Screen implements Screen {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
 
+        RED.setPosition(redBody.getPosition().x - RED.getWidth() / 2, redBody.getPosition().y - RED.getHeight() / 2);
         spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+        RED.draw(spriteBatch);
         stage.act(v);
 
         spriteBatch.end();
-
         stage.draw();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
@@ -224,6 +307,5 @@ public class Level1Screen implements Screen {
         UIskin.dispose();
         stage.dispose();
         spriteBatch.dispose();
-
     }
 }
