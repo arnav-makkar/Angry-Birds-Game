@@ -34,26 +34,29 @@ public class Level1Screen implements Screen {
     private Sprite WOOD_V;
     private Sprite WOOD_BOX;
 
-    private World gameWorld;
+    private final World gameWorld;
     private Body redBody;
     private Body blackBody;
     private Body yellowBody;
     private Body catapultBody;
+    private final OrthographicCamera camera;
     private boolean drag=false;
 
     public Level1Screen(Game game) {
         this.game = game;
-        gameWorld=new World(new Vector2(0,-10.0f),true);
+        gameWorld = new World(new Vector2(0, -10.0f), true);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     private void initBird(){
         BodyDef body=new BodyDef();
         body.type= BodyDef.BodyType.DynamicBody;
-        //body set pos
+        body.position.set(5,5);
         redBody=gameWorld.createBody(body);
 
         CircleShape circleBox=new CircleShape();
-        circleBox.setRadius(0.5f);
+        circleBox.setRadius(2.0f);
 
         FixtureDef fixture=new FixtureDef();
         fixture.shape=circleBox;
@@ -61,13 +64,13 @@ public class Level1Screen implements Screen {
         fixture.restitution=1.0f;
 
         redBody.createFixture(fixture);
-//        circleBox.dispose();
+        circleBox.dispose();
     }
 
     private void initCatapult(){
         BodyDef body=new BodyDef();
         body.type= BodyDef.BodyType.StaticBody;
-        //set body pos;
+        body.position.set(0,5);
         catapultBody=gameWorld.createBody(body);
 
         PolygonShape rect = new PolygonShape();
@@ -78,8 +81,6 @@ public class Level1Screen implements Screen {
     }
 
     private Vector2 worldConvert(int screenX, int screenY) {
-        OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
 
         Vector3 wCoords = camera.unproject(new Vector3(screenX, screenY, 0));
@@ -94,27 +95,45 @@ public class Level1Screen implements Screen {
         Gdx.input.setInputProcessor(new InputAdapter(){
             @Override
             public boolean touchDragged(int screenX, int screenY, int pointer){
-                if(!drag){
-                    return true;
+                if (!drag) {
+                    return false;
                 }
+
                 Vector2 worldCoords = worldConvert(screenX, screenY);
-                redBody.setTransform(worldCoords, redBody.getAngle());
-                return false;
+
+
+                float maxDragDistance = 3.0f;
+                Vector2 offset = worldCoords.sub(catapultBody.getPosition());
+                if (offset.len() > maxDragDistance) {
+                    offset.setLength(maxDragDistance);
+                }
+
+                redBody.setLinearVelocity(0, 0);
+                redBody.setLinearVelocity(offset.scl(10));
+                return true;
             }
 
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 Vector2 worldCoords = worldConvert(screenX, screenY);
-                if (redBody.getPosition().dst(worldCoords) < 1) {
+                System.out.println("toched\n");
+
+                float touchRadius = 2.5f;
+                if (redBody.getPosition().dst(worldCoords) < touchRadius) {
                     drag = true;
+                    Gdx.app.log("TouchDown", "Red bird picked up");
+                    System.out.println("Touch position: " + worldCoords + " Bird position: " + redBody.getPosition());
+                    return true;
+
                 }
-                return true;
+                return false;
             }
 
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 if (drag) {
                     drag = false;
+
                     Vector2 launchVector = redBody.getPosition().cpy().sub(catapultBody.getPosition()).scl(-5);
                     redBody.applyLinearImpulse(launchVector, redBody.getWorldCenter(), true);
                 }
@@ -162,8 +181,8 @@ public class Level1Screen implements Screen {
         WOOD_BOX.setSize(200f, 20f);
 
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-
         stage = new Stage(new ScreenViewport());
+
         Gdx.input.setInputProcessor(stage);
 
         Table table = new Table();
@@ -171,7 +190,7 @@ public class Level1Screen implements Screen {
 
         Image pauseButtonImage = new Image(PAUSE);
         pauseButtonImage.setSize(30f, 30f);
-        table.top().right();  // Set the table alignment to top-left
+        table.top().right();
         table.add(pauseButtonImage).size(60f, 55f).padTop(20).padRight(40);
         table.row();
 
@@ -180,22 +199,30 @@ public class Level1Screen implements Screen {
 
         table2.center().left();
 
-        Image blackButtonImage = new Image(blackTexture);
+        Image blackButtonImage = new Image(BLACK);
         blackButtonImage.setSize(30f, 30f);
         table2.add(blackButtonImage).size(50f, 50f);
         table2.columnDefaults(0).left();
 
-        Image yellowButtonImage = new Image(yellowTexture);
+        Image yellowButtonImage = new Image(YELLOW);
         yellowButtonImage.setSize(30f, 30f);
         table2.add(yellowButtonImage).size(50f, 50f);
         table2.columnDefaults(0).left();
 
-        Image redButtonImage = new Image(redTexture);
+        Image redButtonImage = new Image(RED);
         redButtonImage.setSize(30f, 30f);
+
+        redButtonImage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                drag = true;
+            }
+        });
+
         table2.add(redButtonImage).size(50f, 50f);
         table2.columnDefaults(0).left();
 
-        Image catapultButtonImage = new Image(catapultTexture);
+        Image catapultButtonImage = new Image(CATAPULT);
         catapultButtonImage.setSize(75f, 50f);
         table2.add(catapultButtonImage).size(125f, 75f);
 
@@ -207,38 +234,38 @@ public class Level1Screen implements Screen {
 
         table3.center();
 
-        Image pig_top = new Image(pigTexture);
+        Image pig_top = new Image(PIG);
         table3.add(pig_top).size(50f, 50f);
         table3.row();
 
         Table row_2 = new Table();
 
-        Image pig_left = new Image(pigTexture);
+        Image pig_left = new Image(PIG);
         row_2.add(pig_left).size(50f, 50f).padRight(20);
         row_2.columnDefaults(0);
 
-        Image box = new Image(wood_box_tex);
+        Image box = new Image(WOOD_BOX);
         row_2.add(box).size(50f, 50f).padRight(20);
         row_2.columnDefaults(0);
 
-        Image pig_right = new Image(pigTexture);
+        Image pig_right = new Image(PIG);
         row_2.add(pig_right).size(50f, 50f);
         row_2.columnDefaults(0);
 
         table3.add(row_2).center();
         table3.row();
 
-        Image wood_h = new Image(wood_h_tex);
+        Image wood_h = new Image(WOOD_H);
         table3.add(wood_h).size(250f, 20f).padBottom(0);
 
         table3.row();
 
         Table last_row = new Table();
 
-        Image wood_v1 = new Image(wood_v_tex);
+        Image wood_v1 = new Image(WOOD_V);
         last_row.add(wood_v1).size(20f, 50f).padRight(150);
 
-        Image wood_v2 = new Image(wood_v_tex);
+        Image wood_v2 = new Image(WOOD_V);
         last_row.add(wood_v2).size(20f, 50f);
 
         table3.add(last_row).center();
@@ -266,10 +293,7 @@ public class Level1Screen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         gameWorld.step(1/60f, 6, 2);
 
-        OrthographicCamera camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
-
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
 
@@ -307,5 +331,6 @@ public class Level1Screen implements Screen {
         UIskin.dispose();
         stage.dispose();
         spriteBatch.dispose();
+        gameWorld.dispose();
     }
 }

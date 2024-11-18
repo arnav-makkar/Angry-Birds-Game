@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -33,9 +35,14 @@ public class Level2Screen implements Screen {
     private Sprite WOOD_H;
     private Sprite WOOD_V;
     private Sprite WOOD_BOX;
+    private OrthographicCamera camera;
+    private final World gameWorld;
 
     public Level2Screen(Game game) {
         this.game = game;
+        gameWorld = new World(new Vector2(0, -10.0f), true);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
