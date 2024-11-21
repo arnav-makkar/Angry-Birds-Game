@@ -87,7 +87,7 @@ public class LevelScreen implements Screen {
         ClickListener l1Listener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new Level1Screen(game));
+                game.setScreen(new SimpleBox2DAttachScreen(game));
             }
         };
 
