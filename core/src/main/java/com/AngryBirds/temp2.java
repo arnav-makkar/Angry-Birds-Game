@@ -18,7 +18,7 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class temp implements Screen {
+public class temp2 implements Screen {
     private static final float PPM = 100f;
     private static final float LAUNCH_MULTIPLIER = 1f;
 
@@ -46,7 +46,7 @@ public class temp implements Screen {
     private final LinkedList<Body> allBirds = new LinkedList<>();
     private Body currentBird;
 
-    public temp(Game game) {}
+    public temp2(Game game) {}
 
     @Override
     public void show() {
@@ -92,8 +92,14 @@ public class temp implements Screen {
         create_Ground_obj(5.8f, 0.7f, 1.7f, 0.5f);
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
 
+        createObstacle(4.8f, 1.65f, woodBoxtex, 0.5f, 0.5f);
+        createObstacle(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
+
         createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f);
         createObstacle(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
+
+        createObstacle(6.85f, 1.65f, woodBoxtex, 0.5f, 0.5f);
+        createObstacle(6.85f, 1.8f, pigTexture, 0.05f, 0.05f);
 
         birdsQueue = new LinkedList<>();
         spawnNewBird();
