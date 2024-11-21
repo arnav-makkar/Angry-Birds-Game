@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
@@ -39,7 +40,8 @@ public class temp implements Screen {
     private boolean isDragging = false;
     private Vector2 dragStart;
 
-    private final LinkedList<Body> obstacles = new LinkedList<>();
+    //private final LinkedList<Body> obstacles = new LinkedList<>();
+    private final LinkedList<Obstacle> obstacles = new LinkedList<>();
 
     private Queue<Body> birdsQueue;
     private final LinkedList<Body> allBirds = new LinkedList<>();
@@ -89,7 +91,9 @@ public class temp implements Screen {
 
         create_Ground_obj(5.8f, 0.7f, 1.7f, 0.5f);
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
-        createObstacle_Tex(5.9f, 2f, woodBoxtex);
+        //createObstacle_Tex(5.9f, 2f, woodBoxtex);
+
+        createObstacle(5.9f, 2f, woodBoxtex);
 
         birdsQueue = new LinkedList<>();
         spawnNewBird();
@@ -213,6 +217,34 @@ public class temp implements Screen {
         obstacleShape.dispose();
     }
 
+    private void createObstacle(float x, float y, Texture texture) {
+        float width = texture.getWidth() / PPM / 3;
+        float height = texture.getHeight() / PPM / 3;
+
+        // Create the obstacle body
+        BodyDef obstacleDef = new BodyDef();
+        obstacleDef.type = BodyDef.BodyType.DynamicBody; // Allow it to move
+        obstacleDef.position.set(x, y);
+
+        Body obstacleBody = world.createBody(obstacleDef);
+
+        // Define the shape based on texture dimensions
+        PolygonShape obstacleShape = new PolygonShape();
+        obstacleShape.setAsBox(width / 2, height / 2);
+
+        FixtureDef obstacleFixtureDef = new FixtureDef();
+        obstacleFixtureDef.shape = obstacleShape;
+        obstacleFixtureDef.density = 1f; // Adjust density
+        obstacleFixtureDef.friction = 0.6f;
+        obstacleFixtureDef.restitution = 0.2f;
+
+        obstacleBody.createFixture(obstacleFixtureDef);
+        obstacleShape.dispose();
+
+        // Add the obstacle with texture to the list
+        obstacles.add(new Obstacle(obstacleBody, texture));
+    }
+/*
     private void createObstacle_Tex(float x, float y, Texture texture) {
         // Calculate obstacle dimensions in Box2D units based on the texture size
         float width = texture.getWidth() / PPM/(3);
@@ -241,6 +273,8 @@ public class temp implements Screen {
         // Add to the list of obstacles
         obstacles.add(obstacleBody);
     }
+
+ */
 
 
     @Override
@@ -272,14 +306,27 @@ public class temp implements Screen {
             );
         }
 
-        for (Body obstacle : obstacles) {
-            Vector2 position = obstacle.getPosition();
+        for (Obstacle obstacle : obstacles) {
+            Body body = obstacle.body;
+            Texture texture = obstacle.texture;
+            TextureRegion textureRegion = new TextureRegion(texture);
+
+            // Get obstacle position and angle
+            Vector2 position = body.getPosition();
+            float angle = (float) Math.toDegrees(body.getAngle());
+
+            // Calculate size based on texture and PPM
+            float width = (float) texture.getWidth()/3;
+            float height = (float) texture.getHeight()/3;
+
+            // Render the obstacle with its texture
             batch.draw(
-                woodBoxtex,
-                position.x * PPM - 50, // Adjust offsets to align the texture
-                position.y * PPM - 50,
-                100, // Box width in pixels
-                100  // Box height in pixels
+                textureRegion,
+                position.x * PPM - width / 2, position.y * PPM - height / 2,
+                width / 2f,height / 2f,
+                width/1,height/1,
+                1f,1f,
+                angle/1
             );
         }
 
