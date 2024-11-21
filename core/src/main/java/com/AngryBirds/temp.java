@@ -17,14 +17,15 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class SimpleBox2DAttachScreen implements Screen {
+public class temp implements Screen {
     private static final float PPM = 100f;
     private static final float LAUNCH_MULTIPLIER = 1f;
 
     private SpriteBatch batch;
     private Texture birdTexture;
-    private Texture boxTexture;
+    private Texture catapultTexture;
     private Texture background;
+    private Texture woodBoxtex;
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -38,25 +39,28 @@ public class SimpleBox2DAttachScreen implements Screen {
     private boolean isDragging = false;
     private Vector2 dragStart;
 
+    private final LinkedList<Body> obstacles = new LinkedList<>();
+
     private Queue<Body> birdsQueue;
     private final LinkedList<Body> allBirds = new LinkedList<>();
     private Body currentBird;
 
-    public SimpleBox2DAttachScreen(Game game) {}
+    public temp(Game game) {}
 
     @Override
     public void show() {
         batch = new SpriteBatch();
         birdTexture = new Texture("redBird.png");
-        boxTexture = new Texture("catapult.png");
+        catapultTexture = new Texture("catapult.png");
         background = new Texture(Gdx.files.internal("game_screenBG.png"));
+        woodBoxtex = new Texture("wood_box.png");
 
         world = new World(new Vector2(0, -10.0f), true);
         debugRenderer = new Box2DDebugRenderer();
 
         BodyDef baseDef = new BodyDef();
         baseDef.type = BodyDef.BodyType.StaticBody;
-        baseDef.position.set(3f, 2f);
+        baseDef.position.set(2f, 2.75f);
         catapultBaseBody = world.createBody(baseDef);
 
         PolygonShape baseShape = new PolygonShape();
@@ -66,7 +70,7 @@ public class SimpleBox2DAttachScreen implements Screen {
 
         BodyDef armDef = new BodyDef();
         armDef.type = BodyDef.BodyType.DynamicBody;
-        armDef.position.set(3f, 2f);
+        armDef.position.set(2f, 2.75f);
         catapultArmBody = world.createBody(armDef);
 
         PolygonShape armShape = new PolygonShape();
@@ -78,12 +82,15 @@ public class SimpleBox2DAttachScreen implements Screen {
         armShape.dispose();
 
         RevoluteJointDef revoluteDef = new RevoluteJointDef();
-        revoluteDef.initialize(catapultBaseBody, catapultArmBody, new Vector2(3f, 2f));
+        revoluteDef.initialize(catapultBaseBody, catapultArmBody, new Vector2(2f, 2.75f));
         revoluteDef.enableMotor = true;
         revoluteDef.maxMotorTorque = 1000f;
         catapultJoint = (RevoluteJoint) world.createJoint(revoluteDef);
 
-        createObstacle(6f, 1f);
+        create_Ground_obj(5.8f, 0.7f, 1.7f, 0.5f);
+        create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
+        createObstacle_Tex(5.9f, 2f, woodBoxtex);
+
         birdsQueue = new LinkedList<>();
         spawnNewBird();
 
@@ -141,7 +148,7 @@ public class SimpleBox2DAttachScreen implements Screen {
             jointDef.collideConnected = false;
             ballJoint = (DistanceJoint) world.createJoint(jointDef);
         } else {
-            createBird(3f, 2f); // Create a new bird if the queue is empty
+            createBird(2f, 2.75f); // Create a new bird if the queue is empty
         }
     }
 
@@ -181,11 +188,12 @@ public class SimpleBox2DAttachScreen implements Screen {
         currentBird.setLinearVelocity(0, 0);
         currentBird.setAngularVelocity(0);
     }
+
     private Vector2 screenToWorldCoordinates(int screenX, int screenY) {
         return new Vector2(screenX / PPM, (Gdx.graphics.getHeight() - screenY) / PPM);
     }
 
-    private void createObstacle(float x, float y) {
+    private void create_Ground_obj(float x, float y, float x1, float y1){
         BodyDef obstacleDef = new BodyDef();
         obstacleDef.type = BodyDef.BodyType.StaticBody;
         obstacleDef.position.set(x, y);
@@ -193,7 +201,7 @@ public class SimpleBox2DAttachScreen implements Screen {
         Body obstacleBody = world.createBody(obstacleDef);
 
         PolygonShape obstacleShape = new PolygonShape();
-        obstacleShape.setAsBox(0.5f, 0.5f); // Dimensions: 1x1 meters
+        obstacleShape.setAsBox(x1, y1); // Dimensions: 1x1 meters
 
         FixtureDef obstacleFixtureDef = new FixtureDef();
         obstacleFixtureDef.shape = obstacleShape;
@@ -205,6 +213,36 @@ public class SimpleBox2DAttachScreen implements Screen {
         obstacleShape.dispose();
     }
 
+    private void createObstacle_Tex(float x, float y, Texture texture) {
+        // Calculate obstacle dimensions in Box2D units based on the texture size
+        float width = texture.getWidth() / PPM/(3);
+        float height = texture.getHeight() / PPM/(3);
+
+        // Create the obstacle body
+        BodyDef obstacleDef = new BodyDef();
+        obstacleDef.type = BodyDef.BodyType.DynamicBody;
+        obstacleDef.position.set(x, y);
+
+        Body obstacleBody = world.createBody(obstacleDef);
+
+        // Define the shape based on texture dimensions
+        PolygonShape obstacleShape = new PolygonShape();
+        obstacleShape.setAsBox(width / 2, height / 2);
+
+        FixtureDef obstacleFixtureDef = new FixtureDef();
+        obstacleFixtureDef.shape = obstacleShape;
+        obstacleFixtureDef.density = 0.2f;
+        obstacleFixtureDef.friction = 0.6f;
+        obstacleFixtureDef.restitution = 0.1f;
+
+        obstacleBody.createFixture(obstacleFixtureDef);
+        obstacleShape.dispose();
+
+        // Add to the list of obstacles
+        obstacles.add(obstacleBody);
+    }
+
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -213,6 +251,15 @@ public class SimpleBox2DAttachScreen implements Screen {
 
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        // Render the catapult
+        batch.draw(
+            catapultTexture,
+            catapultArmBody.getPosition().x * PPM - 65,
+            catapultArmBody.getPosition().y * PPM - 53,
+            150,
+            55
+        );
 
         for (Body bird : allBirds) {
             Vector2 position = bird.getPosition();
@@ -225,14 +272,16 @@ public class SimpleBox2DAttachScreen implements Screen {
             );
         }
 
-        // Render the catapult
-        batch.draw(
-            boxTexture,
-            catapultArmBody.getPosition().x * PPM - 50,
-            catapultArmBody.getPosition().y * PPM - 32,
-            150,
-            55
-        );
+        for (Body obstacle : obstacles) {
+            Vector2 position = obstacle.getPosition();
+            batch.draw(
+                woodBoxtex,
+                position.x * PPM - 50, // Adjust offsets to align the texture
+                position.y * PPM - 50,
+                100, // Box width in pixels
+                100  // Box height in pixels
+            );
+        }
 
         batch.end();
 
@@ -243,7 +292,7 @@ public class SimpleBox2DAttachScreen implements Screen {
     public void dispose() {
         batch.dispose();
         birdTexture.dispose();
-        boxTexture.dispose();
+        catapultTexture.dispose();
         background.dispose();
         world.dispose();
         debugRenderer.dispose();
