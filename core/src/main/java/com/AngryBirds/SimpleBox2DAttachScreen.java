@@ -56,7 +56,7 @@ public class SimpleBox2DAttachScreen implements Screen {
 
         BodyDef baseDef = new BodyDef();
         baseDef.type = BodyDef.BodyType.StaticBody;
-        baseDef.position.set(3f, 3f);
+        baseDef.position.set(3f, 2f);
         catapultBaseBody = world.createBody(baseDef);
 
         PolygonShape baseShape = new PolygonShape();
