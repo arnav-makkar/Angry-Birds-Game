@@ -49,6 +49,7 @@ public class temp2 implements Screen {
     private Vector2 dragStart;
 
     private final LinkedList<Obstacle> obstacles = new LinkedList<>();
+    private final LinkedList<Pig> pigs = new LinkedList<>();
 
     private Queue<Body> birdsQueue;
     private final LinkedList<Body> allBirds = new LinkedList<>();
@@ -108,13 +109,13 @@ public class temp2 implements Screen {
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
 
         createObstacle(4.8f, 1.65f, woodBoxtex, 0.5f, 0.5f);
-        createObstacle(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
+        createPig(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
 
         createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f);
-        createObstacle(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
+        createPig(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
 
         createObstacle(6.85f, 1.65f, woodBoxtex, 0.5f, 0.5f);
-        createObstacle(6.85f, 1.8f, pigTexture, 0.05f, 0.05f);
+        createPig(6.85f, 1.8f, pigTexture, 0.05f, 0.05f);
 
         birdsQueue = new LinkedList<>();
         spawnNewBird();
@@ -279,6 +280,34 @@ public class temp2 implements Screen {
         // Add the obstacle with texture to the list
         obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale));
     }
+
+    private void createPig(float x, float y, Texture texture, float xscale, float yscale) {
+        float width = texture.getWidth() / PPM / 3;
+        float height = texture.getHeight() / PPM / 3;
+
+        // Create the obstacle body
+        BodyDef obstacleDef = new BodyDef();
+        obstacleDef.type = BodyDef.BodyType.DynamicBody; // Allow it to move
+        obstacleDef.position.set(x, y);
+
+        Body obstacleBody = world.createBody(obstacleDef);
+
+        // Define the shape based on texture dimensions
+        PolygonShape obstacleShape = new PolygonShape();
+        obstacleShape.setAsBox(width*xscale/2, height*yscale/2);
+
+        FixtureDef obstacleFixtureDef = new FixtureDef();
+        obstacleFixtureDef.shape = obstacleShape;
+        obstacleFixtureDef.density = 1f; // Adjust density
+        obstacleFixtureDef.friction = 0.6f;
+        obstacleFixtureDef.restitution = 0.2f;
+
+        obstacleBody.createFixture(obstacleFixtureDef);
+        obstacleShape.dispose();
+
+        // Add the obstacle with texture to the list
+        pigs.add(new Pig(obstacleBody, texture, xscale, yscale));
+    }
 /*
     private void createObstacle_Tex(float x, float y, Texture texture) {
         // Calculate obstacle dimensions in Box2D units based on the texture size
@@ -342,6 +371,30 @@ public class temp2 implements Screen {
         }
 
         for (Obstacle obstacle : obstacles) {
+            Body body = obstacle.body;
+            Texture texture = obstacle.texture;
+            TextureRegion textureRegion = new TextureRegion(texture);
+
+            // Get obstacle position and angle
+            Vector2 position = body.getPosition();
+            float angle = (float) Math.toDegrees(body.getAngle());
+
+            // Calculate size based on texture and PPM
+            float width = (float) texture.getWidth()/3;
+            float height = (float) texture.getHeight()/3;
+
+            // Render the obstacle with its texture
+            batch.draw(
+                textureRegion,
+                position.x * PPM - width / 2, position.y * PPM - height / 2,
+                width / 2f,height / 2f,
+                width/1,height/1,
+                obstacle.x,obstacle.y,
+                angle/1
+            );
+        }
+
+        for (Pig obstacle : pigs) {
             Body body = obstacle.body;
             Texture texture = obstacle.texture;
             TextureRegion textureRegion = new TextureRegion(texture);
