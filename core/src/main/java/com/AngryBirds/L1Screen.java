@@ -492,6 +492,7 @@ public class L1Screen implements Screen {
             game.setScreen(new LevelSuccessScreen(this.game, totalTime));
         }
 
+
         if(totalTime>20 || birdTextQ.isEmpty()){
             game.setScreen(new LevelFailScreen(this.game));
         }
