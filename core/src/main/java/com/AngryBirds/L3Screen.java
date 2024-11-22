@@ -161,7 +161,7 @@ public class L3Screen implements Screen {
 
         createObstacle(4.8f, 1.65f, ice4tex, 0.5f, 0.5f, 2);
 
-        createObstacle(5.9f, 2.7f, icetri, 0.f, 0.5f, 3);
+        createObstacle(5.9f, 2.7f, icetri, 0.6f, 0.5f, 3);
 
         createPig(5f, 2.1f, pigTexture, 0.055f, 0.055f);
         createPig(6.8f, 2.1f, pigTexture, 0.055f, 0.055f);
