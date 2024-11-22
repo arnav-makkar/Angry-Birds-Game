@@ -24,7 +24,7 @@ import java.util.Queue;
 
 public class tempTest implements Screen {
     private static final float PPM = 100f;
-    private static final float LMULT = 1f;
+    private static final float LMULT = 0.5f;
 
     private SpriteBatch batch;
     private Texture birdTexture;
@@ -58,7 +58,7 @@ public class tempTest implements Screen {
     private Body currentBird;
 
     private BitmapFont font;
-    private float elapsedTime = 0f;
+    private float totalTime = 0f;
 
     public tempTest(Game game) {}
 
@@ -123,13 +123,12 @@ public class tempTest implements Screen {
         createObstacle(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
 
         birdsQueue = new LinkedList<>();
-        spawnNewBird();
+        initNewBird();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 Vector2 worldCoords = screenToWorldCoordinates(screenX, screenY);
-
                 if (currentBird != null && currentBird.getFixtureList().first().testPoint(worldCoords.x, worldCoords.y)) {
                     dragged = true;
                     dragStart = worldCoords;
@@ -150,14 +149,14 @@ public class tempTest implements Screen {
 
                     currentBird.applyLinearImpulse(launchVector, currentBird.getWorldCenter(), true);
                     dragged = false;
-                    spawnNewBird();
+                    initNewBird();
                 }
                 return true;
             }
         });
     }
 
-    private void spawnNewBird() {
+    private void initNewBird() {
         if (!birdsQueue.isEmpty()) {
             currentBird = birdsQueue.poll();
 
@@ -174,7 +173,6 @@ public class tempTest implements Screen {
             createBird(2f, 2.75f);
         }
     }
-
 
     private void createBird(float x, float y) {
         BodyDef ballDef = new BodyDef();
@@ -242,14 +240,12 @@ public class tempTest implements Screen {
         float width = texture.getWidth() / PPM / 3;
         float height = texture.getHeight() / PPM / 3;
 
-        // Create the obstacle body
         BodyDef obstacleDef = new BodyDef();
         obstacleDef.type = BodyDef.BodyType.DynamicBody; // Allow it to move
         obstacleDef.position.set(x, y);
 
         Body obstacleBody = world.createBody(obstacleDef);
 
-        // Define the shape based on texture dimensions
         PolygonShape obstacleShape = new PolygonShape();
         obstacleShape.setAsBox(width*xscale/2, height*yscale/2);
 
@@ -262,46 +258,14 @@ public class tempTest implements Screen {
         obstacleBody.createFixture(obstacleFixtureDef);
         obstacleShape.dispose();
 
-        // Add the obstacle with texture to the list
         obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale));
     }
-/*
-    private void createObstacle_Tex(float x, float y, Texture texture) {
-        // Calculate obstacle dimensions in Box2D units based on the texture size
-        float width = texture.getWidth() / PPM/(3);
-        float height = texture.getHeight() / PPM/(3);
-
-        // Create the obstacle body
-        BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.DynamicBody;
-        obstacleDef.position.set(x, y);
-
-        Body obstacleBody = world.createBody(obstacleDef);
-
-        // Define the shape based on texture dimensions
-        PolygonShape obstacleShape = new PolygonShape();
-        obstacleShape.setAsBox(width / 2, height / 2);
-
-        FixtureDef obstacleFixtureDef = new FixtureDef();
-        obstacleFixtureDef.shape = obstacleShape;
-        obstacleFixtureDef.density = 0.2f;
-        obstacleFixtureDef.friction = 0.6f;
-        obstacleFixtureDef.restitution = 0.1f;
-
-        obstacleBody.createFixture(obstacleFixtureDef);
-        obstacleShape.dispose();
-
-        // Add to the list of obstacles
-        obstacles.add(obstacleBody);
-    }
-
- */
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         world.step(1 / 60f, 6, 2);
-        elapsedTime += delta;
+        totalTime += delta;
 
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -313,7 +277,6 @@ public class tempTest implements Screen {
         batch.draw(yellowBirdTexture, 140, 0, 40, 40);
         batch.draw(blackBirdTexture, 175, 0, 40, 40);
 
-        // Render the catapult
         batch.draw(
             catapultTexture,
             catapultArmBody.getPosition().x * PPM - 65,
@@ -324,14 +287,8 @@ public class tempTest implements Screen {
 
         for (Body bird : allBirds) {
             Vector2 position = bird.getPosition();
-            Texture texture = birdTextM.get(bird); // Get the texture specific to this bird
-            batch.draw(
-                texture,
-                position.x * PPM - 16,
-                position.y * PPM - 16,
-                32,
-                32
-            );
+            Texture texture = birdTextM.get(bird);
+            batch.draw(texture, position.x * PPM - 16, position.y * PPM - 16, 32, 32);
         }
 
 
@@ -346,24 +303,13 @@ public class tempTest implements Screen {
             float width = (float) texture.getWidth()/3;
             float height = (float) texture.getHeight()/3;
 
-            batch.draw(
-                textureRegion,
-                position.x * PPM - width / 2, position.y * PPM - height / 2,
-                width / 2f,height / 2f,
-                width/1,height/1,
-                obstacle.x,obstacle.y,
-                angle/1
+            batch.draw(textureRegion, position.x * PPM - width / 2, position.y * PPM - height / 2, width / 2f,height / 2f, width/1,height/1, obstacle.x,obstacle.y, angle/1
             );
         }
 
-        String timerText = String.format("test timer: %.1f", elapsedTime);
+        String timerText = String.format("test timer: %.1f", totalTime);
         GlyphLayout layout = new GlyphLayout(font, timerText);
-        font.draw(
-            batch,
-            timerText,
-            Gdx.graphics.getWidth() - layout.width - 20,
-            Gdx.graphics.getHeight() - 20
-        );
+        font.draw(batch, timerText, Gdx.graphics.getWidth() - layout.width - 20, Gdx.graphics.getHeight() - 20);
 
         batch.end();
 
