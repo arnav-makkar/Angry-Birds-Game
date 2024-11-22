@@ -1,28 +1,35 @@
 package com.AngryBirds;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 import static java.lang.Thread.sleep;
 
-public class temp2 implements Screen {
+public class L1Screen implements Screen {
     private static final float PPM = 100f;
     private static final float LAUNCH_MULTIPLIER = 1f;
+    private Stage stage;
+
+    private Sprite PAUSE;
 
     private SpriteBatch batch;
     private Texture birdTexture;
@@ -30,6 +37,16 @@ public class temp2 implements Screen {
     private Texture background;
     private Texture woodBoxtex;
     private Texture pigTexture;
+
+    private Texture redBirdTexture;
+    private Texture yellowBirdTexture;
+    private Texture blackBirdTexture;
+
+    private Queue<Texture> birdTextQ;
+    private Map<Body, Texture> birdTextM;
+
+    private BitmapFont font;
+    private float totalTime = 0f;
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -56,7 +73,7 @@ public class temp2 implements Screen {
     private Body currentBird;
     private Game game;
 
-    public temp2(Game game) {}
+    public L1Screen(Game game) {this.game = game;}
 
     @Override
     public void show() {
@@ -66,6 +83,31 @@ public class temp2 implements Screen {
         background = new Texture(Gdx.files.internal("game_screenBG.png"));
         woodBoxtex = new Texture("wood_box.png");
         pigTexture = new Texture("pig.png");
+
+        redBirdTexture = new Texture("redBird.png");
+        yellowBirdTexture = new Texture("yellowBird.png");
+        blackBirdTexture = new Texture("blackBird.png");
+
+        birdTextM = new HashMap<>();
+        birdTextQ = new LinkedList<>();
+        birdTextQ.add(redBirdTexture);
+        birdTextQ.add(redBirdTexture);
+        birdTextQ.add(yellowBirdTexture);
+        birdTextQ.add(yellowBirdTexture);
+
+        font = new BitmapFont();
+        font.getData().setScale(2f);
+
+        Texture pauseTexture = new Texture(Gdx.files.internal("pauseButton.png"));
+        PAUSE = new Sprite(pauseTexture);
+        PAUSE.setSize(150f, 50f);
+
+        stage = new Stage(new ScreenViewport());
+
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(stage);
+
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         world = new World(new Vector2(0, -10.0f), true);
         debugRenderer = new Box2DDebugRenderer();
@@ -110,19 +152,28 @@ public class temp2 implements Screen {
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
         create_Ground_obj(3f, -1f, 10f, 0.2f);
 
-        createObstacle(4.8f, 1.65f, woodBoxtex, 0.5f, 0.5f);
-        createPig(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
+        //createObstacle(4.8f, 1.65f, woodBoxtex, 0.5f, 0.5f);
+        //createPig(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
 
         createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f);
         createPig(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
 
-        createObstacle(6.85f, 1.65f, woodBoxtex, 0.5f, 0.5f);
-        createPig(6.85f, 1.8f, pigTexture, 0.05f, 0.05f);
+        //createObstacle(6.85f, 1.65f, woodBoxtex, 0.5f, 0.5f);
+        //createPig(6.85f, 1.8f, pigTexture, 0.05f, 0.05f);
+
+        Table table = new Table();
+        table.setFillParent(true);
+
+        Image pauseButtonImage = new Image(PAUSE);
+        pauseButtonImage.setSize(30f, 30f);
+        table.top().right();
+        table.add(pauseButtonImage).size(60f, 55f).padTop(20).padRight(40);
+        table.row();
 
         birdsQueue = new LinkedList<>();
-        spawnNewBird();
+        initNewBird();
 
-        Gdx.input.setInputProcessor(new InputAdapter() {
+        inputMultiplexer.addProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 Vector2 worldCoords = screenToWorldCoordinates(screenX, screenY);
@@ -167,22 +218,31 @@ public class temp2 implements Screen {
                     isDragging = false;
 
                     // Spawn the next bird
-                    spawnNewBird();
+                    initNewBird();
                 }
                 return true;
             }
         });
+
+        stage.addActor(table);
+
+        ClickListener pauseButtonListener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new PauseScreen(game));
+            }
+        };
+
+        pauseButtonImage.addListener(pauseButtonListener);
     }
 
-    private void spawnNewBird() {
+    private void initNewBird() {
         if (!birdsQueue.isEmpty()) {
             currentBird = birdsQueue.poll();
 
-            // Reset bird velocity
             currentBird.setLinearVelocity(0, 0);
             currentBird.setAngularVelocity(0);
 
-            // Attach the bird to the catapult using a distance joint
             DistanceJointDef jointDef = new DistanceJointDef();
             jointDef.initialize(catapultArmBody, currentBird,
                 catapultArmBody.getWorldCenter(),
@@ -190,13 +250,13 @@ public class temp2 implements Screen {
             jointDef.collideConnected = false;
             ballJoint = (DistanceJoint) world.createJoint(jointDef);
         } else {
-            createBird(2f, 2.75f); // Create a new bird if the queue is empty
+            createBird(2f, 2.75f);
         }
     }
 
     private void createBird(float x, float y) {
         BodyDef ballDef = new BodyDef();
-        ballDef.type = BodyDef.BodyType.DynamicBody; //static isko
+        ballDef.type = BodyDef.BodyType.DynamicBody;
         ballDef.position.set(x, y);
         Body bird = world.createBody(ballDef);
 
@@ -209,16 +269,18 @@ public class temp2 implements Screen {
         ballFixtureDef.friction = 0.3f;
         ballFixtureDef.restitution = 0.5f;
 
-        // Set collision filters
-        ballFixtureDef.filter.groupIndex = -1; // Negative group index to prevent collisions with catapult
+        ballFixtureDef.filter.groupIndex = -1;
         bird.createFixture(ballFixtureDef);
         ballShape.dispose();
 
-        // Add bird to tracking lists
         allBirds.add(bird);
         currentBird = bird;
 
-        // Attach the bird to the catapult using a distance joint
+        if (!birdTextQ.isEmpty()) {
+            Texture birdTexture = birdTextQ.poll();
+            birdTextM.put(bird, birdTexture);
+        }
+
         DistanceJointDef jointDef = new DistanceJointDef();
         jointDef.initialize(catapultArmBody, bird,
             catapultArmBody.getWorldCenter(),
@@ -226,7 +288,6 @@ public class temp2 implements Screen {
         jointDef.collideConnected = false;
         ballJoint = (DistanceJoint) world.createJoint(jointDef);
 
-        // Reset velocity to ensure stability
         currentBird.setLinearVelocity(0, 0);
         currentBird.setAngularVelocity(0);
     }
@@ -351,9 +412,19 @@ public class temp2 implements Screen {
         int cnt = 0;
 
         world.step(1 / 60f, 6, 2);
+        totalTime += delta;
 
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        batch.draw(redBirdTexture, 105, 0, 40, 40);
+        batch.draw(redBirdTexture, 70, 0, 40, 40);
+        batch.draw(yellowBirdTexture, 35, 0, 40, 40);
+        batch.draw(yellowBirdTexture, 0, 0, 40, 40);
+
+        String timerText = String.format("Total time: 20s\n   Timer: %.1f", totalTime);
+        GlyphLayout layout = new GlyphLayout(font, timerText);
+        font.draw(batch, timerText, Gdx.graphics.getWidth() - layout.width-380, Gdx.graphics.getHeight() - 20);
 
         // Render the catapult
         batch.draw(
@@ -366,13 +437,8 @@ public class temp2 implements Screen {
 
         for (Body bird : allBirds) {
             Vector2 position = bird.getPosition();
-            batch.draw(
-                birdTexture,
-                position.x * PPM - 16,
-                position.y * PPM - 16,
-                32,
-                32
-            );
+            Texture texture = birdTextM.get(bird);
+            batch.draw(texture, position.x * PPM - 16, position.y * PPM - 16, 32, 32);
         }
 
         for (Obstacle obstacle : obstacles) {
@@ -428,14 +494,17 @@ public class temp2 implements Screen {
             }
         }
 
-        if (pigs.isEmpty()) {
-            try {
-                sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            game.setScreen(new LevelSuccessScreen(this.game, cnt));
+        if (pigs.isEmpty() && totalTime<=20) {
+            game.setScreen(new LevelSuccessScreen(this.game, totalTime));
         }
+
+        if(totalTime>20 || birdTextQ.isEmpty()){
+            game.setScreen(new LevelFailScreen(this.game));
+        }
+
+        stage.act(delta);
+
+        stage.draw();
 
         batch.end();
 

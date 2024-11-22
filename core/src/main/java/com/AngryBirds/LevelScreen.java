@@ -87,14 +87,35 @@ public class LevelScreen implements Screen {
         ClickListener l1Listener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SimpleBox2DAttachScreen(game));
+                game.setScreen(new L1Screen(game));
+            }
+        };
+
+        ClickListener l2Listener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new L2Screen(game));
+            }
+        };
+
+        ClickListener l3Listener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new L2Screen(game));
+            }
+        };
+
+        ClickListener l4Listener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new L2Screen(game));
             }
         };
 
         l1ButtonImage.addListener(l1Listener);
-        l2ButtonImage.addListener(l1Listener);
-        l3ButtonImage.addListener(l1Listener);
-        l4ButtonImage.addListener(l1Listener);
+        l2ButtonImage.addListener(l2Listener);
+        l3ButtonImage.addListener(l2Listener);
+        l4ButtonImage.addListener(l2Listener);
     }
 
     @Override

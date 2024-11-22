@@ -21,11 +21,11 @@ public class LevelSuccessScreen implements Screen {
     private Texture background;
     private SpriteBatch spriteBatch;
     private Game game;
-    private int score;
+    private float time;
 
-    public LevelSuccessScreen(int score) {
-        this.score = score;
-        //this.game = AngryBird;
+    public LevelSuccessScreen(Game game, float time) {
+        this.time = time;
+        this.game = game;
     }
 
     @Override

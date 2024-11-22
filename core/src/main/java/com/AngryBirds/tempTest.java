@@ -291,7 +291,6 @@ public class tempTest implements Screen {
             batch.draw(texture, position.x * PPM - 16, position.y * PPM - 16, 32, 32);
         }
 
-
         for (Obstacle obstacle : obstacles) {
             Body body = obstacle.body;
             Texture texture = obstacle.texture;
