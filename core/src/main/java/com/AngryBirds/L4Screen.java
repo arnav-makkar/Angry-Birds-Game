@@ -449,7 +449,7 @@ public class L4Screen implements Screen {
         batch.draw(blackBirdTexture, 35, 0, 40, 40);
         batch.draw(blackBirdTexture, 0, 0, 40, 40);
 
-        String timerText = String.format("Total time: 20s\n   Timer: %.1f", totalTime);
+        String timerText = String.format("Total time: 40s\n   Timer: %.1f", totalTime);
         GlyphLayout layout = new GlyphLayout(font, timerText);
         font.draw(batch, timerText, Gdx.graphics.getWidth() - layout.width-380, Gdx.graphics.getHeight() - 20);
 
@@ -526,11 +526,11 @@ public class L4Screen implements Screen {
             }
         }
 
-        if (pigs.isEmpty() && totalTime<=60) {
+        if (pigs.isEmpty() && totalTime<=40) {
             game.setScreen(new LevelSuccessScreen(this.game, totalTime));
         }
 
-        if(totalTime>60){
+        if(totalTime>40){
             game.setScreen(new LevelFailScreen(this.game));
         }
 

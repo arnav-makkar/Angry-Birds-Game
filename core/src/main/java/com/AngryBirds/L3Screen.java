@@ -159,14 +159,14 @@ public class L3Screen implements Screen {
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
         create_Ground_obj(3f, -1f, 10f, 0.2f);
 
-        createObstacle(4.8f, 1.65f, ice4tex, 0.6f, 0.6f, 2);
+        createObstacle(4.8f, 1.65f, ice4tex, 0.5f, 0.5f, 2);
 
-        createObstacle(5.9f, 2.9f, icetri, 0.7f, 0.6f, 2);
+        createObstacle(5.9f, 2.7f, icetri, 0.6f, 0.5f, 3);
 
-        createObstacle(5.9f, 2f, iceline, 0.85f, 0.5f, 2);
-        createPig(5.9f, 1.6f, pigTexture, 0.085f, 0.085f);
+        createObstacle(5.9f, 2f, iceline, 0.8f, 0.5f, 2);
+        createPig(5.9f, 1.6f, pigTexture, 0.075f, 0.075f);
 
-        createObstacle(6.85f, 1.65f, ice4tex, 0.6f, 0.6f, 2);
+        createObstacle(6.85f, 1.65f, ice4tex, 0.5f, 0.5f, 2);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -406,7 +406,7 @@ public class L3Screen implements Screen {
         batch.draw(blackBirdTexture, 35, 0, 40, 40);
         batch.draw(blackBirdTexture, 0, 0, 40, 40);
 
-        String timerText = String.format("Total time: 20s\n   Timer: %.1f", totalTime);
+        String timerText = String.format("Total time: 40s\n   Timer: %.1f", totalTime);
         GlyphLayout layout = new GlyphLayout(font, timerText);
         font.draw(batch, timerText, Gdx.graphics.getWidth() - layout.width-380, Gdx.graphics.getHeight() - 20);
 
@@ -483,11 +483,11 @@ public class L3Screen implements Screen {
             }
         }
 
-        if (pigs.isEmpty() && totalTime<=20) {
+        if (pigs.isEmpty() && totalTime<=40) {
             game.setScreen(new LevelSuccessScreen(this.game, totalTime));
         }
 
-        if(totalTime>20){
+        if(totalTime>40){
             game.setScreen(new LevelFailScreen(this.game));
         }
 

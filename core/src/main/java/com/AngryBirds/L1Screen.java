@@ -40,6 +40,7 @@ public class L1Screen implements Screen {
 
     private Texture redBirdTexture;
     private Texture yellowBirdTexture;
+    private Texture blackBirdTexture;
 
     private Queue<Texture> birdTextQ;
     private Map<Body, Texture> birdTextM;
@@ -86,14 +87,14 @@ public class L1Screen implements Screen {
 
         redBirdTexture = new Texture("redBird.png");
         yellowBirdTexture = new Texture("yellowBird.png");
+        blackBirdTexture = new Texture("blackBird.png");
 
         birdTextM = new HashMap<>();
         birdTextQ = new LinkedList<>();
         birdTextQ.add(redBirdTexture);
-        birdTextQ.add(redBirdTexture);
         birdTextQ.add(yellowBirdTexture);
-        birdTextQ.add(yellowBirdTexture);
-        birdTextQ.add(yellowBirdTexture);
+        birdTextQ.add(blackBirdTexture);
+        birdTextQ.add(blackBirdTexture);
 
         font = new BitmapFont();
         font.getData().setScale(2f);
@@ -214,7 +215,7 @@ public class L1Screen implements Screen {
                     isDragging = false;
 
                     birdCount+=1;
-                    if(birdCount<=4){
+                    if(birdCount<=3){
                         initNewBird();
                     }
                     else {
@@ -409,20 +410,15 @@ public class L1Screen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        int totPigCount = 3;
-        int cnt = 0;
-        int totBirdcnt = 5;
-
         world.step(1 / 60f, 6, 2);
         totalTime += delta;
 
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        batch.draw(redBirdTexture, 105, 0, 40, 40);
         batch.draw(redBirdTexture, 70, 0, 40, 40);
         batch.draw(yellowBirdTexture, 35, 0, 40, 40);
-        batch.draw(yellowBirdTexture, 0, 0, 40, 40);
+        batch.draw(blackBirdTexture, 0, 0, 40, 40);
 
         String timerText = String.format("Total time: 20s\n   Timer: %.1f", totalTime);
         GlyphLayout layout = new GlyphLayout(font, timerText);
@@ -441,7 +437,6 @@ public class L1Screen implements Screen {
             Texture texture = birdTextM.get(bird);
             batch.draw(texture, position.x * PPM - 16, position.y * PPM - 16, 32, 32);
 
-            cnt++;
         }
 
         for (Obstacle obstacle : obstacles) {
