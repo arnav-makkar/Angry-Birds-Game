@@ -56,10 +56,8 @@ public class L3Screen implements Screen {
     private Body catapultArmBody;
 
     private static final short CATEGORY_CATAPULT = 0x0001;
-    private static final short CATEGORY_BIRD = 0x0002;
     private static final short CATEGORY_OBSTACLE = 0x0004;
     private static final short MASK_CATAPULT = CATEGORY_OBSTACLE; // Collides only with obstacles
-    private static final short MASK_BIRD = CATEGORY_OBSTACLE;
 
     private RevoluteJoint catapultJoint;
     private DistanceJoint ballJoint;
@@ -228,7 +226,7 @@ public class L3Screen implements Screen {
 
                     isDragging = false;
 
-                    if(birdCount>=6){
+                    if(birdCount>6){
                         game.setScreen(new LevelFailScreen(game));
                     }
 
@@ -387,38 +385,6 @@ public class L3Screen implements Screen {
         // Add the obstacle with texture to the list
         pigs.add(new Pig(obstacleBody, texture, xscale, yscale));
     }
-/*
-    private void createObstacle_Tex(float x, float y, Texture texture) {
-        // Calculate obstacle dimensions in Box2D units based on the texture size
-        float width = texture.getWidth() / PPM/(3);
-        float height = texture.getHeight() / PPM/(3);
-
-        // Create the obstacle body
-        BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.DynamicBody;
-        obstacleDef.position.set(x, y);
-
-        Body obstacleBody = world.createBody(obstacleDef);
-
-        // Define the shape based on texture dimensions
-        PolygonShape obstacleShape = new PolygonShape();
-        obstacleShape.setAsBox(width / 2, height / 2);
-
-        FixtureDef obstacleFixtureDef = new FixtureDef();
-        obstacleFixtureDef.shape = obstacleShape;
-        obstacleFixtureDef.density = 0.2f;
-        obstacleFixtureDef.friction = 0.6f;
-        obstacleFixtureDef.restitution = 0.1f;
-
-        obstacleBody.createFixture(obstacleFixtureDef);
-        obstacleShape.dispose();
-
-        // Add to the list of obstacles
-        obstacles.add(obstacleBody);
-    }
-
- */
-
 
     @Override
     public void render(float delta) {
@@ -521,19 +487,13 @@ public class L3Screen implements Screen {
             game.setScreen(new LevelSuccessScreen(this.game, totalTime));
         }
 
-        // (20-totalTime)*100
-        // max(hs, curr score)
-
-        if(totalTime>20 || birdTextQ.isEmpty()){
+        if(totalTime>20){
             game.setScreen(new LevelFailScreen(this.game));
         }
 
         stage.act(delta);
-
         stage.draw();
-
         batch.end();
-
         debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
     }
 

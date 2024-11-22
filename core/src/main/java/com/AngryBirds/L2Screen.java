@@ -157,14 +157,14 @@ public class L2Screen implements Screen {
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
         create_Ground_obj(3f, -1f, 10f, 0.2f);
 
-        createObstacle(4.8f, 1.65f, woodBoxtex, 0.5f, 0.5f, 10);
-        createPig(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
+        createObstacle(4.8f, 1.5f, woodBoxtex, 0.5f, 0.5f, 10);
+        createPig(4.8f, 1.6f, pigTexture, 0.05f, 0.05f);
 
         createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f, 10);
         createPig(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
 
-        createObstacle(6.85f, 1.65f, woodBoxtex, 0.5f, 0.5f, 10);
-        createPig(6.85f, 1.8f, pigTexture, 0.05f, 0.05f);
+        createObstacle(6.85f, 1.5f, woodBoxtex, 0.5f, 0.5f, 10);
+        createPig(6.85f, 1.6f, pigTexture, 0.05f, 0.05f);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -224,12 +224,12 @@ public class L2Screen implements Screen {
 
                     isDragging = false;
 
-                    if(birdCount>6){
-                        game.setScreen(new LevelFailScreen(game));
+                    if(birdCount<=6){
+                        initNewBird();
                     }
 
                     else{
-                        initNewBird();
+                        game.setScreen(new LevelFailScreen(game));
                     }
                 }
                 return true;
@@ -377,38 +377,6 @@ public class L2Screen implements Screen {
 
         pigs.add(new Pig(obstacleBody, texture, xscale, yscale));
     }
-/*
-    private void createObstacle_Tex(float x, float y, Texture texture) {
-        // Calculate obstacle dimensions in Box2D units based on the texture size
-        float width = texture.getWidth() / PPM/(3);
-        float height = texture.getHeight() / PPM/(3);
-
-        // Create the obstacle body
-        BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.DynamicBody;
-        obstacleDef.position.set(x, y);
-
-        Body obstacleBody = world.createBody(obstacleDef);
-
-        // Define the shape based on texture dimensions
-        PolygonShape obstacleShape = new PolygonShape();
-        obstacleShape.setAsBox(width / 2, height / 2);
-
-        FixtureDef obstacleFixtureDef = new FixtureDef();
-        obstacleFixtureDef.shape = obstacleShape;
-        obstacleFixtureDef.density = 0.2f;
-        obstacleFixtureDef.friction = 0.6f;
-        obstacleFixtureDef.restitution = 0.1f;
-
-        obstacleBody.createFixture(obstacleFixtureDef);
-        obstacleShape.dispose();
-
-        // Add to the list of obstacles
-        obstacles.add(obstacleBody);
-    }
-
- */
-
 
     @Override
     public void render(float delta) {
@@ -485,10 +453,7 @@ public class L2Screen implements Screen {
             game.setScreen(new LevelSuccessScreen(this.game, totalTime));
         }
 
-        // (20-totalTime)*100
-        // max(hs, curr score)
-
-        if(totalTime>20 || birdTextQ.isEmpty()){
+        if(totalTime>20){
             game.setScreen(new LevelFailScreen(this.game));
         }
 

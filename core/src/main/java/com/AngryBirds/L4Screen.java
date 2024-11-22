@@ -237,7 +237,7 @@ public class L4Screen implements Screen {
 
                     isDragging = false;
 
-                    if(birdCount>=6){
+                    if(birdCount>6){
                         game.setScreen(new LevelFailScreen(game));
                     }
 
@@ -530,19 +530,13 @@ public class L4Screen implements Screen {
             game.setScreen(new LevelSuccessScreen(this.game, totalTime));
         }
 
-        // (20-totalTime)*100
-        // max(hs, curr score)
-
-        if(totalTime>60 || birdTextQ.isEmpty()){
+        if(totalTime>60){
             game.setScreen(new LevelFailScreen(this.game));
         }
 
         stage.act(delta);
-
         stage.draw();
-
         batch.end();
-
         debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
     }
 
