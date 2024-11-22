@@ -3,6 +3,8 @@ package com.AngryBirds;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,10 +24,15 @@ public class LevelSuccessScreen implements Screen {
     private SpriteBatch spriteBatch;
     private Game game;
     private float time;
+    private BitmapFont font;
 
     public LevelSuccessScreen(Game game, float time) {
         this.time = time;
         this.game = game;
+    }
+
+    public float calcScore() {
+        return (20 - this.time) * 100;
     }
 
     @Override
@@ -36,16 +43,13 @@ public class LevelSuccessScreen implements Screen {
 
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
+        font = new BitmapFont();
+        font.getData().setScale(2);
+        font.setColor(Color.WHITE);
+
         Texture headerTexture = new Texture(Gdx.files.internal("levelComplete.png"));
         Image headerImage = new Image(headerTexture);
-
-        Texture scoreTexture = new Texture(Gdx.files.internal("score.png"));
-        Image scoreImage = new Image(scoreTexture);
-
         TextButton nextLevelButton = new TextButton("Select Levels", UIskin);
-
-        scoreImage.setWidth(200);
-        scoreImage.setHeight(100);
 
         stage = new Stage(new ScreenViewport());
 
@@ -53,11 +57,9 @@ public class LevelSuccessScreen implements Screen {
         table.setFillParent(true);
         table.center();
 
-        table.add(headerImage).padBottom(20);
+        table.add(headerImage).padBottom(50);
         table.row();
-        table.add(scoreImage).padBottom(20);
-        table.row();
-        table.add(nextLevelButton).padBottom(20);
+        table.add(nextLevelButton).padBottom(40);
 
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
@@ -77,6 +79,12 @@ public class LevelSuccessScreen implements Screen {
 
         spriteBatch.begin();
         spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        String scoreText = "Current Score is : " + (int) calcScore();
+        float scoreX = Gdx.graphics.getWidth() / 2f - font.getRegion().getRegionWidth() / 2f;
+        float scoreY = Gdx.graphics.getHeight() / 2f;
+        font.draw(spriteBatch, scoreText, scoreX, scoreY+10);
+
         spriteBatch.end();
 
         stage.act(delta);
@@ -104,5 +112,7 @@ public class LevelSuccessScreen implements Screen {
         stage.dispose();
         UIskin.dispose();
         spriteBatch.dispose();
+        background.dispose();
+        font.dispose();
     }
 }
