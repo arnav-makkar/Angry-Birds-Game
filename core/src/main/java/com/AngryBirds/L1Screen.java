@@ -40,7 +40,6 @@ public class L1Screen implements Screen {
 
     private Texture redBirdTexture;
     private Texture yellowBirdTexture;
-    private Texture blackBirdTexture;
 
     private Queue<Texture> birdTextQ;
     private Map<Body, Texture> birdTextM;
@@ -92,6 +91,7 @@ public class L1Screen implements Screen {
         birdTextQ = new LinkedList<>();
         birdTextQ.add(redBirdTexture);
         birdTextQ.add(redBirdTexture);
+        birdTextQ.add(yellowBirdTexture);
         birdTextQ.add(yellowBirdTexture);
         birdTextQ.add(yellowBirdTexture);
 
@@ -214,7 +214,7 @@ public class L1Screen implements Screen {
                     isDragging = false;
 
                     birdCount+=1;
-                    if(birdCount<4){
+                    if(birdCount<=4){
                         initNewBird();
                     }
                     else {
@@ -411,6 +411,7 @@ public class L1Screen implements Screen {
 
         int totPigCount = 3;
         int cnt = 0;
+        int totBirdcnt = 5;
 
         world.step(1 / 60f, 6, 2);
         totalTime += delta;
@@ -439,6 +440,8 @@ public class L1Screen implements Screen {
             Vector2 position = bird.getPosition();
             Texture texture = birdTextM.get(bird);
             batch.draw(texture, position.x * PPM - 16, position.y * PPM - 16, 32, 32);
+
+            cnt++;
         }
 
         for (Obstacle obstacle : obstacles) {
@@ -493,7 +496,7 @@ public class L1Screen implements Screen {
         }
 
 
-        if(totalTime>20 || birdTextQ.isEmpty()){
+        if(totalTime>20){
             game.setScreen(new LevelFailScreen(this.game));
         }
         stage.act(delta);

@@ -20,7 +20,7 @@ public class Obstacle {
     }
 
     public boolean checkCollision() {
-        float velocityThreshold = 1f; // Adjust the threshold as needed
+        float velocityThreshold = 0.75f; // Adjust the threshold as needed
 
         // Get the linear velocity of the pig's body
         float velocity = body.getLinearVelocity().len();
