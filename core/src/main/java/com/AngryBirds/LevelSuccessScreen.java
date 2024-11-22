@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class EndScreen implements Screen {
+public class LevelSuccessScreen implements Screen {
     private Stage stage;
     private Skin UIskin;
     private Texture background;
@@ -23,9 +23,9 @@ public class EndScreen implements Screen {
     private Game game;
     private int score;
 
-    public EndScreen(int score) {
+    public LevelSuccessScreen(int score) {
         this.score = score;
-        this.game = AngryBird;
+        //this.game = AngryBird;
     }
 
     @Override

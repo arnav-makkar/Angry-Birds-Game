@@ -434,7 +434,7 @@ public class temp2 implements Screen {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            game.setScreen(new EndScreen(totPigCount));
+            game.setScreen(new LevelSuccessScreen(totPigCount));
         }
 
         batch.end();
