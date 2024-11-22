@@ -316,7 +316,7 @@ public class L2Screen implements Screen {
         Body obstacleBody = world.createBody(obstacleDef);
 
         PolygonShape obstacleShape = new PolygonShape();
-        obstacleShape.setAsBox(x1, y1); // Dimensions: 1x1 meters
+        obstacleShape.setAsBox(x1, y1);
 
         FixtureDef obstacleFixtureDef = new FixtureDef();
         obstacleFixtureDef.shape = obstacleShape;
@@ -332,27 +332,24 @@ public class L2Screen implements Screen {
         float width = texture.getWidth() / PPM / 3;
         float height = texture.getHeight() / PPM / 3;
 
-        // Create the obstacle body
         BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.DynamicBody; // Allow it to move
+        obstacleDef.type = BodyDef.BodyType.DynamicBody;
         obstacleDef.position.set(x, y);
 
         Body obstacleBody = world.createBody(obstacleDef);
 
-        // Define the shape based on texture dimensions
         PolygonShape obstacleShape = new PolygonShape();
         obstacleShape.setAsBox(width*xscale/2, height*yscale/2);
 
         FixtureDef obstacleFixtureDef = new FixtureDef();
         obstacleFixtureDef.shape = obstacleShape;
-        obstacleFixtureDef.density = 1f; // Adjust density
+        obstacleFixtureDef.density = 1f;
         obstacleFixtureDef.friction = 0.6f;
         obstacleFixtureDef.restitution = 0.2f;
 
         obstacleBody.createFixture(obstacleFixtureDef);
         obstacleShape.dispose();
 
-        // Add the obstacle with texture to the list
         obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale));
     }
 
@@ -360,27 +357,24 @@ public class L2Screen implements Screen {
         float width = texture.getWidth() / PPM / 3;
         float height = texture.getHeight() / PPM / 3;
 
-        // Create the obstacle body
         BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.DynamicBody; // Allow it to move
+        obstacleDef.type = BodyDef.BodyType.DynamicBody;
         obstacleDef.position.set(x, y);
 
         Body obstacleBody = world.createBody(obstacleDef);
 
-        // Define the shape based on texture dimensions
         PolygonShape obstacleShape = new PolygonShape();
         obstacleShape.setAsBox(width*xscale/2, height*yscale/2);
 
         FixtureDef obstacleFixtureDef = new FixtureDef();
         obstacleFixtureDef.shape = obstacleShape;
-        obstacleFixtureDef.density = 1f; // Adjust density
+        obstacleFixtureDef.density = 1f;
         obstacleFixtureDef.friction = 0.6f;
         obstacleFixtureDef.restitution = 0.2f;
 
         obstacleBody.createFixture(obstacleFixtureDef);
         obstacleShape.dispose();
 
-        // Add the obstacle with texture to the list
         pigs.add(new Pig(obstacleBody, texture, xscale, yscale));
     }
 /*
@@ -440,7 +434,6 @@ public class L2Screen implements Screen {
         GlyphLayout layout = new GlyphLayout(font, timerText);
         font.draw(batch, timerText, Gdx.graphics.getWidth() - layout.width-380, Gdx.graphics.getHeight() - 20);
 
-        // Render the catapult
         batch.draw(
             catapultTexture,
             catapultArmBody.getPosition().x * PPM - 65,
@@ -460,23 +453,13 @@ public class L2Screen implements Screen {
             Texture texture = obstacle.texture;
             TextureRegion textureRegion = new TextureRegion(texture);
 
-            // Get obstacle position and angle
             Vector2 position = body.getPosition();
             float angle = (float) Math.toDegrees(body.getAngle());
 
-            // Calculate size based on texture and PPM
             float width = (float) texture.getWidth()/3;
             float height = (float) texture.getHeight()/3;
 
-            // Render the obstacle with its texture
-            batch.draw(
-                textureRegion,
-                position.x * PPM - width / 2, position.y * PPM - height / 2,
-                width / 2f,height / 2f,
-                width/1,height/1,
-                obstacle.x/1,obstacle.y/1,
-                angle/1
-            );
+            batch.draw(textureRegion, position.x * PPM - width / 2, position.y * PPM - height / 2, width / 2f,height / 2f, width, height, obstacle.x, obstacle.y, angle);
         }
 
         for (Pig pig : pigs) {
@@ -484,23 +467,13 @@ public class L2Screen implements Screen {
             Texture texture = pig.texture;
             TextureRegion textureRegion = new TextureRegion(texture);
 
-            // Get obstacle position and angle
             Vector2 position = body.getPosition();
             float angle = (float) Math.toDegrees(body.getAngle());
 
-            // Calculate size based on texture and PPM
             float width = (float) texture.getWidth()/3;
             float height = (float) texture.getHeight()/3;
 
-            // Render the obstacle with its texture
-            batch.draw(
-                textureRegion,
-                position.x * PPM - width / 2, position.y * PPM - height / 2,
-                width / 2f,height / 2f,
-                width/1,height/1,
-                pig.x/1,pig.y/1,
-                angle/1
-            );
+            batch.draw(textureRegion, position.x * PPM - width / 2, position.y * PPM - height / 2, width / 2f,height / 2f, width, height, pig.x, pig.y, angle);
 
             if (pig.checkCollision()) {
                 pigs.remove(pig);
@@ -516,15 +489,12 @@ public class L2Screen implements Screen {
         // max(hs, curr score)
 
         if(totalTime>20 || birdTextQ.isEmpty()){
-            game.setScreen(new LevelFailScreen(this.game));
+            game.setScreen(new LevelSuccessScreen(this.game,totalTime));
         }
 
         stage.act(delta);
-
         stage.draw();
-
         batch.end();
-
         debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
     }
 

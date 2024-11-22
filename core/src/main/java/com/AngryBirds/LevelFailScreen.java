@@ -6,21 +6,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class LevelFailScreen implements Screen {
-    private Stage stage;
-    private Skin UIskin;
+    private final Game game;
     private Texture background;
-    private SpriteBatch spriteBatch;
-    private Game game;
+    private Texture fail;
+    private Texture click;
+    private SpriteBatch batch;
 
     public LevelFailScreen(Game game) {
         this.game = game;
@@ -28,79 +20,52 @@ public class LevelFailScreen implements Screen {
 
     @Override
     public void show() {
-        spriteBatch = new SpriteBatch();
-
-        background = new Texture(Gdx.files.internal("game_screenBG.png"));
-
-        UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-
-        Texture headerTexture = new Texture(Gdx.files.internal("levelComplete.png"));
-        Image headerImage = new Image(headerTexture);
-
-        Texture scoreTexture = new Texture(Gdx.files.internal("score.png"));
-        Image scoreImage = new Image(scoreTexture);
-
-        TextButton nextLevelButton = new TextButton("Select Levels", UIskin);
-
-        scoreImage.setWidth(200);
-        scoreImage.setHeight(100);
-
-        stage = new Stage(new ScreenViewport());
-
-        Table table = new Table();
-        table.setFillParent(true);
-        table.center();
-
-        table.add(headerImage).padBottom(20);
-        table.row();
-        table.add(scoreImage).padBottom(20);
-        table.row();
-        table.add(nextLevelButton).padBottom(20);
-
-        stage.addActor(table);
-        Gdx.input.setInputProcessor(stage);
-
-        nextLevelButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LevelScreen(game));
-            }
-        });
+        batch = new SpriteBatch();
+        background = new Texture("game_screenBG.png");
+        fail = new Texture("levelFail.png");
+        click=new Texture("click.png");
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        spriteBatch.begin();
-        spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        spriteBatch.end();
+        batch.begin();
 
-        stage.act(delta);
-        stage.draw();
+        batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        float failX = (Gdx.graphics.getWidth() - fail.getWidth()) / 2f;
+        float failY = (Gdx.graphics.getHeight() - fail.getHeight()) / 2f;
+        batch.draw(fail, failX, failY);
+        batch.draw(click,failX+160,failY-100,400,40);
+        batch.end();
+
+        if (Gdx.input.justTouched()) {
+            game.setScreen(new LevelScreen(game));
+        }
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 
     @Override
     public void hide() {
-        dispose();
     }
 
     @Override
     public void dispose() {
-        stage.dispose();
-        UIskin.dispose();
-        spriteBatch.dispose();
+        batch.dispose();
+        background.dispose();
+        fail.dispose();
+        click.dispose();
     }
 }
