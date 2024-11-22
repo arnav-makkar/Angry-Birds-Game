@@ -306,7 +306,7 @@ public class Level1Screen implements Screen {
         stage.draw();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            game.setScreen(new EndScreen(game));
+            //game.setScreen(new EndScreen(game));
         }
     }
 

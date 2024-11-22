@@ -21,9 +21,11 @@ public class EndScreen implements Screen {
     private Texture background;
     private SpriteBatch spriteBatch;
     private Game game;
+    private int score;
 
-    public EndScreen(Game game) {
-        this.game = game;
+    public EndScreen(int score) {
+        this.score = score;
+        this.game = AngryBird;
     }
 
     @Override

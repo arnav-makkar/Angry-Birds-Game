@@ -54,6 +54,7 @@ public class temp2 implements Screen {
     private Queue<Body> birdsQueue;
     private final LinkedList<Body> allBirds = new LinkedList<>();
     private Body currentBird;
+    private Game game;
 
     public temp2(Game game) {}
 
@@ -346,6 +347,9 @@ public class temp2 implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        int totPigCount = 3;
+        int cnt = 0;
+
         world.step(1 / 60f, 6, 2);
 
         batch.begin();
@@ -395,9 +399,9 @@ public class temp2 implements Screen {
             );
         }
 
-        for (Pig obstacle : pigs) {
-            Body body = obstacle.body;
-            Texture texture = obstacle.texture;
+        for (Pig pig : pigs) {
+            Body body = pig.body;
+            Texture texture = pig.texture;
             TextureRegion textureRegion = new TextureRegion(texture);
 
             // Get obstacle position and angle
@@ -414,9 +418,23 @@ public class temp2 implements Screen {
                 position.x * PPM - width / 2, position.y * PPM - height / 2,
                 width / 2f,height / 2f,
                 width/1,height/1,
-                obstacle.x,obstacle.y,
+                pig.x,pig.y,
                 angle/1
             );
+
+            if (pig.checkCollision()) {
+                pigs.remove(pig);
+                break;
+            }
+        }
+
+        if (pigs.isEmpty()) {
+            try {
+                sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            game.setScreen(new EndScreen(totPigCount));
         }
 
         batch.end();
