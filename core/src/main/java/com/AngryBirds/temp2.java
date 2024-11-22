@@ -18,6 +18,8 @@ import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import static java.lang.Thread.sleep;
+
 public class temp2 implements Screen {
     private static final float PPM = 100f;
     private static final float LAUNCH_MULTIPLIER = 1f;
@@ -33,6 +35,12 @@ public class temp2 implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private Body catapultBaseBody;
     private Body catapultArmBody;
+
+    private static final short CATEGORY_CATAPULT = 0x0001;
+    private static final short CATEGORY_BIRD = 0x0002;
+    private static final short CATEGORY_OBSTACLE = 0x0004;
+    private static final short MASK_CATAPULT = CATEGORY_OBSTACLE; // Collides only with obstacles
+    private static final short MASK_BIRD = CATEGORY_OBSTACLE;
 
     private RevoluteJoint catapultJoint;
     private DistanceJoint ballJoint;
@@ -67,7 +75,12 @@ public class temp2 implements Screen {
 
         PolygonShape baseShape = new PolygonShape();
         baseShape.setAsBox(0.2f, 0.5f);
-        catapultBaseBody.createFixture(baseShape, 0);
+
+        FixtureDef baseFixtureDef = new FixtureDef();
+        baseFixtureDef.shape = baseShape;
+        baseFixtureDef.filter.categoryBits = CATEGORY_CATAPULT;
+        baseFixtureDef.filter.maskBits = MASK_CATAPULT;
+        catapultBaseBody.createFixture(baseFixtureDef);
         baseShape.dispose();
 
         BodyDef armDef = new BodyDef();
@@ -77,9 +90,11 @@ public class temp2 implements Screen {
 
         PolygonShape armShape = new PolygonShape();
         armShape.setAsBox(0.3f, 0.5f);
+
         FixtureDef armFixtureDef = new FixtureDef();
         armFixtureDef.shape = armShape;
-        armFixtureDef.density = 1f;
+        armFixtureDef.filter.categoryBits = CATEGORY_CATAPULT;
+        armFixtureDef.filter.maskBits = MASK_CATAPULT;
         catapultArmBody.createFixture(armFixtureDef);
         armShape.dispose();
 
@@ -112,6 +127,20 @@ public class temp2 implements Screen {
                 if (currentBird != null && currentBird.getFixtureList().first().testPoint(worldCoords.x, worldCoords.y)) {
                     isDragging = true;
                     dragStart = worldCoords;
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public boolean touchDragged(int screenX, int screenY, int pointer) {
+                if (isDragging) {
+                    Vector2 worldCoords = screenToWorldCoordinates(screenX, screenY);
+
+                    if (ballJoint != null) {
+                        // Update the position of the bird using the joint.
+                        currentBird.setTransform(worldCoords, currentBird.getAngle());
+                    }
                     return true;
                 }
                 return false;
