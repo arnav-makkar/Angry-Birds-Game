@@ -56,7 +56,7 @@ public class L1Screen implements Screen {
     private static final short CATEGORY_CATAPULT = 0x0001;
     private static final short CATEGORY_BIRD = 0x0002;
     private static final short CATEGORY_OBSTACLE = 0x0004;
-    private static final short MASK_CATAPULT = CATEGORY_OBSTACLE; // Collides only with obstacles
+    private static final short MASK_CATAPULT = CATEGORY_OBSTACLE;
     private static final short MASK_BIRD = CATEGORY_OBSTACLE;
 
     private RevoluteJoint catapultJoint;
@@ -71,6 +71,7 @@ public class L1Screen implements Screen {
     private Queue<Body> birdsQueue;
     private final LinkedList<Body> allBirds = new LinkedList<>();
     private Body currentBird;
+    private int birdCount;
     private Game game;
 
     public L1Screen(Game game) {this.game = game;}
@@ -86,7 +87,6 @@ public class L1Screen implements Screen {
 
         redBirdTexture = new Texture("redBird.png");
         yellowBirdTexture = new Texture("yellowBird.png");
-        blackBirdTexture = new Texture("blackBird.png");
 
         birdTextM = new HashMap<>();
         birdTextQ = new LinkedList<>();
@@ -152,14 +152,10 @@ public class L1Screen implements Screen {
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
         create_Ground_obj(3f, -1f, 10f, 0.2f);
 
-        //createObstacle(4.8f, 1.65f, woodBoxtex, 0.5f, 0.5f);
-        //createPig(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
 
         createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f);
         createPig(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
 
-        //createObstacle(6.85f, 1.65f, woodBoxtex, 0.5f, 0.5f);
-        //createPig(6.85f, 1.8f, pigTexture, 0.05f, 0.05f);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -217,8 +213,13 @@ public class L1Screen implements Screen {
 
                     isDragging = false;
 
-                    // Spawn the next bird
-                    initNewBird();
+                    birdCount+=1;
+                    if(birdCount<4){
+                        initNewBird();
+                    }
+                    else {
+                        game.setScreen(new LevelFailScreen(game));
+                    }
                 }
                 return true;
             }
@@ -304,7 +305,7 @@ public class L1Screen implements Screen {
         Body obstacleBody = world.createBody(obstacleDef);
 
         PolygonShape obstacleShape = new PolygonShape();
-        obstacleShape.setAsBox(x1, y1); // Dimensions: 1x1 meters
+        obstacleShape.setAsBox(x1, y1);
 
         FixtureDef obstacleFixtureDef = new FixtureDef();
         obstacleFixtureDef.shape = obstacleShape;
@@ -426,7 +427,6 @@ public class L1Screen implements Screen {
         GlyphLayout layout = new GlyphLayout(font, timerText);
         font.draw(batch, timerText, Gdx.graphics.getWidth() - layout.width-380, Gdx.graphics.getHeight() - 20);
 
-        // Render the catapult
         batch.draw(
             catapultTexture,
             catapultArmBody.getPosition().x * PPM - 65,
@@ -446,22 +446,19 @@ public class L1Screen implements Screen {
             Texture texture = obstacle.texture;
             TextureRegion textureRegion = new TextureRegion(texture);
 
-            // Get obstacle position and angle
             Vector2 position = body.getPosition();
             float angle = (float) Math.toDegrees(body.getAngle());
 
-            // Calculate size based on texture and PPM
             float width = (float) texture.getWidth()/3;
             float height = (float) texture.getHeight()/3;
 
-            // Render the obstacle with its texture
             batch.draw(
                 textureRegion,
                 position.x * PPM - width / 2, position.y * PPM - height / 2,
                 width / 2f,height / 2f,
-                width/1,height/1,
-                obstacle.x/1,obstacle.y/1,
-                angle/1
+                width, height,
+                obstacle.x, obstacle.y,
+                angle
             );
         }
 
@@ -470,22 +467,19 @@ public class L1Screen implements Screen {
             Texture texture = pig.texture;
             TextureRegion textureRegion = new TextureRegion(texture);
 
-            // Get obstacle position and angle
             Vector2 position = body.getPosition();
             float angle = (float) Math.toDegrees(body.getAngle());
 
-            // Calculate size based on texture and PPM
             float width = (float) texture.getWidth()/3;
             float height = (float) texture.getHeight()/3;
 
-            // Render the obstacle with its texture
             batch.draw(
                 textureRegion,
                 position.x * PPM - width / 2, position.y * PPM - height / 2,
                 width / 2f,height / 2f,
-                width/1,height/1,
-                pig.x/1,pig.y/1,
-                angle/1
+                width, height,
+                pig.x, pig.y,
+                angle
             );
 
             if (pig.checkCollision()) {
@@ -501,11 +495,8 @@ public class L1Screen implements Screen {
         if(totalTime>20 || birdTextQ.isEmpty()){
             game.setScreen(new LevelFailScreen(this.game));
         }
-
         stage.act(delta);
-
         stage.draw();
-
         batch.end();
 
         debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
