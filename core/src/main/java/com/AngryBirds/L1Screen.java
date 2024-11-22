@@ -153,7 +153,7 @@ public class L1Screen implements Screen {
         create_Ground_obj(3f, -1f, 10f, 0.2f);
 
 
-        createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f);
+        createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f, 10);
         createPig(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
 
 
@@ -317,7 +317,7 @@ public class L1Screen implements Screen {
         obstacleShape.dispose();
     }
 
-    private void createObstacle(float x, float y, Texture texture, float xscale, float yscale) {
+    private void createObstacle(float x, float y, Texture texture, float xscale, float yscale, int n) {
         float width = texture.getWidth() / PPM / 3;
         float height = texture.getHeight() / PPM / 3;
 
@@ -342,7 +342,7 @@ public class L1Screen implements Screen {
         obstacleShape.dispose();
 
         // Add the obstacle with texture to the list
-        obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale));
+        obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale, n));
     }
 
     private void createPig(float x, float y, Texture texture, float xscale, float yscale) {

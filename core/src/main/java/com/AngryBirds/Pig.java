@@ -7,7 +7,7 @@ public class Pig extends Obstacle {
 
     // Constructor to match the parent class
     public Pig(Body body, Texture texture, float x, float y) {
-        super(body, texture, x, y); // Call the parent class constructor
+        super(body, texture, x, y, 1); // Call the parent class constructor
     }
 
     // explode pig if it hits the bird or the ground

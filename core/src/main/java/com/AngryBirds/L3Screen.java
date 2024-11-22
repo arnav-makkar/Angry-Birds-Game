@@ -35,7 +35,7 @@ public class L3Screen implements Screen {
     private Texture birdTexture;
     private Texture catapultTexture;
     private Texture background;
-    private Texture ice3tex;
+    private Texture icetri;
     private Texture ice4tex;
     private Texture iceline;
     private Texture pigTexture;
@@ -85,7 +85,7 @@ public class L3Screen implements Screen {
         birdTexture = new Texture("redBird.png");
         catapultTexture = new Texture("catapult.png");
         background = new Texture(Gdx.files.internal("game_screenBG.png"));
-        ice3tex = new Texture("ice3side.png");
+        icetri = new Texture("ice_tri.png");
         ice4tex = new Texture("ice4side.png");
         iceline = new Texture("ice_line.png");
         pigTexture = new Texture("pig.png");
@@ -161,15 +161,14 @@ public class L3Screen implements Screen {
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
         create_Ground_obj(3f, -1f, 10f, 0.2f);
 
-        createObstacle(4.8f, 1.65f, ice4tex, 0.6f, 0.6f);
-//        createPig(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
+        createObstacle(4.8f, 1.65f, ice4tex, 0.6f, 0.6f, 2);
 
-        createObstacle(5.9f, 2f, iceline, 0.85f, 0.5f);
+        createObstacle(5.9f, 2.9f, icetri, 0.7f, 0.6f, 2);
+
+        createObstacle(5.9f, 2f, iceline, 0.85f, 0.5f, 2);
         createPig(5.9f, 1.6f, pigTexture, 0.085f, 0.085f);
 
-
-        createObstacle(6.85f, 1.65f, ice4tex, 0.6f, 0.6f);
-//        createPig(6.85f, 1.8f, pigTexture, 0.05f, 0.05f);
+        createObstacle(6.85f, 1.65f, ice4tex, 0.6f, 0.6f, 2);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -333,7 +332,7 @@ public class L3Screen implements Screen {
         obstacleShape.dispose();
     }
 
-    private void createObstacle(float x, float y, Texture texture, float xscale, float yscale) {
+    private void createObstacle(float x, float y, Texture texture, float xscale, float yscale, int n) {
         float width = texture.getWidth() / PPM / 3;
         float height = texture.getHeight() / PPM / 3;
 
@@ -358,7 +357,7 @@ public class L3Screen implements Screen {
         obstacleShape.dispose();
 
         // Add the obstacle with texture to the list
-        obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale));
+        obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale, n));
     }
 
     private void createPig(float x, float y, Texture texture, float xscale, float yscale) {
@@ -482,6 +481,11 @@ public class L3Screen implements Screen {
                 obstacle.x/1,obstacle.y/1,
                 angle/1
             );
+
+            if (obstacle.checkCollision()) {
+                obstacles.remove(obstacle);
+                break;
+            }
         }
 
         for (Pig pig : pigs) {

@@ -157,13 +157,13 @@ public class L2Screen implements Screen {
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
         create_Ground_obj(3f, -1f, 10f, 0.2f);
 
-        createObstacle(4.8f, 1.65f, woodBoxtex, 0.5f, 0.5f);
+        createObstacle(4.8f, 1.65f, woodBoxtex, 0.5f, 0.5f, 10);
         createPig(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
 
-        createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f);
+        createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f, 10);
         createPig(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
 
-        createObstacle(6.85f, 1.65f, woodBoxtex, 0.5f, 0.5f);
+        createObstacle(6.85f, 1.65f, woodBoxtex, 0.5f, 0.5f, 10);
         createPig(6.85f, 1.8f, pigTexture, 0.05f, 0.05f);
 
         Table table = new Table();
@@ -224,7 +224,7 @@ public class L2Screen implements Screen {
 
                     isDragging = false;
 
-                    if(birdCount>=6){
+                    if(birdCount>6){
                         game.setScreen(new LevelFailScreen(game));
                     }
 
@@ -328,7 +328,7 @@ public class L2Screen implements Screen {
         obstacleShape.dispose();
     }
 
-    private void createObstacle(float x, float y, Texture texture, float xscale, float yscale) {
+    private void createObstacle(float x, float y, Texture texture, float xscale, float yscale, int n) {
         float width = texture.getWidth() / PPM / 3;
         float height = texture.getHeight() / PPM / 3;
 
@@ -350,7 +350,7 @@ public class L2Screen implements Screen {
         obstacleBody.createFixture(obstacleFixtureDef);
         obstacleShape.dispose();
 
-        obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale));
+        obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale, n));
     }
 
     private void createPig(float x, float y, Texture texture, float xscale, float yscale) {
@@ -489,7 +489,7 @@ public class L2Screen implements Screen {
         // max(hs, curr score)
 
         if(totalTime>20 || birdTextQ.isEmpty()){
-            game.setScreen(new LevelSuccessScreen(this.game,totalTime));
+            game.setScreen(new LevelFailScreen(this.game));
         }
 
         stage.act(delta);
