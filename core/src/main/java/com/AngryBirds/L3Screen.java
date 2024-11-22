@@ -24,7 +24,7 @@ import java.util.Queue;
 
 import static java.lang.Thread.sleep;
 
-public class L2Screen implements Screen {
+public class L3Screen implements Screen {
     private static final float PPM = 100f;
     private static final float LAUNCH_MULTIPLIER = 1f;
     private Stage stage;
@@ -35,7 +35,9 @@ public class L2Screen implements Screen {
     private Texture birdTexture;
     private Texture catapultTexture;
     private Texture background;
-    private Texture woodBoxtex;
+    private Texture ice3tex;
+    private Texture ice4tex;
+    private Texture iceline;
     private Texture pigTexture;
 
     private Texture redBirdTexture;
@@ -75,7 +77,7 @@ public class L2Screen implements Screen {
 
     private int birdCount = 0;
 
-    public L2Screen(Game game) {this.game = game;}
+    public L3Screen(Game game) {this.game = game;}
 
     @Override
     public void show() {
@@ -83,7 +85,9 @@ public class L2Screen implements Screen {
         birdTexture = new Texture("redBird.png");
         catapultTexture = new Texture("catapult.png");
         background = new Texture(Gdx.files.internal("game_screenBG.png"));
-        woodBoxtex = new Texture("wood_box.png");
+        ice3tex = new Texture("ice3side.png");
+        ice4tex = new Texture("ice4side.png");
+        iceline = new Texture("ice_line.png");
         pigTexture = new Texture("pig.png");
 
         redBirdTexture = new Texture("redBird.png");
@@ -157,14 +161,15 @@ public class L2Screen implements Screen {
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
         create_Ground_obj(3f, -1f, 10f, 0.2f);
 
-        createObstacle(4.8f, 1.65f, woodBoxtex, 0.5f, 0.5f);
-        createPig(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
+        createObstacle(4.8f, 1.65f, ice4tex, 0.6f, 0.6f);
+//        createPig(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
 
-        createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f);
-        createPig(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
+        createObstacle(5.9f, 2f, iceline, 0.85f, 0.5f);
+        createPig(5.9f, 1.6f, pigTexture, 0.085f, 0.085f);
 
-        createObstacle(6.85f, 1.65f, woodBoxtex, 0.5f, 0.5f);
-        createPig(6.85f, 1.8f, pigTexture, 0.05f, 0.05f);
+
+        createObstacle(6.85f, 1.65f, ice4tex, 0.6f, 0.6f);
+//        createPig(6.85f, 1.8f, pigTexture, 0.05f, 0.05f);
 
         Table table = new Table();
         table.setFillParent(true);
