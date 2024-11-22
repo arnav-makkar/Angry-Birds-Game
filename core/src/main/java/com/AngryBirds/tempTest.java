@@ -154,6 +154,7 @@ public class tempTest implements Screen {
         });
     }
 
+
     private void spawnNewBird() {
         if (!birdsQueue.isEmpty()) {
             currentBird = birdsQueue.poll();
@@ -174,42 +175,6 @@ public class tempTest implements Screen {
         }
     }
 
-//    private void createBird(float x, float y) {
-//        BodyDef ballDef = new BodyDef();
-//        ballDef.type = BodyDef.BodyType.DynamicBody; //static isko
-//        ballDef.position.set(x, y);
-//        Body bird = world.createBody(ballDef);
-//
-//        CircleShape ballShape = new CircleShape();
-//        ballShape.setRadius(0.2f);
-//
-//        FixtureDef ballFixtureDef = new FixtureDef();
-//        ballFixtureDef.shape = ballShape;
-//        ballFixtureDef.density = 1f;
-//        ballFixtureDef.friction = 0.3f;
-//        ballFixtureDef.restitution = 0.5f;
-//
-//        // Set collision filters
-//        ballFixtureDef.filter.groupIndex = -1; // Negative group index to prevent collisions with catapult
-//        bird.createFixture(ballFixtureDef);
-//        ballShape.dispose();
-//
-//        // Add bird to tracking lists
-//        allBirds.add(bird);
-//        currentBird = bird;
-//
-//        // Attach the bird to the catapult using a distance joint
-//        DistanceJointDef jointDef = new DistanceJointDef();
-//        jointDef.initialize(catapultArmBody, bird,
-//            catapultArmBody.getWorldCenter(),
-//            bird.getWorldCenter());
-//        jointDef.collideConnected = false;
-//        ballJoint = (DistanceJoint) world.createJoint(jointDef);
-//
-//        // Reset velocity to ensure stability
-//        currentBird.setLinearVelocity(0, 0);
-//        currentBird.setAngularVelocity(0);
-//    }
 
     private void createBird(float x, float y) {
         BodyDef ballDef = new BodyDef();
