@@ -105,8 +105,9 @@ public class temp2 implements Screen {
         revoluteDef.maxMotorTorque = 1000f;
         catapultJoint = (RevoluteJoint) world.createJoint(revoluteDef);
 
-        create_Ground_obj(5.8f, 0.7f, 1.7f, 0.5f);
+        create_Ground_obj(5.8f, 0.2f, 1.7f, 1f);
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
+        create_Ground_obj(3f, -1f, 10f, 0.2f);
 
         createObstacle(4.8f, 1.65f, woodBoxtex, 0.5f, 0.5f);
         createPig(4.8f, 1.8f, pigTexture, 0.05f, 0.05f);
