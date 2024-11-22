@@ -6,6 +6,8 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -22,7 +24,7 @@ import java.util.Queue;
 
 public class tempTest implements Screen {
     private static final float PPM = 100f;
-    private static final float LAUNCH_MULTIPLIER = 1f;
+    private static final float LMULT = 1f;
 
     private SpriteBatch batch;
     private Texture birdTexture;
@@ -30,6 +32,10 @@ public class tempTest implements Screen {
     private Texture background;
     private Texture woodBoxtex;
     private Texture pigTexture;
+
+    private Texture redBirdTexture;
+    private Texture yellowBirdTexture;
+    private Texture blackBirdTexture;
 
     private Queue<Texture> birdTextQ;
     private Map<Body, Texture> birdTextM;
@@ -42,7 +48,7 @@ public class tempTest implements Screen {
     private RevoluteJoint catapultJoint;
     private DistanceJoint ballJoint;
 
-    private boolean isDragging = false;
+    private boolean dragged = false;
     private Vector2 dragStart;
 
     private final LinkedList<Obstacle> obstacles = new LinkedList<>();
@@ -51,20 +57,22 @@ public class tempTest implements Screen {
     private final LinkedList<Body> allBirds = new LinkedList<>();
     private Body currentBird;
 
+    private BitmapFont font;
+    private float elapsedTime = 0f;
+
     public tempTest(Game game) {}
 
     @Override
     public void show() {
         batch = new SpriteBatch();
-        birdTexture = new Texture("redBird.png");
         catapultTexture = new Texture("catapult.png");
         background = new Texture(Gdx.files.internal("game_screenBG.png"));
         woodBoxtex = new Texture("wood_box.png");
         pigTexture = new Texture("pig.png");
 
-        Texture redBirdTexture = new Texture("redBird.png");
-        Texture yellowBirdTexture = new Texture("yellowBird.png");
-        Texture blackBirdTexture = new Texture("blackBird.png");
+        redBirdTexture = new Texture("redBird.png");
+        yellowBirdTexture = new Texture("yellowBird.png");
+        blackBirdTexture = new Texture("blackBird.png");
 
         birdTextM = new HashMap<>();
         birdTextQ = new LinkedList<>();
@@ -74,6 +82,9 @@ public class tempTest implements Screen {
         birdTextQ.add(redBirdTexture);
         birdTextQ.add(yellowBirdTexture);
         birdTextQ.add(blackBirdTexture);
+
+        font = new BitmapFont();
+        font.getData().setScale(2f);
 
         world = new World(new Vector2(0, -10.0f), true);
         debugRenderer = new Box2DDebugRenderer();
@@ -103,8 +114,6 @@ public class tempTest implements Screen {
 
         RevoluteJointDef revoluteDef = new RevoluteJointDef();
         revoluteDef.initialize(catapultBaseBody, catapultArmBody, new Vector2(2f, 2.75f));
-        revoluteDef.enableMotor = true;
-        revoluteDef.maxMotorTorque = 1000f;
         catapultJoint = (RevoluteJoint) world.createJoint(revoluteDef);
 
         create_Ground_obj(5.8f, 0.7f, 1.7f, 0.5f);
@@ -122,7 +131,7 @@ public class tempTest implements Screen {
                 Vector2 worldCoords = screenToWorldCoordinates(screenX, screenY);
 
                 if (currentBird != null && currentBird.getFixtureList().first().testPoint(worldCoords.x, worldCoords.y)) {
-                    isDragging = true;
+                    dragged = true;
                     dragStart = worldCoords;
                     return true;
                 }
@@ -131,22 +140,16 @@ public class tempTest implements Screen {
 
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                if (isDragging) {
+                if (dragged) {
                     Vector2 dragEnd = screenToWorldCoordinates(screenX, screenY);
-                    Vector2 launchVector = dragStart.sub(dragEnd).scl(LAUNCH_MULTIPLIER);
-
-                    // Remove distance joint
+                    Vector2 launchVector = dragStart.sub(dragEnd).scl(LMULT);
                     if (ballJoint != null) {
                         world.destroyJoint(ballJoint);
                         ballJoint = null;
                     }
 
-                    // Apply launch impulse
                     currentBird.applyLinearImpulse(launchVector, currentBird.getWorldCenter(), true);
-
-                    isDragging = false;
-
-                    // Spawn the next bird
+                    dragged = false;
                     spawnNewBird();
                 }
                 return true;
@@ -154,16 +157,13 @@ public class tempTest implements Screen {
         });
     }
 
-
     private void spawnNewBird() {
         if (!birdsQueue.isEmpty()) {
             currentBird = birdsQueue.poll();
 
-            // Reset bird velocity
             currentBird.setLinearVelocity(0, 0);
             currentBird.setAngularVelocity(0);
 
-            // Attach the bird to the catapult using a distance joint
             DistanceJointDef jointDef = new DistanceJointDef();
             jointDef.initialize(catapultArmBody, currentBird,
                 catapultArmBody.getWorldCenter(),
@@ -171,7 +171,7 @@ public class tempTest implements Screen {
             jointDef.collideConnected = false;
             ballJoint = (DistanceJoint) world.createJoint(jointDef);
         } else {
-            createBird(2f, 2.75f); // Create a new bird if the queue is empty
+            createBird(2f, 2.75f);
         }
     }
 
@@ -297,15 +297,21 @@ public class tempTest implements Screen {
 
  */
 
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         world.step(1 / 60f, 6, 2);
+        elapsedTime += delta;
 
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        batch.draw(redBirdTexture, 0, 0, 40, 40);
+        batch.draw(yellowBirdTexture, 35, 0, 40, 40);
+        batch.draw(blackBirdTexture, 70, 0, 40, 40);
+        batch.draw(redBirdTexture, 105, 0, 40, 40);
+        batch.draw(yellowBirdTexture, 140, 0, 40, 40);
+        batch.draw(blackBirdTexture, 175, 0, 40, 40);
 
         // Render the catapult
         batch.draw(
@@ -334,15 +340,12 @@ public class tempTest implements Screen {
             Texture texture = obstacle.texture;
             TextureRegion textureRegion = new TextureRegion(texture);
 
-            // Get obstacle position and angle
             Vector2 position = body.getPosition();
             float angle = (float) Math.toDegrees(body.getAngle());
 
-            // Calculate size based on texture and PPM
             float width = (float) texture.getWidth()/3;
             float height = (float) texture.getHeight()/3;
 
-            // Render the obstacle with its texture
             batch.draw(
                 textureRegion,
                 position.x * PPM - width / 2, position.y * PPM - height / 2,
@@ -352,6 +355,15 @@ public class tempTest implements Screen {
                 angle/1
             );
         }
+
+        String timerText = String.format("test timer: %.1f", elapsedTime);
+        GlyphLayout layout = new GlyphLayout(font, timerText);
+        font.draw(
+            batch,
+            timerText,
+            Gdx.graphics.getWidth() - layout.width - 20,
+            Gdx.graphics.getHeight() - 20
+        );
 
         batch.end();
 
