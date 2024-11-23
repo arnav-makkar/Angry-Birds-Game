@@ -6,6 +6,6 @@ import com.badlogic.gdx.Game;
 public class AngryBird extends Game {
     @Override
     public void create() {
-        setScreen(new L4Screen(this));
+        setScreen(new L2Screen(this));
     }
 }

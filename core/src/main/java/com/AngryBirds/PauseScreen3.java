@@ -16,7 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class PauseScreen implements Screen {
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+public class PauseScreen3 implements Screen {
     private Stage stage;
     private Skin UIskin;
     private SpriteBatch spriteBatch;
@@ -26,7 +29,7 @@ public class PauseScreen implements Screen {
     private Sprite RESG;
     private Sprite BTMM;
 
-    public PauseScreen(Game game) {
+    public PauseScreen3(Game game) {
         this.game=game;
     }
 
@@ -66,7 +69,7 @@ public class PauseScreen implements Screen {
         ClickListener resumeButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new L2Screen(game));
+                game.setScreen(new L3Screen(game));
             }
         };
 
@@ -90,6 +93,7 @@ public class PauseScreen implements Screen {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
 
+        spriteBatch.setColor(GameSettings.brightness, GameSettings.brightness, GameSettings.brightness, 1.0f);
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
         spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -97,6 +101,19 @@ public class PauseScreen implements Screen {
 
         stage.act(Math.min(delta, 1 / 30f));
         stage.draw();
+    }
+
+    private GameState loadGameState() {
+        try (ObjectInputStream ois = new ObjectInputStream(Gdx.files.local("gamestate.dat").read())) {
+            GameState loadedState = (GameState) ois.readObject();
+            game.setScreen(new L2Copy(game));
+            System.out.println("Game state loaded successfully.");
+            return loadedState;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load game state.");
+        }
+        return null;
     }
 
     @Override

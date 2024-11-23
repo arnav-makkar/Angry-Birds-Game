@@ -100,6 +100,7 @@ public class SettingsScreen implements Screen {
         ChangeListener volumeListener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
+                GameSettings.volume=vslide.getValue()/100f;
                 System.out.println("Volume changed to: " + vslide.getValue());
             }
         };
@@ -107,6 +108,7 @@ public class SettingsScreen implements Screen {
         ChangeListener brightnessListener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
+                GameSettings.brightness = bslide.getValue() / 100f;
                 System.out.println("Brightness changed to: " + bslide.getValue());
             }
         };
@@ -123,15 +125,17 @@ public class SettingsScreen implements Screen {
         bslide.addListener(brightnessListener);
     }
 
+
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1);
+        Gdx.gl.glClearColor(GameSettings.brightness * 0.8f, GameSettings.brightness * 0.8f, GameSettings.brightness * 0.8f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.update();
 
+        spriteBatch.setColor(GameSettings.brightness, GameSettings.brightness, GameSettings.brightness, 1.0f);
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
         spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

@@ -1,6 +1,7 @@
 package com.AngryBirds;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -22,12 +23,12 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-import static java.lang.Thread.sleep;
 
 public class L2Screen implements Screen {
     private static final float PPM = 100f;
     private static final float LAUNCH_MULTIPLIER = 1f;
     private Stage stage;
+    private Music music;
 
     private Sprite PAUSE;
 
@@ -89,6 +90,12 @@ public class L2Screen implements Screen {
         redBirdTexture = new Texture("redBird.png");
         yellowBirdTexture = new Texture("yellowBird.png");
         blackBirdTexture = new Texture("blackBird.png");
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
+        music.setLooping(true);
+        music.setVolume(GameSettings.volume);
+        System.out.println("volume set is "+GameSettings.volume+"\n");
+        music.play();
 
         birdTextM = new HashMap<>();
         birdTextQ = new LinkedList<>();
@@ -241,7 +248,7 @@ public class L2Screen implements Screen {
         ClickListener pauseButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new PauseScreen(game));
+                game.setScreen(new PauseScreen2(game));
             }
         };
 
@@ -412,14 +419,13 @@ public class L2Screen implements Screen {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(GameSettings.brightness , GameSettings.brightness , GameSettings.brightness , 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        int totPigCount = 3;
-        int cnt = 0;
 
         world.step(1 / 60f, 6, 2);
         totalTime += delta;
 
+        batch.setColor(GameSettings.brightness, GameSettings.brightness, GameSettings.brightness, 1.0f);
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -484,9 +490,6 @@ public class L2Screen implements Screen {
         if (pigs.isEmpty() && totalTime<=20) {
             game.setScreen(new LevelSuccessScreen(this.game, totalTime));
         }
-
-        // (20-totalTime)*100
-        // max(hs, curr score)
 
         if(totalTime>20 || birdTextQ.isEmpty()){
             game.setScreen(new LevelFailScreen(this.game));
