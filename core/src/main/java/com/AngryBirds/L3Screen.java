@@ -56,10 +56,8 @@ public class L3Screen implements Screen {
     private Body catapultArmBody;
 
     private static final short CATEGORY_CATAPULT = 0x0001;
-    private static final short CATEGORY_BIRD = 0x0002;
     private static final short CATEGORY_OBSTACLE = 0x0004;
     private static final short MASK_CATAPULT = CATEGORY_OBSTACLE; // Collides only with obstacles
-    private static final short MASK_BIRD = CATEGORY_OBSTACLE;
 
     private RevoluteJoint catapultJoint;
     private DistanceJoint ballJoint;
@@ -161,14 +159,17 @@ public class L3Screen implements Screen {
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
         create_Ground_obj(3f, -1f, 10f, 0.2f);
 
-        createObstacle(4.8f, 1.65f, ice4tex, 0.6f, 0.6f, 2);
+        createObstacle(4.8f, 1.65f, ice4tex, 0.5f, 0.5f, 2);
 
-        createObstacle(5.9f, 2.9f, icetri, 0.7f, 0.6f, 2);
+        createObstacle(5.9f, 2.7f, icetri, 0.6f, 0.5f, 3);
 
-        createObstacle(5.9f, 2f, iceline, 0.85f, 0.5f, 2);
-        createPig(5.9f, 1.6f, pigTexture, 0.085f, 0.085f);
+        createPig(5f, 2.1f, pigTexture, 0.055f, 0.055f);
+        createPig(6.8f, 2.1f, pigTexture, 0.055f, 0.055f);
 
-        createObstacle(6.85f, 1.65f, ice4tex, 0.6f, 0.6f, 2);
+        createObstacle(5.9f, 2f, iceline, 0.8f, 0.5f, 2);
+        createPig(5.9f, 1.6f, pigTexture, 0.075f, 0.075f);
+
+        createObstacle(6.85f, 1.65f, ice4tex, 0.5f, 0.5f, 2);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -228,7 +229,7 @@ public class L3Screen implements Screen {
 
                     isDragging = false;
 
-                    if(birdCount>=6){
+                    if(birdCount>6){
                         game.setScreen(new LevelFailScreen(game));
                     }
 
@@ -387,38 +388,6 @@ public class L3Screen implements Screen {
         // Add the obstacle with texture to the list
         pigs.add(new Pig(obstacleBody, texture, xscale, yscale));
     }
-/*
-    private void createObstacle_Tex(float x, float y, Texture texture) {
-        // Calculate obstacle dimensions in Box2D units based on the texture size
-        float width = texture.getWidth() / PPM/(3);
-        float height = texture.getHeight() / PPM/(3);
-
-        // Create the obstacle body
-        BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.DynamicBody;
-        obstacleDef.position.set(x, y);
-
-        Body obstacleBody = world.createBody(obstacleDef);
-
-        // Define the shape based on texture dimensions
-        PolygonShape obstacleShape = new PolygonShape();
-        obstacleShape.setAsBox(width / 2, height / 2);
-
-        FixtureDef obstacleFixtureDef = new FixtureDef();
-        obstacleFixtureDef.shape = obstacleShape;
-        obstacleFixtureDef.density = 0.2f;
-        obstacleFixtureDef.friction = 0.6f;
-        obstacleFixtureDef.restitution = 0.1f;
-
-        obstacleBody.createFixture(obstacleFixtureDef);
-        obstacleShape.dispose();
-
-        // Add to the list of obstacles
-        obstacles.add(obstacleBody);
-    }
-
- */
-
 
     @Override
     public void render(float delta) {
@@ -440,7 +409,7 @@ public class L3Screen implements Screen {
         batch.draw(blackBirdTexture, 35, 0, 40, 40);
         batch.draw(blackBirdTexture, 0, 0, 40, 40);
 
-        String timerText = String.format("Total time: 20s\n   Timer: %.1f", totalTime);
+        String timerText = String.format("Total time: 40s\n   Timer: %.1f", totalTime);
         GlyphLayout layout = new GlyphLayout(font, timerText);
         font.draw(batch, timerText, Gdx.graphics.getWidth() - layout.width-380, Gdx.graphics.getHeight() - 20);
 
@@ -517,23 +486,17 @@ public class L3Screen implements Screen {
             }
         }
 
-        if (pigs.isEmpty() && totalTime<=20) {
+        if (pigs.isEmpty() && totalTime<=40) {
             game.setScreen(new LevelSuccessScreen(this.game, totalTime));
         }
 
-        // (20-totalTime)*100
-        // max(hs, curr score)
-
-        if(totalTime>20 || birdTextQ.isEmpty()){
+        if(totalTime>40){
             game.setScreen(new LevelFailScreen(this.game));
         }
 
         stage.act(delta);
-
         stage.draw();
-
         batch.end();
-
         debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
     }
 
