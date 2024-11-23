@@ -241,7 +241,7 @@ public class L2Screen implements Screen {
         ClickListener pauseButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new PauseScreen(game));
+                game.setScreen(new PauseScreen2(game));
             }
         };
 
@@ -381,6 +381,7 @@ public class L2Screen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(GameSettings.brightness, GameSettings.brightness * 0.5f, GameSettings.brightness * 0.3f, 1.0f);
 
         int totPigCount = 3;
         int cnt = 0;
@@ -388,6 +389,7 @@ public class L2Screen implements Screen {
         world.step(1 / 60f, 6, 2);
         totalTime += delta;
 
+        batch.setColor(GameSettings.brightness, GameSettings.brightness, GameSettings.brightness, 1.0f);
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 

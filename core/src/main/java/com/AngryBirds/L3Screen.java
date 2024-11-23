@@ -246,7 +246,7 @@ public class L3Screen implements Screen {
         ClickListener pauseButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new PauseScreen(game));
+                game.setScreen(new PauseScreen3(game));
             }
         };
 
