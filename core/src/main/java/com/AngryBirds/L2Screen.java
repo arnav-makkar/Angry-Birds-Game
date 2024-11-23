@@ -387,6 +387,8 @@ public class L2Screen implements Screen {
         int totPigCount = 3;
         int cnt = 0;
 
+
+
         world.step(1 / 60f, 6, 2);
         totalTime += delta;
 
