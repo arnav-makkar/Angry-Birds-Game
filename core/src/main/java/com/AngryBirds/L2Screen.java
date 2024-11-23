@@ -379,6 +379,7 @@ public class L2Screen implements Screen {
     }
 
     @Override
+
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(GameSettings.brightness, GameSettings.brightness * 0.5f, GameSettings.brightness * 0.3f, 1.0f);
