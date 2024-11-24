@@ -517,7 +517,7 @@ public class L1Screen implements Screen {
                 System.err.println("Error updating the file: " + e.getMessage());
             }
 
-            game.setScreen(new LevelSuccessScreen(this.game, score));
+            game.setScreen(new LevelSuccessScreen(this.game, score, 0));
         }
 
 

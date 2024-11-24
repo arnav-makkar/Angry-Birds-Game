@@ -500,7 +500,7 @@ public class L3Screen implements Screen {
                 }
 
                 if (data.size() > 1) {
-                    highscore = Integer.parseInt(data.get(1)[2].trim());
+                    highscore = Integer.parseInt(data.get(1)[2]);
                     data.get(1)[2] = String.valueOf(max(highscore, (int)score));
                 }
 
@@ -516,7 +516,7 @@ public class L3Screen implements Screen {
                 System.err.println("Error updating the file: " + e.getMessage());
             }
 
-            game.setScreen(new LevelSuccessScreen(this.game, score));
+            game.setScreen(new LevelSuccessScreen(this.game, score, 2));
         }
 
         if(totalTime>40){

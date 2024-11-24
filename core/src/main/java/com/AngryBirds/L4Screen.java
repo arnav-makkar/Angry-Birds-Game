@@ -540,7 +540,7 @@ public class L4Screen implements Screen {
                 }
 
                 if (data.size() > 1) {
-                    highscore = Integer.parseInt(data.get(1)[3].trim());
+                    highscore = Integer.parseInt(data.get(1)[3]);
                     data.get(1)[3] = String.valueOf(max(highscore, (int)score));
                 }
 
@@ -556,7 +556,7 @@ public class L4Screen implements Screen {
                 System.err.println("Error updating the file: " + e.getMessage());
             }
 
-            game.setScreen(new LevelSuccessScreen(this.game, score));
+            game.setScreen(new LevelSuccessScreen(this.game, score, 3));
         }
 
         if(totalTime>40){
