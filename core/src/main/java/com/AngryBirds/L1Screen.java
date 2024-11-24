@@ -17,17 +17,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.io.*;
+import java.util.*;
 
+import static java.lang.Math.max;
 import static java.lang.Thread.sleep;
 
 public class L1Screen implements Screen {
     private static final float PPM = 100f;
     private static final float LAUNCH_MULTIPLIER = 1f;
     private Stage stage;
+    private int highscore;
 
     private Sprite PAUSE;
 
@@ -487,7 +487,37 @@ public class L1Screen implements Screen {
         }
 
         if (pigs.isEmpty() && totalTime<=20) {
-            game.setScreen(new LevelSuccessScreen(this.game, totalTime));
+
+            float score = (20 - totalTime) * 100;
+            highscore = max(highscore, (int)score);
+
+            List<String[]> data = new ArrayList<>();
+
+            try (BufferedReader br = new BufferedReader(new FileReader("highscore.csv"))) {
+                String line;
+
+                while ((line = br.readLine()) != null) {
+                    data.add(line.split(","));
+                }
+
+                if (data.size() > 1) {
+                    highscore = Integer.parseInt(data.get(1)[0]);
+                    data.get(1)[0] = String.valueOf(max(highscore, (int)score));
+                }
+
+                // Write the updated data back to the file
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.csv"))) {
+                    for (String[] row : data) {
+                        bw.write(String.join(",", row));
+                        bw.newLine();
+                    }
+                }
+            }
+            catch (IOException e) {
+                System.err.println("Error updating the file: " + e.getMessage());
+            }
+
+            game.setScreen(new LevelSuccessScreen(this.game, score));
         }
 
 

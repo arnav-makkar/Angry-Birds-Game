@@ -23,17 +23,20 @@ public class LevelSuccessScreen implements Screen {
     private Texture background;
     private SpriteBatch spriteBatch;
     private Game game;
-    private float time;
+    //private float time;
     private BitmapFont font;
+    private float score;
 
-    public LevelSuccessScreen(Game game, float time) {
-        this.time = time;
+    public LevelSuccessScreen(Game game, float score) {
+        this.score = score;
         this.game = game;
     }
-
+/*
     public float calcScore() {
         return (20 - this.time) * 100;
     }
+
+ */
 
     @Override
     public void show() {
@@ -80,7 +83,7 @@ public class LevelSuccessScreen implements Screen {
         spriteBatch.begin();
         spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        String scoreText = "Current Score is : " + (int) calcScore();
+        String scoreText = "Current Score is : " + (int) score;
         float scoreX = Gdx.graphics.getWidth() / 2f - font.getRegion().getRegionWidth() / 2f;
         float scoreY = Gdx.graphics.getHeight() / 2f;
         font.draw(spriteBatch, scoreText, scoreX, scoreY+10);

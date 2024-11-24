@@ -106,7 +106,7 @@ public class PauseScreen2 implements Screen {
     private GameState loadGameState() {
         try (ObjectInputStream ois = new ObjectInputStream(Gdx.files.local("gamestate.dat").read())) {
             GameState loadedState = (GameState) ois.readObject();
-            game.setScreen(new L2Copy(game));
+            game.setScreen(new L2Screen(game));
             System.out.println("Game state loaded successfully.");
             return loadedState;
         } catch (IOException | ClassNotFoundException e) {
