@@ -23,7 +23,6 @@ import java.util.*;
 
 import static java.lang.Math.max;
 
-
 public class L2Screen implements Screen {
     private static final float PPM = 100f;
     private static final float LAUNCH_MULTIPLIER = 1f;
