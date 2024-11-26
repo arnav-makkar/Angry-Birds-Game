@@ -54,22 +54,28 @@ public class LevelSuccessScreen implements Screen {
 
         Texture headerTexture = new Texture(Gdx.files.internal("levelComplete.png"));
         Image headerImage = new Image(headerTexture);
-        TextButton nextLevelButton = new TextButton("Select Levels", UIskin);
+        Texture nextLevelButton = new Texture(Gdx.files.internal("selectLevel.png"));
+        Image nextLevelImage = new Image(nextLevelButton);
 
         stage = new Stage(new ScreenViewport());
 
-        Table table = new Table();
-        table.setFillParent(true);
-        table.center();
+        Table table1 = new Table();
+        table1.setFillParent(true);
+        table1.center();
 
-        table.add(headerImage).padBottom(50);
-        table.row();
-        table.add(nextLevelButton).padBottom(0);
+        table1.add(headerImage).size(450,80).padBottom(100);
 
-        stage.addActor(table);
+        Table table2 = new Table();
+        table2.setFillParent(true);
+        table2.bottom();
+
+        table2.add(nextLevelImage).size(225, 40).padBottom(80);
+
+        stage.addActor(table1);
+        stage.addActor(table2);
         Gdx.input.setInputProcessor(stage);
 
-        nextLevelButton.addListener(new ClickListener() {
+        nextLevelImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new LevelScreen(game));
@@ -106,10 +112,10 @@ public class LevelSuccessScreen implements Screen {
         spriteBatch.begin();
         spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        String scoreText = "Current Score is : " + (int) score + "\n High Score: " + calcHS(game_num);
+        String scoreText = "Current Score: " + (int) score + "\n High Score    : " + calcHS(game_num);
         float scoreX = Gdx.graphics.getWidth() / 2f - font.getRegion().getRegionWidth() / 2f;
         float scoreY = Gdx.graphics.getHeight() / 2f;
-        font.draw(spriteBatch, scoreText, scoreX, scoreY+10);
+        font.draw(spriteBatch, scoreText, scoreX+15, scoreY-10);
 
         spriteBatch.end();
 

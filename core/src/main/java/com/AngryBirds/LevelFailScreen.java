@@ -41,8 +41,7 @@ public class LevelFailScreen implements Screen {
         table1.center();
 
         Image fail_img = new Image(fail);
-        fail_img.setSize(200f,200f);
-        table1.add(fail_img).size(400f, 70f).padBottom(50f);
+        table1.add(fail_img).size(400f, 80f).padBottom(40f);
 
 
         Table table2 = new Table();
@@ -51,8 +50,7 @@ public class LevelFailScreen implements Screen {
         table2.center().bottom();
 
         Image click_img = new Image(click);
-        click_img.setSize(200f,200f);
-        table2.add(click_img).size(180f, 60f);
+        table2.add(click_img).size(260f, 30f).padBottom(170f);
 
         stage.addActor(table1);
         stage.addActor(table2);
@@ -66,10 +64,6 @@ public class LevelFailScreen implements Screen {
 
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-//        float failX = (Gdx.graphics.getWidth() - fail.getWidth()) / 2f;
-//        float failY = (Gdx.graphics.getHeight() - fail.getHeight()) / 2f;
-//        batch.draw(fail, failX, failY);
-//        batch.draw(click,failX+160,failY-100,400,40);
         batch.end();
 
         if (Gdx.input.justTouched()) {

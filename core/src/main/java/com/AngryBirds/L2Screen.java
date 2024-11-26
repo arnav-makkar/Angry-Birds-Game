@@ -494,7 +494,7 @@ public class L2Screen implements Screen {
                 System.err.println("Error updating the file: " + e.getMessage());
             }
 
-            game.setScreen(new LevelSuccessScreen(this.game, score, 2));
+            game.setScreen(new LevelSuccessScreen(this.game, score, 1));
         }
 
         if(totalTime>20){
@@ -504,7 +504,7 @@ public class L2Screen implements Screen {
         stage.act(delta);
         stage.draw();
         batch.end();
-        debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
+//        debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
     }
 
     @Override

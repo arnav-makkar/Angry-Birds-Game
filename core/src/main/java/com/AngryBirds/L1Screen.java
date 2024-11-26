@@ -496,7 +496,7 @@ public class L1Screen implements Screen {
         stage.draw();
         batch.end();
 
-        debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
+//        debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
     }
 
     @Override
