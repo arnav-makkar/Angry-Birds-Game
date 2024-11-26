@@ -30,7 +30,6 @@ public class L2Screen implements Screen {
     private Music music;
 
     private Sprite PAUSE;
-    private int highscore;
 
     private SpriteBatch batch;
     private Texture birdTexture;
@@ -39,6 +38,7 @@ public class L2Screen implements Screen {
     private Texture woodBoxtex;
     private Texture pigTexture;
     private Texture king_pigTexture;
+    private int highscore;
 
     private Texture redBirdTexture;
     private Texture yellowBirdTexture;
@@ -103,10 +103,10 @@ public class L2Screen implements Screen {
         birdTextQ.add(blackBirdTexture);
         birdTextQ.add(blackBirdTexture);
 
-//        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
-//        music.setLooping(true);
-//        music.setVolume(GameSettings.volume);
-//        music.play();
+        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
+        music.setLooping(true);
+        music.setVolume(GameSettings.volume);
+        music.play();
 
         font = new BitmapFont();
         font.getData().setScale(2f);
@@ -250,9 +250,9 @@ public class L2Screen implements Screen {
         stage.addActor(table);
 
         ClickListener pauseButtonListener = new ClickListener() {
-
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                saveGameState("savegame.dat");
                 game.setScreen(new PauseScreen2(game));
             }
         };
@@ -478,8 +478,8 @@ public class L2Screen implements Screen {
                 }
 
                 if (data.size() > 1) {
-                    highscore = Integer.parseInt(data.get(1)[0]);
-                    data.get(1)[0] = String.valueOf(max(highscore, (int)score));
+                    highscore = Integer.parseInt(data.get(1)[2]);
+                    data.get(1)[2] = String.valueOf(max(highscore, (int)score));
                 }
 
                 // Write the updated data back to the file
@@ -494,7 +494,7 @@ public class L2Screen implements Screen {
                 System.err.println("Error updating the file: " + e.getMessage());
             }
 
-            game.setScreen(new LevelSuccessScreen(this.game, score, 1));
+            game.setScreen(new LevelSuccessScreen(this.game, score, 2));
         }
 
         if(totalTime>20){
@@ -504,7 +504,7 @@ public class L2Screen implements Screen {
         stage.act(delta);
         stage.draw();
         batch.end();
-//        debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
+        debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
     }
 
     @Override
@@ -517,6 +517,7 @@ public class L2Screen implements Screen {
         background.dispose();
         world.dispose();
         debugRenderer.dispose();
+
     }
 
     @Override
