@@ -39,6 +39,7 @@ public class L2Screen implements Screen {
     private Texture background;
     private Texture woodBoxtex;
     private Texture pigTexture;
+    private Texture king_pigTexture;
 
     private Texture redBirdTexture;
     private Texture yellowBirdTexture;
@@ -87,6 +88,7 @@ public class L2Screen implements Screen {
         background = new Texture(Gdx.files.internal("game_screenBG.png"));
         woodBoxtex = new Texture("wood_box.png");
         pigTexture = new Texture("pig.png");
+        king_pigTexture = new Texture("king_pig.png");
 
         redBirdTexture = new Texture("redBird.png");
         yellowBirdTexture = new Texture("yellowBird.png");
@@ -171,7 +173,7 @@ public class L2Screen implements Screen {
         createPig(4.8f, 1.6f, pigTexture, 0.05f, 0.05f);
 
         createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f, 10);
-        createPig(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
+        createPig(5.9f, 2.2f, king_pigTexture, 0.22f, 0.22f);
 
         createObstacle(6.85f, 1.5f, woodBoxtex, 0.5f, 0.5f, 10);
         createPig(6.85f, 1.6f, pigTexture, 0.05f, 0.05f);
@@ -563,7 +565,6 @@ public class L2Screen implements Screen {
             e.printStackTrace();
         }
     }
-
 
     void loadGameState(String fileName) {
         if (birdTextM == null) {
