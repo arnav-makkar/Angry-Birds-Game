@@ -17,22 +17,27 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.Math.max;
+
 public class LevelSuccessScreen implements Screen {
     private Stage stage;
     private Skin UIskin;
     private Texture background;
     private SpriteBatch spriteBatch;
     private Game game;
-    private float time;
     private BitmapFont font;
+    private float score;
+    private int game_num;
+    private int highscore;
 
-    public LevelSuccessScreen(Game game, float time) {
-        this.time = time;
+    public LevelSuccessScreen(Game game, float score, int game_num) {
+        this.score = score;
         this.game = game;
-    }
-
-    public float calcScore() {
-        return (20 - this.time) * 100;
+        this.game_num = game_num;
     }
 
     @Override
@@ -59,7 +64,7 @@ public class LevelSuccessScreen implements Screen {
 
         table.add(headerImage).padBottom(50);
         table.row();
-        table.add(nextLevelButton).padBottom(40);
+        table.add(nextLevelButton).padBottom(0);
 
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
@@ -72,6 +77,27 @@ public class LevelSuccessScreen implements Screen {
         });
     }
 
+    public int calcHS(int game_num){
+        List<String[]> data = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("highscore.csv"))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                data.add(line.split(","));
+            }
+
+            if (data.size() > 1) {
+                highscore = Integer.parseInt(data.get(1)[game_num]);
+            }
+        }
+        catch (IOException e) {
+            System.err.println("Error updating the file: " + e.getMessage());
+        }
+
+        return highscore;
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -80,7 +106,7 @@ public class LevelSuccessScreen implements Screen {
         spriteBatch.begin();
         spriteBatch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        String scoreText = "Current Score is : " + (int) calcScore();
+        String scoreText = "Current Score is : " + (int) score + "\n High Score: " + calcHS(game_num);
         float scoreX = Gdx.graphics.getWidth() / 2f - font.getRegion().getRegionWidth() / 2f;
         float scoreY = Gdx.graphics.getHeight() / 2f;
         font.draw(spriteBatch, scoreText, scoreX, scoreY+10);

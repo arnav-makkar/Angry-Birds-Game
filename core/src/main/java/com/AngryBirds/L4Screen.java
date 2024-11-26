@@ -17,11 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.io.*;
+import java.util.*;
 
+import static java.lang.Math.max;
 import static java.lang.Thread.sleep;
 
 public class L4Screen implements Screen {
@@ -30,6 +29,7 @@ public class L4Screen implements Screen {
     private Stage stage;
 
     private Sprite PAUSE;
+    private int highscore;
 
     private SpriteBatch batch;
     private Texture birdTexture;
@@ -527,7 +527,36 @@ public class L4Screen implements Screen {
         }
 
         if (pigs.isEmpty() && totalTime<=40) {
-            game.setScreen(new LevelSuccessScreen(this.game, totalTime));
+            float score = (40 - totalTime) * 100;
+            highscore = max(highscore, (int)score);
+
+            List<String[]> data = new ArrayList<>();
+
+            try (BufferedReader br = new BufferedReader(new FileReader("highscore.csv"))) {
+                String line;
+
+                while ((line = br.readLine()) != null) {
+                    data.add(line.split(","));
+                }
+
+                if (data.size() > 1) {
+                    highscore = Integer.parseInt(data.get(1)[3]);
+                    data.get(1)[3] = String.valueOf(max(highscore, (int)score));
+                }
+
+                // Write the updated data back to the file
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.csv"))) {
+                    for (String[] row : data) {
+                        bw.write(String.join(",", row));
+                        bw.newLine();
+                    }
+                }
+            }
+            catch (IOException e) {
+                System.err.println("Error updating the file: " + e.getMessage());
+            }
+
+            game.setScreen(new LevelSuccessScreen(this.game, score, 3));
         }
 
         if(totalTime>40){
