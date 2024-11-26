@@ -1,6 +1,7 @@
 package com.AngryBirds;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -17,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -28,6 +31,7 @@ public class L2Screen implements Screen {
     private static final float PPM = 100f;
     private static final float LAUNCH_MULTIPLIER = 1f;
     private Stage stage;
+    private Music music;
 
     private Sprite PAUSE;
 
@@ -56,7 +60,7 @@ public class L2Screen implements Screen {
     private static final short CATEGORY_CATAPULT = 0x0001;
     private static final short CATEGORY_BIRD = 0x0002;
     private static final short CATEGORY_OBSTACLE = 0x0004;
-    private static final short MASK_CATAPULT = CATEGORY_OBSTACLE; // Collides only with obstacles
+    private static final short MASK_CATAPULT = CATEGORY_OBSTACLE;
     private static final short MASK_BIRD = CATEGORY_OBSTACLE;
 
     private RevoluteJoint catapultJoint;
@@ -99,6 +103,11 @@ public class L2Screen implements Screen {
         birdTextQ.add(blackBirdTexture);
         birdTextQ.add(blackBirdTexture);
         birdTextQ.add(blackBirdTexture);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
+        music.setLooping(true);
+        music.setVolume(GameSettings.volume);
+        music.play();
 
         font = new BitmapFont();
         font.getData().setScale(2f);
@@ -482,4 +491,29 @@ public class L2Screen implements Screen {
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}
+
+    private void saveGameState(String filePath) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            GameState gameState = new GameState();
+            gameState.totalTime = totalTime;
+            gameState.birdCount = birdCount;
+
+            // Save bird states
+            gameState.birdStates = new LinkedList<>();
+            for (Body bird : allBirds) {
+                Vector2 pos = bird.getPosition();
+                Vector2 vel = bird.getLinearVelocity();
+                gameState.birdStates.add(new BodyState(pos.x, pos.y, vel.x, vel.y, bird.getAngle()));
+            }
+
+            // Save obstacles and pigs
+            gameState.obstacles = obstacles;
+            gameState.pigs = pigs;
+
+            oos.writeObject(gameState);
+            System.out.println("Game state saved successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
