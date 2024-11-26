@@ -40,6 +40,10 @@ public class L4Screen implements Screen {
     private Texture iceline;
     private Texture pigTexture;
 
+    private Texture ribbonPigTexture;;
+    private Texture kingPigTexture;
+    private Texture helmetPigTexture;
+
     private Texture redBirdTexture;
     private Texture yellowBirdTexture;
     private Texture blackBirdTexture;
@@ -93,6 +97,10 @@ public class L4Screen implements Screen {
         redBirdTexture = new Texture("redBird.png");
         yellowBirdTexture = new Texture("yellowBird.png");
         blackBirdTexture = new Texture("blackBird.png");
+
+        kingPigTexture = new Texture("king_pig.png");
+        helmetPigTexture = new Texture("helmet_pig.png");
+        ribbonPigTexture = new Texture("ribbon_pig.png");
 
         birdTextM = new HashMap<>();
         birdTextQ = new LinkedList<>();
@@ -166,7 +174,7 @@ public class L4Screen implements Screen {
         createObstacle(5.1f, 2.7f, icetri, 0.6f, 0.5f, 2);
         createObstacle(6.7f, 2.7f, icetri, 0.6f, 0.5f, 2);
 
-        createPig(5.9f, 2.3f, pigTexture, 0.075f, 0.075f);
+        createPig(5.9f, 2.3f, ribbonPigTexture, 0.3f, 0.3f);
 
         createObstacle(5.9f, 3.2f, iceline, 0.5f, 0.5f, 2);
 
@@ -174,8 +182,11 @@ public class L4Screen implements Screen {
         createPig(5.3f, 3.3f, pigTexture, 0.075f, 0.075f);
         createPig(6.5f, 3.3f, pigTexture, 0.075f, 0.075f);
 
+        createPig(4.4f, 2.1f, pigTexture, 0.04f, 0.04f);
+        createPig(7.35f, 2.1f, pigTexture, 0.04f, 0.04f);
+
         createObstacle(5.9f, 2f, iceline, 0.8f, 0.5f, 2);
-        createPig(5.9f, 1.6f, pigTexture, 0.075f, 0.075f);
+        createPig(5.9f, 1.6f, kingPigTexture, 0.15f, 0.15f);
 
         createObstacle(6.85f, 1.65f, ice4tex, 0.5f, 0.5f, 2);
 
@@ -566,7 +577,7 @@ public class L4Screen implements Screen {
         stage.act(delta);
         stage.draw();
         batch.end();
-        debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
+//        debugRenderer.render(world, batch.getProjectionMatrix().cpy().scale(PPM, PPM, 0));
     }
 
     @Override

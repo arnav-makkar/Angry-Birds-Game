@@ -69,9 +69,10 @@ public class PauseScreen2 implements Screen {
         ClickListener resumeButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
                 L2Screen gameScreen=new L2Screen(game);
                 gameScreen.loadGameState("savegame.dat");
-                game.setScreen(gameScreen);
+                game.setScreen(new L2Screen(game));
             }
         };
 
@@ -135,15 +136,15 @@ public class PauseScreen2 implements Screen {
 
     @Override
     public void hide() {
-        dispose();
+
     }
 
     @Override
     public void dispose() {
-        UIskin.dispose();
-        stage.dispose();
-        spriteBatch.dispose();
-        RESG.getTexture().dispose();
-        BTMM.getTexture().dispose();
+//        UIskin.dispose();
+//        stage.dispose();
+//        spriteBatch.dispose();
+//        RESG.getTexture().dispose();
+//        BTMM.getTexture().dispose();
     }
 }
