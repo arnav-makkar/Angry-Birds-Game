@@ -24,7 +24,7 @@ import static java.lang.Integer.parseInt;
 import static java.lang.Math.max;
 import static java.lang.Thread.sleep;
 
-public class L2Screen implements Screen {
+public class L2Copy implements Screen {
     private static final float PPM = 100f;
     private static final float LAUNCH_MULTIPLIER = 1f;
     private Stage stage;
@@ -76,7 +76,7 @@ public class L2Screen implements Screen {
 
     private int birdCount = 0;
 
-    public L2Screen(Game game) {this.game = game;}
+    public L2Copy(Game game) {this.game = game;}
 
     @Override
     public void show() {
