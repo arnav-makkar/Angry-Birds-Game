@@ -19,9 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.io.*;
-import java.util.*;
-
-import static java.lang.Math.max;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 public class L2Screen implements Screen {
     private static final float PPM = 100f;
@@ -30,7 +31,6 @@ public class L2Screen implements Screen {
     private Music music;
 
     private Sprite PAUSE;
-    private int highscore;
 
     private SpriteBatch batch;
     private Texture birdTexture;
@@ -58,7 +58,7 @@ public class L2Screen implements Screen {
     private static final short CATEGORY_CATAPULT = 0x0001;
     private static final short CATEGORY_BIRD = 0x0002;
     private static final short CATEGORY_OBSTACLE = 0x0004;
-    private static final short MASK_CATAPULT = CATEGORY_OBSTACLE; // Collides only with obstacles
+    private static final short MASK_CATAPULT = CATEGORY_OBSTACLE;
     private static final short MASK_BIRD = CATEGORY_OBSTACLE;
 
     private RevoluteJoint catapultJoint;
@@ -103,10 +103,10 @@ public class L2Screen implements Screen {
         birdTextQ.add(blackBirdTexture);
         birdTextQ.add(blackBirdTexture);
 
-//        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
-//        music.setLooping(true);
-//        music.setVolume(GameSettings.volume);
-//        music.play();
+        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
+        music.setLooping(true);
+        music.setVolume(GameSettings.volume);
+        music.play();
 
         font = new BitmapFont();
         font.getData().setScale(2f);
@@ -465,35 +465,6 @@ public class L2Screen implements Screen {
         }
 
         if (pigs.isEmpty() && totalTime<=20) {
-            float score = (20 - totalTime) * 100;
-            highscore = max(highscore, (int)score);
-
-            List<String[]> data = new ArrayList<>();
-
-            try (BufferedReader br = new BufferedReader(new FileReader("highscore.csv"))) {
-                String line;
-
-                while ((line = br.readLine()) != null) {
-                    data.add(line.split(","));
-                }
-
-                if (data.size() > 1) {
-                    highscore = Integer.parseInt(data.get(1)[1]);
-                    data.get(1)[1] = String.valueOf(max(highscore, (int)score));
-                }
-
-                try (BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.csv"))) {
-                    for (String[] row : data) {
-                        bw.write(String.join(",", row));
-                        bw.newLine();
-                    }
-                }
-            }
-            catch (IOException e) {
-                System.err.println("Error updating the file: " + e.getMessage());
-            }
-
-            game.setScreen(new LevelSuccessScreen(this.game, score, 1));
 //            game.setScreen(new LevelSuccessScreen(this.game));
         }
 
@@ -510,13 +481,14 @@ public class L2Screen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
+        music.stop();
+        music.dispose();
         birdTexture.dispose();
         catapultTexture.dispose();
         background.dispose();
         world.dispose();
         debugRenderer.dispose();
-        music.stop();
-        music.dispose();
+
     }
 
     @Override
@@ -564,8 +536,7 @@ public class L2Screen implements Screen {
             e.printStackTrace();
         }
     }
-
-    void loadGameState(String fileName) {
+    public void loadGameState(String fileName) {
         if (birdTextM == null) {
             birdTextM = new HashMap<>();
         }
