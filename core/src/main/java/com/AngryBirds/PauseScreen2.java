@@ -69,7 +69,9 @@ public class PauseScreen2 implements Screen {
         ClickListener resumeButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new L2Screen(game));
+                L2Screen gameScreen=new L2Screen(game);
+                gameScreen.loadGameState("savegame.dat");
+                game.setScreen(gameScreen);
             }
         };
 
