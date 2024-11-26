@@ -3,6 +3,7 @@ package com.AngryBirds;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -19,6 +20,7 @@ public class HomeScreen implements Screen {
     private Texture background;
     private SpriteBatch spriteBatch;
     private Game game;
+    private Music music;
 
     private Sprite PLAY;
     private Sprite LOGO;
@@ -31,6 +33,12 @@ public class HomeScreen implements Screen {
 
     @Override
     public void show() {
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
+        music.setLooping(true);
+        music.setVolume(GameSettings.volume);
+        music.play();
+
         spriteBatch = new SpriteBatch();
         background = new Texture(Gdx.files.internal("homeBackground.png"));
 
@@ -72,7 +80,7 @@ public class HomeScreen implements Screen {
 
         Image exitButtonImage = new Image(EXIT);
         exitButtonImage.setSize(150f, 750f);
-        buttonRow.add(exitButtonImage).size(125f, 80f).padRight(80f); // Add padding between buttons
+        buttonRow.add(exitButtonImage).size(125f, 80f).padRight(80f);
 
         Image settingsButtonImage = new Image(SETTINGS);
         settingsButtonImage.setSize(150f, 750f);
@@ -149,5 +157,7 @@ public class HomeScreen implements Screen {
         LOGO.getTexture().dispose();
         PLAY.getTexture().dispose();
         background.dispose();
+        music.stop();
+        music.dispose();
     }
 }
