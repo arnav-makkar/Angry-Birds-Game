@@ -510,7 +510,6 @@ public class L2Screen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        music.stop();
         music.dispose();
         birdTexture.dispose();
         catapultTexture.dispose();
@@ -530,7 +529,9 @@ public class L2Screen implements Screen {
     public void resume() {}
 
     @Override
-    public void hide() {}
+    public void hide() {
+        music.stop();
+    }
 
     private void saveGameState(String filePath) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {

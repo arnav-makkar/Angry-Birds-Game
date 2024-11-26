@@ -3,6 +3,7 @@ package com.AngryBirds;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,6 +24,7 @@ public class SettingsScreen implements Screen {
     private SpriteBatch spriteBatch;
     private Game game;
 
+
     private Sprite LOGO;
     private Sprite VOLUME;
     private Sprite BRIGHTNESS;
@@ -37,6 +39,11 @@ public class SettingsScreen implements Screen {
         spriteBatch = new SpriteBatch();
         stage = new Stage(new ScreenViewport());
         background = new Texture(Gdx.files.internal("homeBackground.png"));
+
+//        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
+//        music.setLooping(true);
+//        music.setVolume(GameSettings.volume);
+//        music.play();
 
         Gdx.input.setInputProcessor(stage);
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));

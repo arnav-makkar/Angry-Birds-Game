@@ -1,6 +1,7 @@
 package com.AngryBirds;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
@@ -37,6 +38,7 @@ public class L1Screen implements Screen {
     private Texture background;
     private Texture woodBoxtex;
     private Texture pigTexture;
+    private Music music;
 
     private Texture redBirdTexture;
     private Texture yellowBirdTexture;
@@ -95,6 +97,11 @@ public class L1Screen implements Screen {
         birdTextQ.add(yellowBirdTexture);
         birdTextQ.add(blackBirdTexture);
         birdTextQ.add(blackBirdTexture);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
+        music.setLooping(true);
+        music.setVolume(GameSettings.volume);
+        music.play();
 
         font = new BitmapFont();
         font.getData().setScale(2f);
@@ -503,6 +510,7 @@ public class L1Screen implements Screen {
     public void dispose() {
         batch.dispose();
         birdTexture.dispose();
+        music.dispose();
         catapultTexture.dispose();
         background.dispose();
         world.dispose();
@@ -512,5 +520,7 @@ public class L1Screen implements Screen {
     @Override public void resize(int width, int height) {}
     @Override public void pause() {}
     @Override public void resume() {}
-    @Override public void hide() {}
+    @Override public void hide() {
+        music.stop();
+    }
 }
