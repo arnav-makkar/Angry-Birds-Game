@@ -17,10 +17,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.io.*;
+import java.util.*;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.Math.max;
 import static java.lang.Thread.sleep;
 
-public class L2Copy implements Screen {
+public class L2Screen implements Screen {
     private static final float PPM = 100f;
     private static final float LAUNCH_MULTIPLIER = 1f;
     private Stage stage;
@@ -33,6 +37,7 @@ public class L2Copy implements Screen {
     private Texture background;
     private Texture woodBoxtex;
     private Texture pigTexture;
+    private int highscore;
 
     private Texture redBirdTexture;
     private Texture yellowBirdTexture;
@@ -71,7 +76,7 @@ public class L2Copy implements Screen {
 
     private int birdCount = 0;
 
-    public L2Copy(Game game) {this.game = game;}
+    public L2Screen(Game game) {this.game = game;}
 
     @Override
     public void show() {
@@ -153,10 +158,14 @@ public class L2Copy implements Screen {
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
         create_Ground_obj(3f, -1f, 10f, 0.2f);
 
+        createObstacle(4.8f, 1.5f, woodBoxtex, 0.5f, 0.5f, 10);
+        createPig(4.8f, 1.6f, pigTexture, 0.05f, 0.05f);
 
         createObstacle(5.9f, 2f, woodBoxtex, 0.8f, 0.8f, 10);
         createPig(5.9f, 2.2f, pigTexture, 0.1f, 0.1f);
 
+        createObstacle(6.85f, 1.5f, woodBoxtex, 0.5f, 0.5f, 10);
+        createPig(6.85f, 1.6f, pigTexture, 0.05f, 0.05f);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -216,7 +225,12 @@ public class L2Copy implements Screen {
 
                     isDragging = false;
 
+                    if(birdCount<=6){
                         initNewBird();
+                    }
+
+                    else{
+                        game.setScreen(new LevelFailScreen(game));
                     }
                 }
                 return true;
@@ -366,8 +380,15 @@ public class L2Copy implements Screen {
     }
 
     @Override
+
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(GameSettings.brightness, GameSettings.brightness * 0.5f, GameSettings.brightness * 0.3f, 1.0f);
+
+        int totPigCount = 3;
+        int cnt = 0;
+
+
 
         world.step(1 / 60f, 6, 2);
         totalTime += delta;
@@ -435,8 +456,38 @@ public class L2Copy implements Screen {
         }
 
         if (pigs.isEmpty() && totalTime<=20) {
+            float score = (20 - totalTime) * 100;
+            highscore = max(highscore, (int)score);
+
+            List<String[]> data = new ArrayList<>();
+
+            try (BufferedReader br = new BufferedReader(new FileReader("highscore.csv"))) {
+                String line;
+
+                while ((line = br.readLine()) != null) {
+                    data.add(line.split(","));
+                }
+
+                if (data.size() > 1) {
+                    highscore = Integer.parseInt(data.get(1)[1]);
+                    data.get(1)[1] = String.valueOf(max(highscore, (int)score));
+                }
+
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.csv"))) {
+                    for (String[] row : data) {
+                        bw.write(String.join(",", row));
+                        bw.newLine();
+                    }
+                }
+            }
+            catch (IOException e) {
+                System.err.println("Error updating the file: " + e.getMessage());
+            }
+
+            game.setScreen(new LevelSuccessScreen(this.game, score, 1));
         }
 
+        if(totalTime>20){
             game.setScreen(new LevelFailScreen(this.game));
         }
 

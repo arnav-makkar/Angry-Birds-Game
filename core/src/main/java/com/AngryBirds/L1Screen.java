@@ -363,7 +363,7 @@ public class L1Screen implements Screen {
 
         FixtureDef obstacleFixtureDef = new FixtureDef();
         obstacleFixtureDef.shape = obstacleShape;
-        obstacleFixtureDef.density = 1f; // Adjust density
+        obstacleFixtureDef.density = 1f;
         obstacleFixtureDef.friction = 0.6f;
         obstacleFixtureDef.restitution = 0.2f;
 
@@ -373,38 +373,6 @@ public class L1Screen implements Screen {
         // Add the obstacle with texture to the list
         pigs.add(new Pig(obstacleBody, texture, xscale, yscale));
     }
-/*
-    private void createObstacle_Tex(float x, float y, Texture texture) {
-        // Calculate obstacle dimensions in Box2D units based on the texture size
-        float width = texture.getWidth() / PPM/(3);
-        float height = texture.getHeight() / PPM/(3);
-
-        // Create the obstacle body
-        BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.DynamicBody;
-        obstacleDef.position.set(x, y);
-
-        Body obstacleBody = world.createBody(obstacleDef);
-
-        // Define the shape based on texture dimensions
-        PolygonShape obstacleShape = new PolygonShape();
-        obstacleShape.setAsBox(width / 2, height / 2);
-
-        FixtureDef obstacleFixtureDef = new FixtureDef();
-        obstacleFixtureDef.shape = obstacleShape;
-        obstacleFixtureDef.density = 0.2f;
-        obstacleFixtureDef.friction = 0.6f;
-        obstacleFixtureDef.restitution = 0.1f;
-
-        obstacleBody.createFixture(obstacleFixtureDef);
-        obstacleShape.dispose();
-
-        // Add to the list of obstacles
-        obstacles.add(obstacleBody);
-    }
-
- */
-
 
     @Override
     public void render(float delta) {
