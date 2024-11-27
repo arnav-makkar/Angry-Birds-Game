@@ -71,7 +71,7 @@ public class PauseScreen1 implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 L1Screen gameScreen=new L1Screen(game);
                 gameScreen.loadState("savegame.dat");
-                game.setScreen(new L1Screen(game));
+                game.setScreen(gameScreen);
             }
         };
 

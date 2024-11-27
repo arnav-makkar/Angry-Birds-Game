@@ -123,7 +123,7 @@ public class L2Screen implements Screen {
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         if (world == null) {
-            world = new World(new Vector2(0, -10.0f), true);  // Standard gravity
+            world = new World(new Vector2(0, -10.0f), true);
         }
 
         debugRenderer = new Box2DDebugRenderer();
@@ -541,16 +541,6 @@ public class L2Screen implements Screen {
 
             gameState.birdStates = new LinkedList<>();
             for (Body bird : allBirds) {
-                String birdType;
-                if (birdTextM.get(bird) == redBirdTexture) {
-                    birdType = "red";
-                } else if (birdTextM.get(bird) == yellowBirdTexture) {
-                    birdType = "yellow";
-                } else if (birdTextM.get(bird) == blackBirdTexture) {
-                    birdType = "black";
-                } else {
-                    birdType = "red";
-                }
                 Vector2 pos = bird.getPosition();
                 Vector2 vel = bird.getLinearVelocity();
                 Texture birdTexture = birdTextM.get(bird);
@@ -566,6 +556,7 @@ public class L2Screen implements Screen {
             e.printStackTrace();
         }
     }
+
     public void loadState(String fileName) {
         if (birdTextM == null) {
             birdTextM = new HashMap<>();
@@ -637,8 +628,7 @@ public class L2Screen implements Screen {
 
             obstacles.clear();
             for (Obstacle oldObstacle : gameState.obstacles) {
-                createObstacle(oldObstacle.body.getPosition().x, oldObstacle.body.getPosition().y, woodBoxtex, oldObstacle.x, oldObstacle.y, 10
-                );
+                createObstacle(oldObstacle.body.getPosition().x, oldObstacle.body.getPosition().y, woodBoxtex, oldObstacle.x, oldObstacle.y, 10);
             }
 
             pigs.clear();

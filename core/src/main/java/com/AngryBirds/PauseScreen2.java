@@ -72,7 +72,7 @@ public class PauseScreen2 implements Screen {
 
                 L2Screen gameScreen=new L2Screen(game);
                 gameScreen.loadState("savegame.dat");
-                game.setScreen(new L2Screen(game));
+                game.setScreen(gameScreen);
             }
         };
 
