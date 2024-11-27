@@ -71,7 +71,7 @@ public class PauseScreen2 implements Screen {
             public void clicked(InputEvent event, float x, float y) {
 
                 L2Screen gameScreen=new L2Screen(game);
-                gameScreen.loadGameState("savegame.dat");
+                gameScreen.loadState("savegame.dat");
                 game.setScreen(new L2Screen(game));
             }
         };
@@ -104,19 +104,6 @@ public class PauseScreen2 implements Screen {
 
         stage.act(Math.min(delta, 1 / 30f));
         stage.draw();
-    }
-
-    private GameState loadGameState() {
-        try (ObjectInputStream ois = new ObjectInputStream(Gdx.files.local("gamestate.dat").read())) {
-            GameState loadedState = (GameState) ois.readObject();
-            game.setScreen(new L2Screen(game));
-            System.out.println("Game state loaded successfully.");
-            return loadedState;
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("Failed to load game state.");
-        }
-        return null;
     }
 
     @Override

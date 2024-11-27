@@ -67,11 +67,11 @@ public class L1Screen implements Screen {
     private boolean isDragging = false;
     private Vector2 dragStart;
 
-    private final LinkedList<Obstacle> obstacles = new LinkedList<>();
+    private LinkedList<Obstacle> obstacles = new LinkedList<>();
     private final LinkedList<Pig> pigs = new LinkedList<>();
 
     private Queue<Body> birdsQueue;
-    private final LinkedList<Body> allBirds = new LinkedList<>();
+    private LinkedList<Body> allBirds = new LinkedList<>();
     private Body currentBird;
     private int birdCount;
     private Game game;
@@ -522,5 +522,131 @@ public class L1Screen implements Screen {
     @Override public void resume() {}
     @Override public void hide() {
         music.stop();
+    }
+
+    private void saveState(String filePath) {
+        try (ObjectOutputStream Objo = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            GameState gameState = new GameState();
+            gameState.totalTime = totalTime;
+            gameState.birdCount = birdCount;
+
+            gameState.birdStates = new LinkedList<>();
+            for (Body bird : allBirds) {
+                String birdType;
+                if (birdTextM.get(bird) == redBirdTexture) {
+                    birdType = "red";
+                } else if (birdTextM.get(bird) == yellowBirdTexture) {
+                    birdType = "yellow";
+                } else if (birdTextM.get(bird) == blackBirdTexture) {
+                    birdType = "black";
+                } else {
+                    birdType = "red";
+                }
+                Vector2 pos = bird.getPosition();
+                Vector2 vel = bird.getLinearVelocity();
+                Texture birdTexture = birdTextM.get(bird);
+                gameState.birdStates.add(new BodyState(pos.x, pos.y, vel.x, vel.y, bird.getAngle(),birdTexture));
+            }
+
+            gameState.obstacles = obstacles;
+            gameState.pigs = pigs;
+
+            Objo.writeObject(gameState);
+            System.out.println("Game is saved");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadState(String fileName) {
+        if (birdTextM == null) {
+            birdTextM = new HashMap<>();
+        }
+        if (allBirds == null) {
+            allBirds = new LinkedList<>();
+        }
+        if (birdsQueue == null) {
+            birdsQueue = new LinkedList<>();
+        }
+        if (obstacles == null) {
+            obstacles = new LinkedList<>();
+        }
+
+        try (ObjectInputStream Obji = new ObjectInputStream(new FileInputStream(fileName))) {
+            GameState gameState = (GameState) Obji.readObject();
+
+            if (world != null) world.dispose();
+            world = new World(new Vector2(0, -10.0f), true);
+
+            allBirds.clear();
+            obstacles.clear();
+            pigs.clear();
+            birdTextM.clear();
+
+            totalTime = gameState.totalTime;
+            birdCount = gameState.birdCount;
+
+            for (BodyState bodyState : gameState.birdStates) {
+                BodyDef ballDef = new BodyDef();
+                ballDef.type = BodyDef.BodyType.DynamicBody;
+                ballDef.position.set(bodyState.posX, bodyState.posY);
+                ballDef.angle = bodyState.angle;
+
+                Body bird = world.createBody(ballDef);
+
+                CircleShape ballShape = new CircleShape();
+                ballShape.setRadius(0.2f);
+
+                FixtureDef ballFixtureDef = new FixtureDef();
+                ballFixtureDef.shape = ballShape;
+                ballFixtureDef.density = 1f;
+                ballFixtureDef.friction = 0.3f;
+                ballFixtureDef.restitution = 0.5f;
+
+                bird.createFixture(ballFixtureDef);
+                ballShape.dispose();
+
+                bird.setLinearVelocity(bodyState.velX, bodyState.velY);
+
+                Texture birdTexture;
+                switch (bodyState.birdType) {
+                    case "red":
+                        birdTexture = redBirdTexture;
+                        break;
+                    case "yellow":
+                        birdTexture = yellowBirdTexture;
+                        break;
+                    case "black":
+                        birdTexture = blackBirdTexture;
+                        break;
+                    default:
+                        birdTexture = redBirdTexture;
+                        break;
+                }
+                birdTextM.put(bird, birdTexture);
+                allBirds.add(bird);
+            }
+
+            obstacles.clear();
+            for (Obstacle oldObstacle : gameState.obstacles) {
+                createObstacle(oldObstacle.body.getPosition().x, oldObstacle.body.getPosition().y, woodBoxtex, oldObstacle.x, oldObstacle.y, 10
+                );
+            }
+
+            pigs.clear();
+            for (Pig oldPig : gameState.pigs) {
+                createPig(oldPig.body.getPosition().x, oldPig.body.getPosition().y, pigTexture, oldPig.x, oldPig.y);
+            }
+
+            if (!allBirds.isEmpty()) {
+                currentBird = allBirds.getLast();
+            }
+            if (gameState.birdStates == null || gameState.birdStates.isEmpty()) {
+                System.out.println("no birds so cant load");
+                return;
+            }
+            System.out.println("successful game load");
+        } catch (Exception e) {
+            System.out.println("failed to load");
+        }
     }
 }

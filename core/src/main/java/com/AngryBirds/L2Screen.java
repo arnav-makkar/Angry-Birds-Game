@@ -252,7 +252,7 @@ public class L2Screen implements Screen {
         ClickListener pauseButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                saveGameState("savegame.dat");
+                saveState("savegame.dat");
                 game.setScreen(new PauseScreen2(game));
             }
         };
@@ -533,8 +533,8 @@ public class L2Screen implements Screen {
         music.stop();
     }
 
-    private void saveGameState(String filePath) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+    private void saveState(String filePath) {
+        try (ObjectOutputStream Objo = new ObjectOutputStream(new FileOutputStream(filePath))) {
             GameState gameState = new GameState();
             gameState.totalTime = totalTime;
             gameState.birdCount = birdCount;
@@ -560,13 +560,13 @@ public class L2Screen implements Screen {
             gameState.obstacles = obstacles;
             gameState.pigs = pigs;
 
-            oos.writeObject(gameState);
+            Objo.writeObject(gameState);
             System.out.println("Game is saved");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void loadGameState(String fileName) {
+    public void loadState(String fileName) {
         if (birdTextM == null) {
             birdTextM = new HashMap<>();
         }
@@ -580,8 +580,8 @@ public class L2Screen implements Screen {
             obstacles = new LinkedList<>();
         }
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
-            GameState gameState = (GameState) ois.readObject();
+        try (ObjectInputStream Obji = new ObjectInputStream(new FileInputStream(fileName))) {
+            GameState gameState = (GameState) Obji.readObject();
 
             if (world != null) world.dispose();
             world = new World(new Vector2(0, -10.0f), true);
@@ -616,7 +616,6 @@ public class L2Screen implements Screen {
 
                 bird.setLinearVelocity(bodyState.velX, bodyState.velY);
 
-                String birdType = bodyState.birdType != null ? bodyState.birdType : "red";
                 Texture birdTexture;
                 switch (bodyState.birdType) {
                     case "red":
@@ -651,10 +650,10 @@ public class L2Screen implements Screen {
                 currentBird = allBirds.getLast();
             }
             if (gameState.birdStates == null || gameState.birdStates.isEmpty()) {
-                Gdx.app.log("LoadGame", "No bird states found in saved game!");
+                System.out.println("no birds so cant load");
                 return;
             }
-            Gdx.app.log("LoadGame", "Game state loaded successfully.");
+            System.out.println("successful game load");
         } catch (Exception e) {
             System.out.println("failed to load");
         }

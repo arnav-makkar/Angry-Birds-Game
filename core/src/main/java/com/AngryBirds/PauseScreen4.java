@@ -69,6 +69,8 @@ public class PauseScreen4 implements Screen {
         ClickListener resumeButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                L4Screen gameScreen=new L4Screen(game);
+                gameScreen.loadState("savegame.dat");
                 game.setScreen(new L4Screen(game));
             }
         };
@@ -101,19 +103,6 @@ public class PauseScreen4 implements Screen {
 
         stage.act(Math.min(delta, 1 / 30f));
         stage.draw();
-    }
-
-    private GameState loadGameState() {
-        try (ObjectInputStream ois = new ObjectInputStream(Gdx.files.local("gamestate.dat").read())) {
-            GameState loadedState = (GameState) ois.readObject();
-            game.setScreen(new L4Screen(game));
-            System.out.println("Game state loaded successfully.");
-            return loadedState;
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("Failed to load game state.");
-        }
-        return null;
     }
 
     @Override
