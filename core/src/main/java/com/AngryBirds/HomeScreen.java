@@ -26,6 +26,7 @@ public class HomeScreen implements Screen {
     private Sprite LOGO;
     private Sprite SETTINGS;
     private Sprite EXIT;
+    private Sprite MUSIC;
 
     public HomeScreen(Game game) {
         this.game = game;
@@ -58,6 +59,10 @@ public class HomeScreen implements Screen {
         EXIT = new Sprite(exitTexture);
         EXIT.setSize(200f, 20f);
 
+        Texture musicTexture = new Texture(Gdx.files.internal("music.png"));
+        MUSIC = new Sprite(musicTexture);
+        MUSIC.setSize(200f, 20f);
+
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
         stage = new Stage(new ScreenViewport());
@@ -80,11 +85,15 @@ public class HomeScreen implements Screen {
 
         Image exitButtonImage = new Image(EXIT);
         exitButtonImage.setSize(150f, 750f);
-        buttonRow.add(exitButtonImage).size(125f, 80f).padRight(80f);
+        buttonRow.add(exitButtonImage).size(125f, 80f).padRight(20);
 
         Image settingsButtonImage = new Image(SETTINGS);
         settingsButtonImage.setSize(150f, 750f);
-        buttonRow.add(settingsButtonImage).size(75f, 75f).padRight(25f);
+        buttonRow.add(settingsButtonImage).size(75f, 75f).padRight(20).padLeft(10);
+
+        Image musicButtonImg = new Image(MUSIC);
+        musicButtonImg.setSize(150f, 750f);
+        buttonRow.add(musicButtonImg).size(125f, 110f);
 
         table.add(buttonRow).center();
         table.row();
@@ -105,6 +114,13 @@ public class HomeScreen implements Screen {
             }
         };
 
+        ClickListener musicButtonListener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MusicScreen(game));
+            }
+        };
+
         ClickListener exitButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -115,6 +131,7 @@ public class HomeScreen implements Screen {
         playButtonImage.addListener(playButtonListener);
         settingsButtonImage.addListener(settingsButtonListener);
         exitButtonImage.addListener(exitButtonListener);
+        musicButtonImg.addListener(musicButtonListener);
     }
 
     @Override

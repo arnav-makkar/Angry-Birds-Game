@@ -465,7 +465,7 @@ public class L2Screen implements Screen {
         }
 
         if (pigs.isEmpty() && totalTime<=20) {
-            float score = (20 - totalTime) * 100;
+            float score = (20 - totalTime) * 50;
             highscore = max(highscore, (int)score);
 
             List<String[]> data = new ArrayList<>();
@@ -478,8 +478,8 @@ public class L2Screen implements Screen {
                 }
 
                 if (data.size() > 1) {
-                    highscore = Integer.parseInt(data.get(1)[2]);
-                    data.get(1)[2] = String.valueOf(max(highscore, (int)score));
+                    highscore = Integer.parseInt(data.get(1)[1]);
+                    data.get(1)[1] = String.valueOf(max(highscore, (int)score));
                 }
 
                 // Write the updated data back to the file

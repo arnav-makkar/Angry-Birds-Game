@@ -463,7 +463,7 @@ public class L1Screen implements Screen {
 
         if (pigs.isEmpty() && totalTime<=20) {
 
-            float score = (20 - totalTime) * 100;
+            float score = (20 - totalTime) * 50;
             highscore = max(highscore, (int)score);
 
             List<String[]> data = new ArrayList<>();

@@ -545,7 +545,7 @@ public class L4Screen implements Screen {
         }
 
         if (pigs.isEmpty() && totalTime<=40) {
-            float score = (40 - totalTime) * 100;
+            float score = (40 - totalTime) * 25;
             highscore = max(highscore, (int)score);
 
             List<String[]> data = new ArrayList<>();
