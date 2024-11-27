@@ -3,6 +3,7 @@ package com.AngryBirds;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,6 +22,7 @@ public class LevelScreen implements Screen {
     private Skin UIskin;
     private Texture background;
     private SpriteBatch spriteBatch;
+    private Music music;
 
     private Game game;
 
@@ -42,6 +44,11 @@ public class LevelScreen implements Screen {
         Texture levelTexture2 = new Texture(Gdx.files.internal("level2.png"));
         Texture levelTexture3 = new Texture(Gdx.files.internal("level3.png"));
         Texture levelTexture4 = new Texture(Gdx.files.internal("level4.png"));
+
+        music = Gdx.audio.newMusic(Gdx.files.internal(GameSettings.SONG_PATH));
+        music.setLooping(true);
+        music.setVolume(GameSettings.volume);
+        music.play();
 
         LEVEL1 = new Sprite(levelTexture1);
         LEVEL2 = new Sprite(levelTexture2);
@@ -151,7 +158,7 @@ public class LevelScreen implements Screen {
 
     @Override
     public void hide() {
-        dispose();
+        music.stop();
     }
 
     @Override

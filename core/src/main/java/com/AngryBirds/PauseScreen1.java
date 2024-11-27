@@ -105,7 +105,6 @@ public class PauseScreen1 implements Screen {
         stage.draw();
     }
 
-
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
@@ -113,7 +112,6 @@ public class PauseScreen1 implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override

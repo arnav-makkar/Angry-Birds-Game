@@ -40,10 +40,6 @@ public class SettingsScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         background = new Texture(Gdx.files.internal("homeBackground.png"));
 
-//        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
-//        music.setLooping(true);
-//        music.setVolume(GameSettings.volume);
-//        music.play();
 
         Gdx.input.setInputProcessor(stage);
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
