@@ -114,7 +114,7 @@ public class L4Screen implements Screen {
         birdTextQ.add(blackBirdTexture);
         birdTextQ.add(blackBirdTexture);
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal(GameSettings.SONG_PATH));
         music.setLooping(true);
         music.setVolume(GameSettings.volume);
         music.play();

@@ -3,6 +3,7 @@ package com.AngryBirds;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,6 +28,11 @@ public class MusicScreen implements Screen {
     private Sprite snd4;
     private Sprite BACK;
 
+    private Music music1;
+    private Music music2;
+    private Music music3;
+    private Music music4;
+
     private Sprite SBGM;
 
     public MusicScreen(Game game) {
@@ -38,11 +44,6 @@ public class MusicScreen implements Screen {
         spriteBatch = new SpriteBatch();
         stage = new Stage(new ScreenViewport());
         background = new Texture(Gdx.files.internal("homeBackground.png"));
-
-//        music = Gdx.audio.newMusic(Gdx.files.internal("s1.mp3"));
-//        music.setLooping(true);
-//        music.setVolume(GameSettings.volume);
-//        music.play();
 
         Gdx.input.setInputProcessor(stage);
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
@@ -108,31 +109,31 @@ public class MusicScreen implements Screen {
         };
 
         ClickListener s1Listener = new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                game.setScreen(new HomeScreen(game));
-//            }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameSettings.SONG_PATH="s1.mp3";
+            }
         };
 
         ClickListener s2Listener = new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                game.setScreen(new HomeScreen(game));
-//            }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameSettings.SONG_PATH="s2.mp3";
+            }
         };
 
         ClickListener s3Listener = new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                game.setScreen(new HomeScreen(game));
-//            }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameSettings.SONG_PATH="s3.mp3";
+            }
         };
 
         ClickListener s4Listener = new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                game.setScreen(new HomeScreen(game));
-//            }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameSettings.SONG_PATH="s4.mp3";
+            }
         };
 
         backButtonImage.addListener(backButtonListener);
