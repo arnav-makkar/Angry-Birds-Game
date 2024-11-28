@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -53,10 +52,10 @@ public class LevelSuccessScreen implements Screen {
         font.getData().setScale(2);
         font.setColor(Color.WHITE);
 
-        Texture headerTexture = new Texture(Gdx.files.internal("levelComplete.png"));
-        Image headerImage = new Image(headerTexture);
-        Texture nextLevelButton = new Texture(Gdx.files.internal("selectLevel.png"));
-        Image nextLevelImage = new Image(nextLevelButton);
+        Texture lvl_complete = new Texture(Gdx.files.internal("levelComplete.png"));
+        Image lvl_complete_img = new Image(lvl_complete);
+        Texture select_lvl = new Texture(Gdx.files.internal("selectLevel.png"));
+        Image select_lvl_img = new Image(select_lvl);
 
         stage = new Stage(new ScreenViewport());
 
@@ -64,19 +63,19 @@ public class LevelSuccessScreen implements Screen {
         table1.setFillParent(true);
         table1.center();
 
-        table1.add(headerImage).size(450,80).padBottom(100);
+        table1.add(lvl_complete_img).size(480,80).padBottom(100);
 
         Table table2 = new Table();
         table2.setFillParent(true);
         table2.bottom();
 
-        table2.add(nextLevelImage).size(225, 40).padBottom(80);
+        table2.add(select_lvl_img).size(300, 50).padBottom(80);
 
         stage.addActor(table1);
         stage.addActor(table2);
         Gdx.input.setInputProcessor(stage);
 
-        nextLevelImage.addListener(new ClickListener() {
+        select_lvl_img.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new LevelScreen(game));

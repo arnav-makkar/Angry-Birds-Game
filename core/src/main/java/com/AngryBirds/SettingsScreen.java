@@ -40,7 +40,7 @@ public class SettingsScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         background = new Texture(Gdx.files.internal("homeBackground.png"));
 
-        
+
 
         Gdx.input.setInputProcessor(stage);
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
@@ -104,7 +104,7 @@ public class SettingsScreen implements Screen {
         ChangeListener volumeListener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                GameSettings.volume=vslide.getValue()/100f;
+                GameSettings.volume=vslide.getValue()/1000f;
                 System.out.println("Volume changed to: " + vslide.getValue());
             }
         };

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,6 +31,7 @@ public class LevelScreen implements Screen {
     private Sprite LEVEL2;
     private Sprite LEVEL3;
     private Sprite LEVEL4;
+    private Sprite BACK;
 
     public LevelScreen(Game game) {
         this.game=game;
@@ -44,6 +46,9 @@ public class LevelScreen implements Screen {
         Texture levelTexture2 = new Texture(Gdx.files.internal("level2.png"));
         Texture levelTexture3 = new Texture(Gdx.files.internal("level3.png"));
         Texture levelTexture4 = new Texture(Gdx.files.internal("level4.png"));
+
+        Texture backTexture = new Texture(Gdx.files.internal("exit_app.png"));
+        BACK = new Sprite(backTexture);
 
         music = Gdx.audio.newMusic(Gdx.files.internal(GameSettings.SONG_PATH));
         music.setLooping(true);
@@ -91,6 +96,21 @@ public class LevelScreen implements Screen {
 
         stage.addActor(table);
 
+        Image backButtonImage = new Image(BACK);
+        backButtonImage.setSize(100f, 67f);
+        stage.addActor(backButtonImage);
+        backButtonImage.setPosition(20f, 20f);
+
+        Color color = backButtonImage.getColor();
+        backButtonImage.setColor(color.r, color.g, color.b, 0.6f);
+
+        ClickListener backButtonListener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new HomeScreen(game));
+            }
+        };
+
         ClickListener l1Listener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -123,6 +143,7 @@ public class LevelScreen implements Screen {
         l2ButtonImage.addListener(l2Listener);
         l3ButtonImage.addListener(l3Listener);
         l4ButtonImage.addListener(l4Listener);
+        backButtonImage.addListener(backButtonListener);
     }
 
 

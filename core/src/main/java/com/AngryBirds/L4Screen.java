@@ -157,8 +157,6 @@ public class L4Screen implements Screen {
         armDef.position.set(2f, 2.75f);
         catapultArmBody = world.createBody(armDef);
 
-
-
         PolygonShape armShape = new PolygonShape();
         armShape.setAsBox(0.3f, 0.5f);
 
