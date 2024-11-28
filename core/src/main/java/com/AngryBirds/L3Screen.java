@@ -119,6 +119,8 @@ public class L3Screen implements Screen {
         font = new BitmapFont();
         font.getData().setScale(2f);
 
+
+
         Texture pauseTexture = new Texture(Gdx.files.internal("pauseButton.png"));
         PAUSE = new Sprite(pauseTexture);
         PAUSE.setSize(150f, 50f);

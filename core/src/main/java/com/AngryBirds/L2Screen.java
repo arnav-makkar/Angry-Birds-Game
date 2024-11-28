@@ -103,6 +103,8 @@ public class L2Screen implements Screen {
         birdTextQ.add(blackBirdTexture);
         birdTextQ.add(blackBirdTexture);
 
+
+
         music = Gdx.audio.newMusic(Gdx.files.internal(GameSettings.SONG_PATH));
         music.setLooping(true);
         music.setVolume(GameSettings.volume);

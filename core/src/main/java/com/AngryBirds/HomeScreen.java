@@ -40,6 +40,8 @@ public class HomeScreen implements Screen {
         music.setVolume(GameSettings.volume);
         music.play();
 
+
+
         spriteBatch = new SpriteBatch();
         background = new Texture(Gdx.files.internal("homeBackground.png"));
 
