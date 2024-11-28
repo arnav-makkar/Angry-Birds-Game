@@ -34,6 +34,7 @@ public class LevelSuccessScreen implements Screen {
     private int game_num;
     private int highscore;
 
+
     public LevelSuccessScreen(Game game, float score, int game_num) {
         this.score = score;
         this.game = game;

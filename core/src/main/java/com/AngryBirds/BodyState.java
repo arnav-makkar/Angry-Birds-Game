@@ -10,6 +10,7 @@ public class BodyState implements Serializable {
     private Texture blackBirdTexture;
 
 
+
     public float posX, posY;
     public float velX, velY;
     public float angle;

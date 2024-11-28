@@ -5,4 +5,5 @@ public class GameSettings {
     public static float volume=0.5f;
     public static String SONG_PATH;
 
+
 }

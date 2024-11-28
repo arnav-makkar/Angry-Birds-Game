@@ -7,4 +7,5 @@ public class AngryBird extends Game {
     public void create() {
         setScreen(new MusicScreen(this));
     }
+
 }

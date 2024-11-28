@@ -93,6 +93,7 @@ public class L2Screen implements Screen {
         yellowBirdTexture = new Texture("yellowBird.png");
         blackBirdTexture = new Texture("blackBird.png");
 
+
         birdTextM = new HashMap<>();
         birdTextQ = new LinkedList<>();
         birdTextQ.add(redBirdTexture);

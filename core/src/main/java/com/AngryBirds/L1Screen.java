@@ -87,6 +87,7 @@ public class L1Screen implements Screen {
         woodBoxtex = new Texture("wood_box.png");
         pigTexture = new Texture("pig.png");
 
+
         redBirdTexture = new Texture("redBird.png");
         yellowBirdTexture = new Texture("yellowBird.png");
         blackBirdTexture = new Texture("blackBird.png");

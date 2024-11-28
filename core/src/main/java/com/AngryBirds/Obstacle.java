@@ -13,6 +13,7 @@ public class Obstacle implements Serializable {
     private int collisionCount = 0; // To track the number of collisions
     private int MAX_COLLISIONS;
 
+
     Obstacle(Body body, Texture texture, float x, float y, int n) {
         this.body = body;
         this.texture = texture;

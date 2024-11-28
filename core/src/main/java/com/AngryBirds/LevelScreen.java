@@ -125,6 +125,7 @@ public class LevelScreen implements Screen {
         l4ButtonImage.addListener(l4Listener);
     }
 
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);

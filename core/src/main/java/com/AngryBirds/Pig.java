@@ -9,4 +9,5 @@ public class Pig extends Obstacle {
     public Pig(Body body, Texture texture, float x, float y) {
         super(body, texture, x, y, 1); // Call the parent class constructor
     }
+
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 public class GameState implements Serializable {
 
+
     public LinkedList<Obstacle> obstacles;
     public LinkedList<Pig> pigs;
     public LinkedList<BodyState> birdStates;

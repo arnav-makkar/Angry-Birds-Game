@@ -34,6 +34,7 @@ public class MusicScreen implements Screen {
         this.game = game;
     }
 
+
     @Override
     public void show() {
         spriteBatch = new SpriteBatch();

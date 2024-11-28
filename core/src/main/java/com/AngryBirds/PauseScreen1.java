@@ -29,6 +29,7 @@ public class PauseScreen1 implements Screen {
     private Sprite RESG;
     private Sprite BTMM;
 
+
     public PauseScreen1(Game game) {
         this.game=game;
     }
