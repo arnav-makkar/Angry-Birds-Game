@@ -7,7 +7,5 @@ class TestClass {
     @Test
     void createObstaclesTest() {
 
-        new
-
     }
 }

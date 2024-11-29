@@ -182,22 +182,22 @@ public class L4Screen implements Screen {
 
         createObstacle(4.8f, 1.65f, ice4tex, 0.5f, 0.5f, 2);
 
-        createObstacle(5.1f, 2.7f, icetri, 0.6f, 0.5f, 2);
+        createObstacle(5.1f, 2.7f, icetri, 0.6f, 0.5f, 3);
         createObstacle(6.7f, 2.7f, icetri, 0.6f, 0.5f, 2);
 
-        createPig(5.9f, 2.3f, ribbonPigTexture, 0.3f, 0.3f);
+        createPig(5.9f, 2.4f, ribbonPigTexture, 0.3f, 0.3f);
 
-        createObstacle(5.9f, 3.2f, iceline, 0.5f, 0.5f, 2);
+        createObstacle(5.9f, 3.25f, iceline, 0.5f, 0.5f, 3);
 
-        createPig(5.9f, 3.3f, pigTexture, 0.075f, 0.075f);
-        createPig(5.3f, 3.3f, pigTexture, 0.075f, 0.075f);
-        createPig(6.5f, 3.3f, pigTexture, 0.075f, 0.075f);
+        createPig(5.9f, 3.6f, pigTexture, 0.075f, 0.075f);
+        createPig(5.3f, 3.6f, pigTexture, 0.075f, 0.075f);
+        createPig(6.5f, 3.6f, pigTexture, 0.075f, 0.075f);
 
-        createPig(4.4f, 2.1f, pigTexture, 0.04f, 0.04f);
-        createPig(7.35f, 2.1f, pigTexture, 0.04f, 0.04f);
+        createPig(4.4f, 2.3f, pigTexture, 0.04f, 0.04f);
+        createPig(7.35f, 2.3f, pigTexture, 0.04f, 0.04f);
 
-        createObstacle(5.9f, 2f, iceline, 0.8f, 0.5f, 2);
-        createPig(5.9f, 1.6f, kingPigTexture, 0.15f, 0.15f);
+        createObstacle(5.9f, 2.2f, iceline, 0.8f, 0.5f, 2);
+        createPig(5.9f, 1.7f, kingPigTexture, 0.15f, 0.15f);
 
         createObstacle(6.85f, 1.65f, ice4tex, 0.5f, 0.5f, 2);
 

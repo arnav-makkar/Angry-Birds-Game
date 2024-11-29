@@ -181,13 +181,13 @@ public class L3Screen implements Screen {
 
         createObstacle(4.8f, 1.65f, ice4tex, 0.5f, 0.5f, 2);
 
-        createObstacle(5.9f, 2.6f, icetri, 0.6f, 0.5f, 3);
+        createObstacle(5.9f, 2.7f, icetri, 0.6f, 0.5f, 3);
 
-        createPig(5f, 2.1f, helmetPigTexture, 0.35f, 0.35f);
-        createPig(6.8f, 2.1f, helmetPigTexture, 0.35f, 0.35f);
+        createPig(5f, 2.5f, helmetPigTexture, 0.35f, 0.35f);
+        createPig(6.8f, 2.5f, helmetPigTexture, 0.35f, 0.35f);
 
-        createObstacle(5.9f, 2f, iceline, 0.8f, 0.5f, 2);
-        createPig(5.9f, 1.6f, kingPigTexture, 0.15f, 0.15f);
+        createObstacle(5.9f, 2.2f, iceline, 0.8f, 0.5f, 2);
+        createPig(5.9f, 1.7f, kingPigTexture, 0.15f, 0.15f);
 
         createObstacle(6.85f, 1.65f, ice4tex, 0.5f, 0.5f, 2);
 
@@ -580,7 +580,6 @@ public class L3Screen implements Screen {
 
         pixmap.setColor(1, 1, 1, alpha);
         pixmap.fill();
-
         Texture texture = new Texture(pixmap);
 
         pixmap.dispose();
