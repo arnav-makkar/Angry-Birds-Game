@@ -1,9 +1,9 @@
 # AP Project
 
-Angry Birds Game GUI developed using LibGDX and Box2d by Aryamaan Singh (2023139) and Arnav Makkar (2023127). Course Project for Advanced Programming Course, CSE-201, Monsoon'24.
+Angry Birds Game developed using LibGDX and Box2d by Aryamaan Singh (2023139) and Arnav Makkar (2023127). Course Project for Advanced Programming Course, CSE-201, Monsoon'24.
 
 ## Link to Video
-...
+https://drive.google.com/file/d/1si6MGOfFDlYCKgvYSja_G8nV-EiUyket/view?usp=drive_link
 
 ## Link to GitHub Repo:
 https://github.com/arnav-makkar/Angry-Birds-Game
