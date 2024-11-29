@@ -23,7 +23,7 @@ public class Obstacle implements Serializable {
     }
 
     public boolean checkCollision() {
-        float velocityThreshold = 1.5f;
+        float velocityThreshold = 1f;
 
         float velocity = body.getLinearVelocity().len();
 
