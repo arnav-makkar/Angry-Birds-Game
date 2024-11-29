@@ -13,7 +13,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,28 +23,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ClassTest {
-    private Texture mockBirdTexture;
-    private Stage mockStage;
-    private Viewport mockViewport;
+    private Stage testStage;
+    private Viewport testViewport;
     private L1Screen l1Screen;
     private SettingsScreen settingsScreen;
     private LevelSuccessScreen levelSuccessScreen;
     private World world;
     private Game game;
-    private Image mockPauseButton;
 
     @BeforeEach
     void init(){
         game = mock(Game.class);
-        mockStage = mock(Stage.class);
-        mockViewport = mock(Viewport.class);
+        testStage = mock(Stage.class);
+        testViewport = mock(Viewport.class);
 
 
-        when(mockStage.getViewport()).thenReturn(mockViewport);
-        Texture mockTexture = mock(Texture.class);
-        mockPauseButton = new Image(mockTexture);
+        when(testStage.getViewport()).thenReturn(testViewport);
         l1Screen = new L1Screen(game);
-        settingsScreen = new SettingsScreen(mockStage);
+        settingsScreen = new SettingsScreen(testStage);
 
         Gdx.graphics = mock(Graphics.class);
         world=new World(new Vector2(0,-10.0f),true);
@@ -102,7 +97,7 @@ class ClassTest {
         int width = 800;
         int height = 600;
         settingsScreen.resize(width, height);
-        verify(mockViewport, times(1)).update(width, height, true);
+        verify(testViewport, times(1)).update(width, height, true);
     }
 
     @Test
