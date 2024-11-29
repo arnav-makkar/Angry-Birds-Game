@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.Random;
+
 public class LevelScreen implements Screen {
     private Stage stage;
     private Skin UIskin;
@@ -32,6 +34,7 @@ public class LevelScreen implements Screen {
     private Sprite LEVEL3;
     private Sprite LEVEL4;
     private Sprite BACK;
+    private Sprite random;
 
     public LevelScreen(Game game) {
         this.game=game;
@@ -49,6 +52,9 @@ public class LevelScreen implements Screen {
 
         Texture backTexture = new Texture(Gdx.files.internal("exit_app.png"));
         BACK = new Sprite(backTexture);
+
+        Texture randomtex = new Texture(Gdx.files.internal("random.png"));
+        random = new Sprite(randomtex);
 
         music = Gdx.audio.newMusic(Gdx.files.internal(GameSettings.SONG_PATH));
         music.setLooping(true);
@@ -104,6 +110,11 @@ public class LevelScreen implements Screen {
         Color color = backButtonImage.getColor();
         backButtonImage.setColor(color.r, color.g, color.b, 0.6f);
 
+        Image random_btn_img = new Image(random);
+        random_btn_img.setSize(300, 60);
+        stage.addActor(random_btn_img);
+        random_btn_img.setPosition(310, 100);
+
         ClickListener backButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -144,8 +155,29 @@ public class LevelScreen implements Screen {
         l3ButtonImage.addListener(l3Listener);
         l4ButtonImage.addListener(l4Listener);
         backButtonImage.addListener(backButtonListener);
-    }
 
+        random_btn_img.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Create a random number generator
+                Random random = new Random();
+
+                // Randomly choose one of the three listeners
+                int choice = random.nextInt(3); // Generates 0, 1, or 2
+                switch (choice) {
+                    case 0:
+                        game.setScreen(new L2Screen(game));
+                        break;
+                    case 1:
+                        game.setScreen(new L3Screen(game));
+                        break;
+                    case 2:
+                        game.setScreen(new L4Screen(game));
+                        break;
+                }
+            }
+        });
+    }
 
     @Override
     public void render(float delta) {
