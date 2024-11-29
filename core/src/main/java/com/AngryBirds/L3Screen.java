@@ -574,20 +574,15 @@ public class L3Screen implements Screen {
     }
 
     public Texture createTransparentTexture(int width, int height, float alpha) {
-        // Ensure alpha is between 0 (fully transparent) and 1 (fully opaque)
         alpha = Math.max(0, Math.min(alpha, 1));
 
-        // Create a Pixmap with RGBA8888 format
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
 
-        // Set the color with the desired transparency
-        pixmap.setColor(1, 1, 1, alpha); // White color with alpha transparency
-        pixmap.fill(); // Fill the entire Pixmap with this color
+        pixmap.setColor(1, 1, 1, alpha);
+        pixmap.fill();
 
-        // Convert the Pixmap to a Texture
         Texture texture = new Texture(pixmap);
 
-        // Dispose of the Pixmap to free memory
         pixmap.dispose();
 
         return texture;

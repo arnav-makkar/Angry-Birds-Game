@@ -34,8 +34,6 @@ public class L1Screen implements Screen {
     private Sound clickSound;
 
     private Sprite PAUSE;
-    private float timeElapsed = 0.0f;
-    private boolean isExploding = false;
 
     private SpriteBatch batch;
     private Texture birdTexture;
@@ -255,6 +253,7 @@ public class L1Screen implements Screen {
         ClickListener pauseButtonListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                saveState("savegame.dat");
                 game.setScreen(new PauseScreen1(game));
             }
         };
@@ -527,22 +526,13 @@ public class L1Screen implements Screen {
     }
 
     public Texture createTransparentTexture(int width, int height, float alpha) {
-        // Ensure alpha is between 0 (fully transparent) and 1 (fully opaque)
         alpha = Math.max(0, Math.min(alpha, 1));
-
-        // Create a Pixmap with RGBA8888 format
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
 
-        // Set the color with the desired transparency
-        pixmap.setColor(1, 1, 1, alpha); // White color with alpha transparency
-        pixmap.fill(); // Fill the entire Pixmap with this color
-
-        // Convert the Pixmap to a Texture
+        pixmap.setColor(1, 1, 1, alpha);
+        pixmap.fill();
         Texture texture = new Texture(pixmap);
-
-        // Dispose of the Pixmap to free memory
         pixmap.dispose();
-
         return texture;
     }
 
@@ -597,6 +587,7 @@ public class L1Screen implements Screen {
             e.printStackTrace();
         }
     }
+
     public void loadState(String fileName) {
         if (birdTextM == null) {
             birdTextM = new HashMap<>();
