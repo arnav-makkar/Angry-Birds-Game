@@ -29,7 +29,7 @@ import static java.lang.Thread.sleep;
 
 public class L1Screen implements Screen {
     private static final float PPM = 100f;
-    private static final float LAUNCH_MULTIPLIER = 1f;
+    private static final float LAUNCH_MULTIPLIER = 0.7f;
     private Stage stage;
     private int highscore;
     private Sound clickSound;
@@ -95,7 +95,6 @@ public class L1Screen implements Screen {
         this.catapultTexture=testCatapultTexture;
         this.background=testBackground;
         this.world=world;
-
     }
 
     @Override
@@ -241,13 +240,11 @@ public class L1Screen implements Screen {
                     Vector2 dragEnd = screenToWorldCoordinates(screenX, screenY);
                     Vector2 launchVector = dragStart.sub(dragEnd).scl(LAUNCH_MULTIPLIER);
 
-                    // Remove distance joint
                     if (ballJoint != null) {
                         world.destroyJoint(ballJoint);
                         ballJoint = null;
                     }
 
-                    // Apply launch impulse
                     currentBird.applyLinearImpulse(launchVector, currentBird.getWorldCenter(), true);
 
                     isDragging = false;
@@ -369,43 +366,13 @@ public class L1Screen implements Screen {
         float width = texture.getWidth() / PPM / 3;
         float height = texture.getHeight() / PPM / 3;
 
-        // Create the obstacle body
         BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.DynamicBody; // Allow it to move
+        obstacleDef.type = BodyDef.BodyType.DynamicBody;
         obstacleDef.position.set(x, y);
 
         Body obstacleBody = world.createBody(obstacleDef);
         createdObs.add(obstacleBody);
 
-        // Define the shape based on texture dimensions
-        PolygonShape obstacleShape = new PolygonShape();
-        obstacleShape.setAsBox(width*xscale/2, height*yscale/2);
-
-        FixtureDef obstacleFixtureDef = new FixtureDef();
-        obstacleFixtureDef.shape = obstacleShape;
-        obstacleFixtureDef.density = 1f; // Adjust density
-        obstacleFixtureDef.friction = 0.6f;
-        obstacleFixtureDef.restitution = 0.2f;
-
-        obstacleBody.createFixture(obstacleFixtureDef);
-        obstacleShape.dispose();
-
-        // Add the obstacle with texture to the list
-        obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale, n));
-    }
-
-    private void createPig(float x, float y, Texture texture, float xscale, float yscale) {
-        float width = texture.getWidth() / PPM / 3;
-        float height = texture.getHeight() / PPM / 3;
-
-        // Create the obstacle body
-        BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.DynamicBody; // Allow it to move
-        obstacleDef.position.set(x, y);
-
-        Body obstacleBody = world.createBody(obstacleDef);
-
-        // Define the shape based on texture dimensions
         PolygonShape obstacleShape = new PolygonShape();
         obstacleShape.setAsBox(width*xscale/2, height*yscale/2);
 
@@ -418,7 +385,31 @@ public class L1Screen implements Screen {
         obstacleBody.createFixture(obstacleFixtureDef);
         obstacleShape.dispose();
 
-        // Add the obstacle with texture to the list
+        obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale, n));
+    }
+
+    private void createPig(float x, float y, Texture texture, float xscale, float yscale) {
+        float width = texture.getWidth() / PPM / 3;
+        float height = texture.getHeight() / PPM / 3;
+
+        BodyDef obstacleDef = new BodyDef();
+        obstacleDef.type = BodyDef.BodyType.DynamicBody;
+        obstacleDef.position.set(x, y);
+
+        Body obstacleBody = world.createBody(obstacleDef);
+
+        PolygonShape obstacleShape = new PolygonShape();
+        obstacleShape.setAsBox(width*xscale/2, height*yscale/2);
+
+        FixtureDef obstacleFixtureDef = new FixtureDef();
+        obstacleFixtureDef.shape = obstacleShape;
+        obstacleFixtureDef.density = 1f;
+        obstacleFixtureDef.friction = 0.6f;
+        obstacleFixtureDef.restitution = 0.2f;
+
+        obstacleBody.createFixture(obstacleFixtureDef);
+        obstacleShape.dispose();
+
         pigs.add(new Pig(obstacleBody, texture, xscale, yscale));
     }
 
@@ -520,7 +511,6 @@ public class L1Screen implements Screen {
                     data.get(1)[0] = String.valueOf(max(highscore, (int)score));
                 }
 
-                // Write the updated data back to the file
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.csv"))) {
                     for (String[] row : data) {
                         bw.write(String.join(",", row));

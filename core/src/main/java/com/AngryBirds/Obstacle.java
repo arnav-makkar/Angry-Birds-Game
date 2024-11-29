@@ -10,7 +10,7 @@ public class Obstacle implements Serializable {
     transient Texture texture;
     public float x, y;
 
-    private int collisionCount = 0; // To track the number of collisions
+    private int collisionCount = 0;
     private int MAX_COLLISIONS;
 
 
@@ -23,16 +23,14 @@ public class Obstacle implements Serializable {
     }
 
     public boolean checkCollision() {
-        float velocityThreshold = 0.75f; // Adjust the threshold as needed
+        float velocityThreshold = 1.5f;
 
-        // Get the linear velocity of the pig's body
         float velocity = body.getLinearVelocity().len();
 
-        // Check if the pig's velocity is high enough
         if (velocity > velocityThreshold) {
-            collisionCount++; // Increment collision count
+            collisionCount++;
             if (collisionCount >= MAX_COLLISIONS) {
-                explode(); // Trigger explosion after 2 collisions
+                explode();
                 return true;
             }
         }

@@ -129,10 +129,10 @@ public class PauseScreen2 implements Screen {
 
     @Override
     public void dispose() {
-//        UIskin.dispose();
-//        stage.dispose();
-//        spriteBatch.dispose();
-//        RESG.getTexture().dispose();
-//        BTMM.getTexture().dispose();
+        UIskin.dispose();
+        stage.dispose();
+        spriteBatch.dispose();
+        RESG.getTexture().dispose();
+        BTMM.getTexture().dispose();
     }
 }

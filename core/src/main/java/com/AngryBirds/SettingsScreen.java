@@ -24,7 +24,6 @@ public class SettingsScreen implements Screen {
     private SpriteBatch spriteBatch;
     private Game game;
 
-
     private Sprite LOGO;
     private Sprite VOLUME;
     private Sprite BRIGHTNESS;
@@ -43,8 +42,6 @@ public class SettingsScreen implements Screen {
         spriteBatch = new SpriteBatch();
         stage = new Stage(new ScreenViewport());
         background = new Texture(Gdx.files.internal("homeBackground.png"));
-
-
 
         Gdx.input.setInputProcessor(stage);
         UIskin = new Skin(Gdx.files.internal("skins/uiskin.json"));
@@ -78,12 +75,12 @@ public class SettingsScreen implements Screen {
         Image volumeButtonImage = new Image(volumeTexture);
         volumeButtonImage.setSize(100f, 60f);
         Slider vslide = new Slider(0, 100, 1, false, UIskin);
-        vslide.setValue(50);
+        vslide.setValue(GameSettings.volume*5000);
 
         Image brightnessButtonImage = new Image(brightnessTexture);
         brightnessButtonImage.setSize(100f, 80f);
         Slider bslide = new Slider(0, 100, 1, false, UIskin);
-        bslide.setValue(50);
+        bslide.setValue(100);
 
         controlsTable.add(volumeButtonImage).size(180f, 45f).center().padRight(30f);
         controlsTable.columnDefaults(0);
@@ -108,7 +105,7 @@ public class SettingsScreen implements Screen {
         ChangeListener volumeListener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                GameSettings.volume=vslide.getValue()/1000f;
+                GameSettings.volume=vslide.getValue()/5000f;
                 System.out.println("Volume changed to: " + vslide.getValue());
             }
         };

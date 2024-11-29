@@ -27,7 +27,7 @@ import static java.lang.Math.max;
 
 public class L2Screen implements Screen {
     private static final float PPM = 100f;
-    private static final float LAUNCH_MULTIPLIER = 1f;
+    private static final float LAUNCH_MULTIPLIER = 0.7f;
     private Stage stage;
     private Music music;
     private Sound clickSound;
@@ -240,13 +240,11 @@ public class L2Screen implements Screen {
                     Vector2 dragEnd = screenToWorldCoordinates(screenX, screenY);
                     Vector2 launchVector = dragStart.sub(dragEnd).scl(LAUNCH_MULTIPLIER);
 
-                    // Remove distance joint
                     if (ballJoint != null) {
                         world.destroyJoint(ballJoint);
                         ballJoint = null;
                     }
 
-                    // Apply launch impulse
                     currentBird.applyLinearImpulse(launchVector, currentBird.getWorldCenter(), true);
 
                     isDragging = false;
@@ -504,7 +502,6 @@ public class L2Screen implements Screen {
                     data.get(1)[1] = String.valueOf(max(highscore, (int)score));
                 }
 
-                // Write the updated data back to the file
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.csv"))) {
                     for (String[] row : data) {
                         bw.write(String.join(",", row));

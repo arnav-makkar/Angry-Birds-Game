@@ -32,7 +32,6 @@ public class HomeScreen implements Screen {
         this.game = game;
     }
 
-
     @Override
     public void show() {
 

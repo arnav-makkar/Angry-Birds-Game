@@ -111,9 +111,9 @@ public class LevelScreen implements Screen {
         backButtonImage.setColor(color.r, color.g, color.b, 0.6f);
 
         Image random_btn_img = new Image(random);
-        random_btn_img.setSize(300, 60);
+        random_btn_img.setSize(450, 60);
         stage.addActor(random_btn_img);
-        random_btn_img.setPosition(310, 100);
+        random_btn_img.setPosition(240, 100);
 
         ClickListener backButtonListener = new ClickListener() {
             @Override
@@ -159,11 +159,9 @@ public class LevelScreen implements Screen {
         random_btn_img.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Create a random number generator
                 Random random = new Random();
 
-                // Randomly choose one of the three listeners
-                int choice = random.nextInt(3); // Generates 0, 1, or 2
+                int choice = random.nextInt(3);
                 switch (choice) {
                     case 0:
                         game.setScreen(new L2Screen(game));

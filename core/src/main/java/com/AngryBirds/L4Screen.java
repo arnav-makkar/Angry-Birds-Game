@@ -28,7 +28,7 @@ import static java.lang.Thread.sleep;
 
 public class L4Screen implements Screen {
     private static final float PPM = 100f;
-    private static final float LAUNCH_MULTIPLIER = 1f;
+    private static final float LAUNCH_MULTIPLIER = 0.7f;
     private Stage stage;
     private Body prevBird;
 
@@ -67,7 +67,7 @@ public class L4Screen implements Screen {
 
     private static final short CATEGORY_CATAPULT = 0x0001;
     private static final short CATEGORY_OBSTACLE = 0x0004;
-    private static final short MASK_CATAPULT = CATEGORY_OBSTACLE; // Collides only with obstacles
+    private static final short MASK_CATAPULT = CATEGORY_OBSTACLE;
 
     private RevoluteJoint catapultJoint;
     private DistanceJoint ballJoint;
@@ -257,13 +257,11 @@ public class L4Screen implements Screen {
                     Vector2 dragEnd = screenToWorldCoordinates(screenX, screenY);
                     Vector2 launchVector = dragStart.sub(dragEnd).scl(LAUNCH_MULTIPLIER);
 
-                    // Remove distance joint
                     if (ballJoint != null) {
                         world.destroyJoint(ballJoint);
                         ballJoint = null;
                     }
 
-                    // Apply launch impulse
                     currentBird.applyLinearImpulse(launchVector, currentBird.getWorldCenter(), true);
 
                     isDragging = false;
@@ -367,7 +365,7 @@ public class L4Screen implements Screen {
         Body obstacleBody = world.createBody(obstacleDef);
 
         PolygonShape obstacleShape = new PolygonShape();
-        obstacleShape.setAsBox(x1, y1); // Dimensions: 1x1 meters
+        obstacleShape.setAsBox(x1, y1);
 
         FixtureDef obstacleFixtureDef = new FixtureDef();
         obstacleFixtureDef.shape = obstacleShape;
@@ -383,27 +381,24 @@ public class L4Screen implements Screen {
         float width = texture.getWidth() / PPM / 3;
         float height = texture.getHeight() / PPM / 3;
 
-        // Create the obstacle body
         BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.DynamicBody; // Allow it to move
+        obstacleDef.type = BodyDef.BodyType.DynamicBody;
         obstacleDef.position.set(x, y);
 
         Body obstacleBody = world.createBody(obstacleDef);
 
-        // Define the shape based on texture dimensions
         PolygonShape obstacleShape = new PolygonShape();
         obstacleShape.setAsBox(width*xscale/2, height*yscale/2);
 
         FixtureDef obstacleFixtureDef = new FixtureDef();
         obstacleFixtureDef.shape = obstacleShape;
-        obstacleFixtureDef.density = 1f; // Adjust density
+        obstacleFixtureDef.density = 1f;
         obstacleFixtureDef.friction = 0.6f;
         obstacleFixtureDef.restitution = 0.2f;
 
         obstacleBody.createFixture(obstacleFixtureDef);
         obstacleShape.dispose();
 
-        // Add the obstacle with texture to the list
         obstacles.add(new Obstacle(obstacleBody, texture, xscale, yscale, n));
     }
 
@@ -411,27 +406,24 @@ public class L4Screen implements Screen {
         float width = texture.getWidth() / PPM / 3;
         float height = texture.getHeight() / PPM / 3;
 
-        // Create the obstacle body
         BodyDef obstacleDef = new BodyDef();
-        obstacleDef.type = BodyDef.BodyType.DynamicBody; // Allow it to move
+        obstacleDef.type = BodyDef.BodyType.DynamicBody;
         obstacleDef.position.set(x, y);
 
         Body obstacleBody = world.createBody(obstacleDef);
 
-        // Define the shape based on texture dimensions
         PolygonShape obstacleShape = new PolygonShape();
         obstacleShape.setAsBox(width*xscale/2, height*yscale/2);
 
         FixtureDef obstacleFixtureDef = new FixtureDef();
         obstacleFixtureDef.shape = obstacleShape;
-        obstacleFixtureDef.density = 1f; // Adjust density
+        obstacleFixtureDef.density = 1f;
         obstacleFixtureDef.friction = 0.6f;
         obstacleFixtureDef.restitution = 0.2f;
 
         obstacleBody.createFixture(obstacleFixtureDef);
         obstacleShape.dispose();
 
-        // Add the obstacle with texture to the list
         pigs.add(new Pig(obstacleBody, texture, xscale, yscale));
     }
 
@@ -454,9 +446,6 @@ public class L4Screen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        int totPigCount = 3;
-        int cnt = 0;
-
         world.step(1 / 60f, 6, 2);
         totalTime += delta;
 
@@ -474,7 +463,6 @@ public class L4Screen implements Screen {
         GlyphLayout layout = new GlyphLayout(font, timerText);
         font.draw(batch, timerText, Gdx.graphics.getWidth() - layout.width-380, Gdx.graphics.getHeight() - 20);
 
-        // Render the catapult
         batch.draw(
             catapultTexture,
             catapultArmBody.getPosition().x * PPM - 65,
@@ -494,15 +482,12 @@ public class L4Screen implements Screen {
             Texture texture = obstacle.texture;
             TextureRegion textureRegion = new TextureRegion(texture);
 
-            // Get obstacle position and angle
             Vector2 position = body.getPosition();
             float angle = (float) Math.toDegrees(body.getAngle());
 
-            // Calculate size based on texture and PPM
             float width = (float) texture.getWidth()/3;
             float height = (float) texture.getHeight()/3;
 
-            // Render the obstacle with its texture
             batch.draw(
                 textureRegion,
                 position.x * PPM - width / 2, position.y * PPM - height / 2,
@@ -523,15 +508,12 @@ public class L4Screen implements Screen {
             Texture texture = pig.texture;
             TextureRegion textureRegion = new TextureRegion(texture);
 
-            // Get obstacle position and angle
             Vector2 position = body.getPosition();
             float angle = (float) Math.toDegrees(body.getAngle());
 
-            // Calculate size based on texture and PPM
             float width = (float) texture.getWidth()/3;
             float height = (float) texture.getHeight()/3;
 
-            // Render the obstacle with its texture
             batch.draw(
                 textureRegion,
                 position.x * PPM - width / 2, position.y * PPM - height / 2,
@@ -565,7 +547,6 @@ public class L4Screen implements Screen {
                     data.get(1)[3] = String.valueOf(max(highscore, (int)score));
                 }
 
-                // Write the updated data back to the file
                 try (BufferedWriter bw = new BufferedWriter(new FileWriter("highscore.csv"))) {
                     for (String[] row : data) {
                         bw.write(String.join(",", row));
