@@ -2,7 +2,9 @@ package com.AngryBirds;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
@@ -30,6 +32,8 @@ public class L3Screen implements Screen {
     private Stage stage;
 
     private Sprite PAUSE;
+    private Sound clickSound;
+    private Body prevBird;
 
     private SpriteBatch batch;
     private Texture birdTexture;
@@ -109,7 +113,7 @@ public class L3Screen implements Screen {
         birdTextQ.add(yellowBirdTexture);
         birdTextQ.add(blackBirdTexture);
         birdTextQ.add(blackBirdTexture);
-        birdTextQ.add(blackBirdTexture);
+        birdTextQ.add(createTransparentTexture(32, 32, 0f));
 
         music = Gdx.audio.newMusic(Gdx.files.internal(GameSettings.SONG_PATH));
         music.setLooping(true);
@@ -118,9 +122,6 @@ public class L3Screen implements Screen {
 
         font = new BitmapFont();
         font.getData().setScale(2f);
-
-
-
 
         Texture pauseTexture = new Texture(Gdx.files.internal("pauseButton.png"));
         PAUSE = new Sprite(pauseTexture);
@@ -174,7 +175,9 @@ public class L3Screen implements Screen {
 
         create_Ground_obj(5.8f, 0.2f, 1.7f, 1f);
         create_Ground_obj(5.85f, 1.3f, 0.45f, 0.2f);
-        create_Ground_obj(3f, -1f, 10f, 0.2f);
+        create_Ground_obj(3f, -1f, 50f, 0.2f);
+        create_Ground_obj(10f, 5f, 0.25f, 50f);
+        create_Ground_obj(-1f, 5f, 0.25f, 50f);
 
         createObstacle(4.8f, 1.65f, ice4tex, 0.5f, 0.5f, 2);
 
@@ -208,8 +211,18 @@ public class L3Screen implements Screen {
                 if (currentBird != null && currentBird.getFixtureList().first().testPoint(worldCoords.x, worldCoords.y)) {
                     isDragging = true;
                     dragStart = worldCoords;
+
                     return true;
                 }
+                clickSound = Gdx.audio.newSound(Gdx.files.internal("click.mp3"));
+
+                if (birdTextM.get(prevBird).equals(blackBirdTexture)) {
+                    if (Gdx.input.justTouched()) {
+                        clickSound.play(0.25f);
+                        triggerSpecialBlack(prevBird);
+                    }
+                }
+
                 return false;
             }
 
@@ -219,7 +232,6 @@ public class L3Screen implements Screen {
                     Vector2 worldCoords = screenToWorldCoordinates(screenX, screenY);
 
                     if (ballJoint != null) {
-                        // Update the position of the bird using the joint.
                         currentBird.setTransform(worldCoords, currentBird.getAngle());
                     }
                     return true;
@@ -239,21 +251,21 @@ public class L3Screen implements Screen {
                         ballJoint = null;
                     }
 
-                    birdCount++;
-
                     // Apply launch impulse
                     currentBird.applyLinearImpulse(launchVector, currentBird.getWorldCenter(), true);
 
                     isDragging = false;
 
-                    if(birdCount>6){
-                        game.setScreen(new LevelFailScreen(game));
-                    }
-
-                    else{
+                    birdCount+=1;
+                    if(birdCount<=6){
+                        prevBird = currentBird;
                         initNewBird();
                     }
+                    else {
+                        game.setScreen(new LevelFailScreen(game));
+                    }
                 }
+
                 return true;
             }
         });
@@ -269,6 +281,10 @@ public class L3Screen implements Screen {
         };
 
         pauseButtonImage.addListener(pauseButtonListener);
+    }
+
+    private void triggerSpecialBlack(Body bird) {
+        bird.setLinearVelocity(bird.getLinearVelocity().x*1.5f, bird.getLinearVelocity().y*-1f);
     }
 
     private void initNewBird() {
@@ -556,6 +572,26 @@ public class L3Screen implements Screen {
         world.dispose();
         debugRenderer.dispose();
         music.dispose();
+    }
+
+    public Texture createTransparentTexture(int width, int height, float alpha) {
+        // Ensure alpha is between 0 (fully transparent) and 1 (fully opaque)
+        alpha = Math.max(0, Math.min(alpha, 1));
+
+        // Create a Pixmap with RGBA8888 format
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+
+        // Set the color with the desired transparency
+        pixmap.setColor(1, 1, 1, alpha); // White color with alpha transparency
+        pixmap.fill(); // Fill the entire Pixmap with this color
+
+        // Convert the Pixmap to a Texture
+        Texture texture = new Texture(pixmap);
+
+        // Dispose of the Pixmap to free memory
+        pixmap.dispose();
+
+        return texture;
     }
 
     @Override public void resize(int width, int height) {}
