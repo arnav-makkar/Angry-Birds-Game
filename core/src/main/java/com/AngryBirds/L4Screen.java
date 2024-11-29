@@ -228,10 +228,12 @@ public class L4Screen implements Screen {
                 }
                 clickSound = Gdx.audio.newSound(Gdx.files.internal("click.mp3"));
 
-                if (birdTextM.get(prevBird).equals(blackBirdTexture)) {
-                    if (Gdx.input.justTouched()) {
-                        clickSound.play(0.25f);
-                        triggerSpecialBlack(prevBird);
+                if(birdTextM.get(prevBird) != null){
+                    if (birdTextM.get(prevBird).equals(blackBirdTexture)) {
+                        if (Gdx.input.justTouched()) {
+                            clickSound.play(0.25f);
+                            triggerSpecialBlack(prevBird);
+                        }
                     }
                 }
 

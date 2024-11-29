@@ -214,15 +214,17 @@ public class L3Screen implements Screen {
 
                     return true;
                 }
+
                 clickSound = Gdx.audio.newSound(Gdx.files.internal("click.mp3"));
 
-                if (birdTextM.get(prevBird).equals(blackBirdTexture)) {
-                    if (Gdx.input.justTouched()) {
-                        clickSound.play(0.25f);
-                        triggerSpecialBlack(prevBird);
+                if(birdTextM.get(prevBird) != null){
+                    if (birdTextM.get(prevBird).equals(blackBirdTexture)) {
+                        if (Gdx.input.justTouched()) {
+                            clickSound.play(0.25f);
+                            triggerSpecialBlack(prevBird);
+                        }
                     }
                 }
-
                 return false;
             }
 
@@ -426,9 +428,6 @@ public class L3Screen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        int totPigCount = 3;
-        int cnt = 0;
 
         world.step(1 / 60f, 6, 2);
         totalTime += delta;
