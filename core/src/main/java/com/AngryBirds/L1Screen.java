@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJoint;
@@ -49,6 +50,9 @@ public class L1Screen implements Screen {
 
     private Queue<Texture> birdTextQ;
     private Map<Body, Texture> birdTextM;
+    private List<Body> createdBodies = new ArrayList<>();
+    private List<Body> createdObs = new ArrayList<>();
+    private List<Body> createdBirds = new ArrayList<>();
 
     private BitmapFont font;
     private float totalTime = 0f;
@@ -79,6 +83,20 @@ public class L1Screen implements Screen {
     private Game game;
 
     public L1Screen(Game game) {this.game = game;}
+
+    public L1Screen(World world){
+        this.world=world;
+    }
+
+    public L1Screen(SpriteBatch testBatch, Texture testBirdTexture, Music testMusic, Texture testCatapultTexture, Texture testBackground, World world, ShapeRenderer testDebungRenderer) {
+        this.batch=testBatch;
+        this.birdTexture=testBirdTexture;
+        this.music=testMusic;
+        this.catapultTexture=testCatapultTexture;
+        this.background=testBackground;
+        this.world=world;
+
+    }
 
     @Override
     public void show() {
@@ -283,11 +301,12 @@ public class L1Screen implements Screen {
         }
     }
 
-    private void createBird(float x, float y) {
+    public void createBird(float x, float y) {
         BodyDef ballDef = new BodyDef();
         ballDef.type = BodyDef.BodyType.DynamicBody;
         ballDef.position.set(x, y);
         Body bird = world.createBody(ballDef);
+        createdBirds.add(bird);
 
         CircleShape ballShape = new CircleShape();
         ballShape.setRadius(0.2f);
@@ -321,16 +340,17 @@ public class L1Screen implements Screen {
         currentBird.setAngularVelocity(0);
     }
 
-    private Vector2 screenToWorldCoordinates(int screenX, int screenY) {
+    public Vector2 screenToWorldCoordinates(int screenX, int screenY) {
         return new Vector2(screenX / PPM, (Gdx.graphics.getHeight() - screenY) / PPM);
     }
 
-    private void create_Ground_obj(float x, float y, float x1, float y1){
+    public void create_Ground_obj(float x, float y, float x1, float y1){
         BodyDef obstacleDef = new BodyDef();
         obstacleDef.type = BodyDef.BodyType.StaticBody;
         obstacleDef.position.set(x, y);
 
         Body obstacleBody = world.createBody(obstacleDef);
+        createdBodies.add(obstacleBody);
 
         PolygonShape obstacleShape = new PolygonShape();
         obstacleShape.setAsBox(x1, y1);
@@ -345,7 +365,7 @@ public class L1Screen implements Screen {
         obstacleShape.dispose();
     }
 
-    private void createObstacle(float x, float y, Texture texture, float xscale, float yscale, int n) {
+    public void createObstacle(float x, float y, Texture texture, float xscale, float yscale, int n) {
         float width = texture.getWidth() / PPM / 3;
         float height = texture.getHeight() / PPM / 3;
 
@@ -355,6 +375,7 @@ public class L1Screen implements Screen {
         obstacleDef.position.set(x, y);
 
         Body obstacleBody = world.createBody(obstacleDef);
+        createdObs.add(obstacleBody);
 
         // Define the shape based on texture dimensions
         PolygonShape obstacleShape = new PolygonShape();
@@ -544,7 +565,6 @@ public class L1Screen implements Screen {
         catapultTexture.dispose();
         background.dispose();
         world.dispose();
-        debugRenderer.dispose();
     }
 
     @Override public void resize(int width, int height) {}
@@ -679,5 +699,17 @@ public class L1Screen implements Screen {
         } catch (Exception e) {
             System.out.println("failed to load");
         }
+    }
+
+    public List<Body> getCreatedBodies() {
+        return createdBodies;
+    }
+
+    public List<Body> getCreatedObs() {
+        return createdObs;
+    }
+
+    public List<Body> getCreatedBirds(){
+        return createdBirds;
     }
 }

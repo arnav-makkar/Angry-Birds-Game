@@ -30,7 +30,7 @@ public class LevelSuccessScreen implements Screen {
     private Game game;
     private BitmapFont font;
     private float score;
-    private int game_num;
+    public int game_num;
     private int highscore;
 
 

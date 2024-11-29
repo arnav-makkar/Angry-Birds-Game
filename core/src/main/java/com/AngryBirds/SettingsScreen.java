@@ -34,6 +34,10 @@ public class SettingsScreen implements Screen {
         this.game = game;
     }
 
+    public SettingsScreen(Stage mockStage) {
+        this.stage=mockStage;
+    }
+
     @Override
     public void show() {
         spriteBatch = new SpriteBatch();
