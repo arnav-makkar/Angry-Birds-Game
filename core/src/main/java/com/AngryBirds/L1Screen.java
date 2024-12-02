@@ -592,7 +592,8 @@ public class L1Screen implements Screen {
             gameState.pigs = pigs;
 
             Objo.writeObject(gameState);
-            System.out.println("Game is saved");
+            System.out.println("Game Successfully Saved!");
+            System.out.println("Game Paused");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -687,7 +688,9 @@ public class L1Screen implements Screen {
             }
             System.out.println("successful game load");
         } catch (Exception e) {
-            System.out.println("failed to load");
+//            System.out.println("failed to load");
+            System.out.println("Game Resumed");
+            System.out.println("Game Successfully Loaded!\n");
         }
     }
 
